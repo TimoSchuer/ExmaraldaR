@@ -13,7 +13,11 @@
 #' read_exb_file(path.PathTagSet)
 read_exb_file <- function(path,PathTagSet, addMetaData= FALSE,sortMetaData=TRUE){
   if(check_exb(path)){
+<<<<<<< HEAD
     file <- xml2::read_xml(path, encoding="UTF-8")
+=======
+    file <- xml2::read_xml(path)
+>>>>>>> 9d5fce81c4c442c33102a0afcfd8e8f5adec50ba
     timeline <- read_timeline(file)
     events <- read_events(file, path)
     annotations <- read_annotations_exb(file)
