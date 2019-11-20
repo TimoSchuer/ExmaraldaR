@@ -36,12 +36,7 @@ read_metadata <- function(path){
       Attributes[1,SpkAttr[p]] <- ValSpkAttr[p]
     }
   }
-
-<<<<<<< HEAD
   if(length(SpeakerTable)>1){
-=======
-
->>>>>>> 9d5fce81c4c442c33102a0afcfd8e8f5adec50ba
   k <- 2
   for (k in 2:length(SpeakerTable)){
     Speaker <- xml2::xml_children(SpeakerTable[k])
@@ -65,10 +60,7 @@ read_metadata <- function(path){
     }
   }
   }
-<<<<<<< HEAD
   }
-=======
->>>>>>> 9d5fce81c4c442c33102a0afcfd8e8f5adec50ba
   Attributes[Attributes=="---unknown---"] <- NA
   return(Attributes)
 }
