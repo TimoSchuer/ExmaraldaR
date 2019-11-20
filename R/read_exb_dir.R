@@ -9,14 +9,14 @@
 #' @examples read_exb_dir(pathDir, PathTagSet)
 read_exb_dir <- function(pathDir, PathTagSet,addMetaData= FALSE){
   files <- list.files(pathDir,".\\.exb")
-
-  exb <- read_exb_file(path= unlist(stringr::str_c(pathDir,"\\",files[1])),PathTagSet, addMetaData=addMetaData, sortMetaData=FALSE)
+  addMetaDataDir <- addMetaData
+  exb <- read_exb_file(path= unlist(stringr::str_c(pathDir,"\\",files[1])),PathTagSet, addMetaData=addMetaDataDir, sortMetaData=FALSE)
   k <- 2
   for (k in 2:length(files)) {
-    help <- read_exb_file(path= unlist(stringr::str_c(pathDir,"\\",files[k])),PathTagSet, addMetaData=addMetaData, sortMetaData=FALSE)
+    help <- read_exb_file(path= unlist(stringr::str_c(pathDir,"\\",files[k])),PathTagSet, addMetaData=addMetaDataDir, sortMetaData=FALSE)
     exb <- dplyr::bind_rows(exb,help)
   }
-  if(addMetaData==TRUE){
+  if(addMetaDataDir==TRUE){
     startMetaData <- which(colnames(exb)=="sex")
     k <- ncol(exb)
     l <- startMetaData-1
