@@ -33,11 +33,7 @@ for (k in 1:length(VecAnn)) {
     VTag <- unlist(stringr::str_split(TagSplit[1],":"))
     VTag <- stringr::str_c(VTag[2],":",VTag[3])
     annotation_sorted[k,1] <- VTag
-<<<<<<< HEAD
     if(length(TagSplit)>1){
-
-=======
->>>>>>> 9d5fce81c4c442c33102a0afcfd8e8f5adec50ba
     i <- 2
     for (i in 2:length(TagSplit)) {
       TagAtomic <- unlist(stringr::str_split(TagSplit[i],":"))
@@ -45,10 +41,8 @@ for (k in 1:length(VecAnn)) {
       #annotation_sorted[k,as.numeric(TagAtomic[1])] <- as.character(TagAtomic[3])
       tryCatch(annotation_sorted[k,as.numeric(TagAtomic[1])] <- as.character(TagAtomic[3]), error= function(e) print_error(exb,k))
     }
-<<<<<<< HEAD
+
     }
-=======
->>>>>>> 9d5fce81c4c442c33102a0afcfd8e8f5adec50ba
   }
 }
 annotation_sorted <- dplyr::bind_cols(exb, annotation_sorted)
