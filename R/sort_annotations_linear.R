@@ -22,6 +22,7 @@ for (k in 1:nrow(exb)) {
     }
 }
 variableNames <- unlist(xml2::xml_attrs(xml2::xml_children(tagSet)))
+variableNames <- stringr::str_remove_all(variableNames, " ")
 annotation_sorted <- data.frame(matrix(ncol = length(variableNames),nrow = nrow(exb)), stringsAsFactors = FALSE)
 colnames(annotation_sorted) <- variableNames
 VecAnn <- exb$Annotation
