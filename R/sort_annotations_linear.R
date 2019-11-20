@@ -41,7 +41,6 @@ for (k in 1:length(VecAnn)) {
       #annotation_sorted[k,as.numeric(TagAtomic[1])] <- as.character(TagAtomic[3])
       tryCatch(annotation_sorted[k,as.numeric(TagAtomic[1])] <- as.character(TagAtomic[3]), error= function(e) print_error(exb,k))
     }
-
     }
   }
 }
