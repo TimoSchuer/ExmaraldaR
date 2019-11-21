@@ -55,7 +55,7 @@ sort_by_unit <- function(exb, Unit_column= 1,noObservationAsNA=TRUE, drop= FALSE
     }
   }else{
     for (k in 1:length(colnames)) {
-      perVar <- dplyr::select(dummies, dplyr::contains(colnames[k])) # get all dummy Variables that belong to one Variable
+      perVar <- dplyr::select(dummies, dplyr::contains(stringr::str_glue(colnames[k],":"))) # get all dummy Variables that belong to one Variable
       Sums <- unname(rowSums(perVar)) # get RowSums
       for (n in 1:nrow(perVar)){
         if(Sums[n] !=0){
