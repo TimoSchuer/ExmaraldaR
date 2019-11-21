@@ -28,10 +28,12 @@ sort_by_unit <- function(exb, Unit_column= 1,noObservationAsNA=TRUE, drop= FALSE
 # get percentage if theres more than  one observation per variable --------
   colnames <- colnames(dummies)
   colnames <- stringr::str_remove(colnames, "Variable:")
-  colnames_spl <- as.data.frame(stringr::str_split(colnames, ":"))
-  colnames_spl <- colnames_spl[1,]
-  colnames_spl <- t(colnames_spl)
-  colnames <- unique(colnames_spl) #getting Vector of Variable names
+  colnames <- stringr::str_remove(colnames,":.+")
+  colnames <- unique(colnames)
+  # colnames_spl <- as.data.frame(stringr::str_split(colnames, ":"))
+  # colnames_spl <- colnames_spl[1,]
+  # colnames_spl <- t(colnames_spl)
+  # colnames <- unique(colnames_spl) #getting Vector of Variable names
   dummies2 <- data.frame(0) #empty data.frame
   if(noObservationAsNA == TRUE){
     for (k in 1:length(colnames)) {
