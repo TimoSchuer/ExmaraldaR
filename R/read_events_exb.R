@@ -23,7 +23,8 @@ read_events <- function(file, path){
   filename <- stringr::str_remove(basename(path), "\\.exb")
   for(tier in transcriptions){
     event <- xml2::xml_children(tier)
-    text_help <- stringr::str_trim(xml2::xml_text(event)) #Transkriptionstext auslesen
+    text_help <- xml2::xml_text(event) #Transkriptionstext auslesen
+    text_help <- stringr::str_trim(text_help)
     tierAttrs <- xml2::xml_attrs(tier) #TierId, Sprecher und Sprechername auslesen
     # Start und Endzeitpunkte auslesen ----------------------------------------
     start_help <- character(0)
