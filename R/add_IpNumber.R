@@ -24,7 +24,8 @@ add_IpNumber <- function(events_sorted){
         stringr::str_ends(events_sorted$Text[k-1], "\\d\\)")|
         stringr::str_ends(events_sorted$Text[k-1], "\\)\\)")|
         stringr::str_ends(events_sorted$Text[k-1], "([.;?,-]{1}| \\Q|\\E|\\Q/\\E|\\u01C0)(?=\\])")|
-        stringr::str_ends(events_sorted$Text[k-1], "([.;?,-]{1}| \\Q|\\E|\\Q/\\E|\\u01C0)(?==)")){
+        #stringr::str_ends(events_sorted$Text[k-1], "([.;?,-]{1}| \\Q|\\E|\\Q/\\E|\\u01C0)(?==)")
+        stringr::str_ends(events_sorted$Text[k-1],"=")){
       IpNumber[k] <- IpNumber[k-1] +1
       k <- k+1
     } else if(events_sorted$Speaker[k-1] != events_sorted$Speaker[k]){
