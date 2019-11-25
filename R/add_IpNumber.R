@@ -13,10 +13,7 @@ add_IpNumber <- function(events_sorted){
   IpNumber[1] <- 1
   k <- 2
   for (k in 2:nrow(events_sorted)) {
-    if((stringr::str_ends(events_sorted$Text[k-1], "[.;?,-]")|
-        stringr::str_ends(events_sorted$Text[k-1], "\\Q|\\E")|
-        stringr::str_ends(events_sorted$Text[k-1], "\\u01C0") |
-        stringr::str_ends(events_sorted$Text[k-1], "\\Q/\\E"))& stringr::str_starts(events_sorted&Text[k], "=")){
+    if(stringr::str_ends(events_sorted$Text[k-1], "[^=]")& stringr::str_starts(events_sorted&Text[k], "=")){
       IpNumber[k] <- IpNumber[k-1]
       k <- k+1
     }else if(stringr::str_ends(events_sorted$Text[k-1], "[.;?,-]")|
