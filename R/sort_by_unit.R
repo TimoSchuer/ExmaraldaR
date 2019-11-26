@@ -3,6 +3,7 @@
 #' @param exb needs a dataframe as given by read_exb_file or read_exb_dir
 #' @param Unit_column column where the unit is defined. Needs to be consisted. Default is 1 as the output of read_exb_file and read_exb_dir saves the IP number there
 #' @param drop logical value, wheter rows without an obeservation should be dropped or not
+#' @param percentage logical valuem wether values per Variable per Unite should be relative or absolute
 #'
 #' @return returns data.frame
 #' @export
