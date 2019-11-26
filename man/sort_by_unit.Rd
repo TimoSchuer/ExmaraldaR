@@ -4,8 +4,13 @@
 \alias{sort_by_unit}
 \title{sort_by_unit}
 \usage{
-sort_by_unit(exb, Unit_column = 1, noObservationAsNA = TRUE,
-  drop = FALSE)
+sort_by_unit(
+  exb,
+  Unit_column = 1,
+  noObservationAsNA = TRUE,
+  drop = FALSE,
+  percentage = TRUE
+)
 }
 \arguments{
 \item{exb}{needs a dataframe as given by read_exb_file or read_exb_dir}
@@ -13,6 +18,8 @@ sort_by_unit(exb, Unit_column = 1, noObservationAsNA = TRUE,
 \item{Unit_column}{column where the unit is defined. Needs to be consisted. Default is 1 as the output of read_exb_file and read_exb_dir saves the IP number there}
 
 \item{drop}{logical value, wheter rows without an obeservation should be dropped or not}
+
+\item{percentage}{logical valuem wether values per Variable per Unite should be relative or absolute}
 }
 \value{
 returns data.frame
@@ -22,4 +29,5 @@ sort_by_unit
 }
 \examples{
 sort_by_unit(exb, Unit_column=1, drop= TRUE)
+
 }
