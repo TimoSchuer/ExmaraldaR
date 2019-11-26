@@ -9,6 +9,7 @@
 #' @export
 #'
 #' @examples sort_by_unit(exb, Unit_column=1, drop= TRUE)
+#'
 sort_by_unit <- function(exb, Unit_column= 1,noObservationAsNA=TRUE, drop= FALSE, percentage= TRUE){
   dummies <- as.data.frame(dummies::dummy("Variable",exb, sep=":")) #create binary values of variable
   dummies <- dplyr::select(dummies, -(dplyr::ends_with("NA")))# delete NA Variable
