@@ -8,7 +8,7 @@
 #' @export
 #'
 #' @examples sort_by_unit(exb, Unit_column=1, drop= TRUE)
-sort_by_unit <- function(exb, Unit_column= 1,noObservationAsNA=TRUE, drop= FALSE){
+sort_by_unit <- function(exb, Unit_column= 1,noObservationAsNA=TRUE, drop= FALSE, percentage= TRUE){
   dummies <- as.data.frame(dummies::dummy("Variable",exb, sep=":")) #create binary values of variable
   dummies <- dplyr::select(dummies, -(dplyr::ends_with("NA")))# delete NA Variable
   ColNoVar <- which(colnames(exb)=="Variable")#get number of Variable column
@@ -28,18 +28,48 @@ sort_by_unit <- function(exb, Unit_column= 1,noObservationAsNA=TRUE, drop= FALSE
       dummies <- dummies[-i, ]
     }
   }
-
+  if(percentage==TRUE){
 # get percentage if theres more than  one observation per variable --------
-  colnames <- colnames(dummies)
-  colnames <- stringr::str_remove(colnames, "Variable:")
-  colnames <- stringr::str_remove(colnames,":.+")
-  colnames <- unique(colnames)
-  # colnames_spl <- as.data.frame(stringr::str_split(colnames, ":"))
-  # colnames_spl <- colnames_spl[1,]
-  # colnames_spl <- t(colnames_spl)
-  # colnames <- unique(colnames_spl) #getting Vector of Variable names
-  dummies2 <- data.frame(0) #empty data.frame
-  if(noObservationAsNA == TRUE){
+    colnames <- colnames(dummies)
+    colnames <- stringr::str_remove(colnames, "Variable:")
+    colnames <- stringr::str_remove(colnames,":.+")
+    colnames <- unique(colnames)
+    dummies2 <- data.frame(0) #empty data.frame
+    if(noObservationAsNA == TRUE){
+      for (k in 1:length(colnames)) {
+        perVar <- dplyr::select(dummies, dplyr::contains(stringr::str_glue(colnames[k],":"))) # get all dummy Variables that belong to one Variable
+        Sums <- unname(rowSums(perVar)) # get RowSums
+        for (n in 1:nrow(perVar)){
+          if(Sums[n] ==0){
+            for (p in 1:ncol(perVar)) {
+              perVar[n,p] <- NA
+            }
+          }else{
+            for (l in 1:ncol(perVar)){
+              perVar[n,l] <- as.numeric(perVar[n,l])
+              perVar[n,l] <- perVar[n,l]/Sums[n] # get percentage
+            }
+          }
+        }
+      dummies2 <- cbind(dummies2,perVar) #save
+      }
+    }else{
+      for (k in 1:length(colnames)) {
+        perVar <- dplyr::select(dummies, dplyr::contains(stringr::str_glue(colnames[k],":"))) # get all dummy Variables that belong to one Variable
+        Sums <- unname(rowSums(perVar)) # get RowSums
+        for (n in 1:nrow(perVar)){
+          if(Sums[n] !=0){
+            for (l in 1:ncol(perVar)){
+              perVar[n,l] <- as.numeric(perVar[n,l])
+              perVar[n,l] <- perVar[n,l]/Sums[n] # get percentage
+            }
+          }
+        }
+      dummies2 <- cbind(dummies2,perVar) #save
+      }
+    }
+  dummies <- dplyr::select(dummies2,-(1)) # overwrite absolute values, leave out empty column created by data.frame(0)
+  }else{
     for (k in 1:length(colnames)) {
       perVar <- dplyr::select(dummies, dplyr::contains(stringr::str_glue(colnames[k],":"))) # get all dummy Variables that belong to one Variable
       Sums <- unname(rowSums(perVar)) # get RowSums
@@ -48,31 +78,11 @@ sort_by_unit <- function(exb, Unit_column= 1,noObservationAsNA=TRUE, drop= FALSE
           for (p in 1:ncol(perVar)) {
             perVar[n,p] <- NA
           }
-        }else{
-          for (l in 1:ncol(perVar)){
-            perVar[n,l] <- as.numeric(perVar[n,l])
-            perVar[n,l] <- perVar[n,l]/Sums[n] # get percentage
-          }
-        }
-      }
-      dummies2 <- cbind(dummies2,perVar) #save
-    }
-  }else{
-    for (k in 1:length(colnames)) {
-      perVar <- dplyr::select(dummies, dplyr::contains(stringr::str_glue(colnames[k],":"))) # get all dummy Variables that belong to one Variable
-      Sums <- unname(rowSums(perVar)) # get RowSums
-      for (n in 1:nrow(perVar)){
-        if(Sums[n] !=0){
-          for (l in 1:ncol(perVar)){
-            perVar[n,l] <- as.numeric(perVar[n,l])
-            perVar[n,l] <- perVar[n,l]/Sums[n] # get percentage
-          }
         }
       }
       dummies2 <- cbind(dummies2,perVar) #save
     }
   }
-  dummies <- dplyr::select(dummies2,-(1)) # overwrite absolute values, leave out empty column created by data.frame(0)
   sorted <- cbind(exb, dummies) # merge transcription information and obeservations
   # drops alls rows without observations ------------------------------------
     if(drop==TRUE){
