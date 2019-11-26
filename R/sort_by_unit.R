@@ -72,18 +72,26 @@ sort_by_unit <- function(exb, Unit_column= 1,noObservationAsNA=TRUE, drop= FALSE
     }
   dummies <- dplyr::select(dummies2,-(1)) # overwrite absolute values, leave out empty column created by data.frame(0)
   }else{
-    for (k in 1:length(colnames)) {
-      perVar <- dplyr::select(dummies, dplyr::contains(stringr::str_glue(colnames[k],":"))) # get all dummy Variables that belong to one Variable
-      Sums <- unname(rowSums(perVar)) # get RowSums
-      for (n in 1:nrow(perVar)){
-        if(Sums[n] ==0){
-          for (p in 1:ncol(perVar)) {
-            perVar[n,p] <- NA
+    colnames <- colnames(dummies)
+    colnames <- stringr::str_remove(colnames, "Variable:")
+    colnames <- stringr::str_remove(colnames,":.+")
+    colnames <- unique(colnames)
+    dummies2 <- data.frame(0) #empty data.frame
+    if(noObservationAsNA == TRUE){
+      for (k in 1:length(colnames)) {
+        perVar <- dplyr::select(dummies, dplyr::contains(stringr::str_glue(colnames[k],":"))) # get all dummy Variables that belong to one Variable
+        Sums <- unname(rowSums(perVar)) # get RowSums
+        for (n in 1:nrow(perVar)){
+          if(Sums[n] ==0){
+            for (p in 1:ncol(perVar)) {
+              perVar[n,p] <- NA
+            }
           }
         }
+        dummies2 <- cbind(dummies2,perVar) #save
       }
-      dummies2 <- cbind(dummies2,perVar) #save
     }
+    dummies <- dplyr::select(dummies2,-(1)) # overwrite absolute values, leave out empty column created by data.frame(0)
   }
   sorted <- cbind(exb, dummies) # merge transcription information and obeservations
   # drops alls rows without observations ------------------------------------
