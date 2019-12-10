@@ -12,6 +12,7 @@ for (k in 1:nrow(exb)) {
     SplitAnn <- character(0)
     SplitAnn <- unlist(stringr::str_split(exb[k,10],";"))
     SplitAnn <- stringr::str_trim(SplitAnn[SplitAnn != ""])
+    SplitAnn[1] <- stringr::str_remove(SplitAnn[1],";")
     exb[k,10] <- SplitAnn[1]
     l <- 2
     for (l in 2:length(SplitAnn)) {
