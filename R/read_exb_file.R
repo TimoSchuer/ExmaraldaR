@@ -6,11 +6,11 @@
 #' @param PathTagSet Path of the Tag Set used to annotate the file
 #' @param addMetaData Logical Value, wheter Metadata should be read from the speakertable
 #'
-#' @return Returns a data frame that contains the transcription an the annotations
+#' @return Returns a data frame that contains the transcription and the annotations
 #' @export
 #'
 #' @examples
-#' read_exb_file(path.PathTagSet)
+#' read_exb_file(path,PathTagSet)
 read_exb_file <- function(path,PathTagSet, addMetaData= FALSE,sortMetaData=TRUE){
   if(check_exb(path)){
     file <- xml2::read_xml(path, encoding="UTF-8")
