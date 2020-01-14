@@ -3,7 +3,6 @@
 #' Function that reads an exb transcription file
 #'
 #' @param path Path of an exb transcription file
-#' @param PathTagSet Path of the Tag Set used to annotate the file
 #' @param addMetaData Logical Value, wheter Metadata should be read from the speakertable
 #'
 #' @return Returns a data frame that contains the transcription and the annotations
@@ -11,7 +10,7 @@
 #'
 #' @examples
 #' read_exb_file(path,PathTagSet)
-read_exb_file <- function(path,PathTagSet, addMetaData= FALSE,sortMetaData=TRUE){
+read_exb_file <- function(path, addMetaData= FALSE,sortMetaData=TRUE){
   if(check_exb(path)){
     file <- xml2::read_xml(path, encoding="UTF-8")
     timeline <- read_timeline(file)
@@ -21,7 +20,7 @@ read_exb_file <- function(path,PathTagSet, addMetaData= FALSE,sortMetaData=TRUE)
     events_sorted <- sort_events(events, timeline)
     events_sorted <- add_IpNumber(events_sorted)
     exb <- dplyr::left_join(events_sorted, annotations,by = c("Speaker", "Start", "End"))
-    exb <- sort_anntotations_linear(exb,PathTagSet)
+    exb <- sort_anntotations_linear(exb)
     if(addMetaData==TRUE){
       MetaData <- read_metadata(path)
       exb2 <- dplyr::left_join(exb, MetaData, by= "Speaker")
