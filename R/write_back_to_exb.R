@@ -19,35 +19,38 @@ write_back_to_exb <- function(CsvFile,sep=",", PathExb, PathNewFile = PathExb){
     events <- dplyr::filter(annotations ,Speaker== annotationTiers[[r]][["speaker"]] & is.na(annotations[,10])==FALSE)
     TextAnn <- dplyr::select(events, 10:ncol(events))
     colnames <- colnames(TextAnn)
+    if(nrow(events)!=0){
   # rebuild tags -------------------------------------------------------------
-    tag <- character(0)
-    for (k in 1:nrow(events)) {
-      tag[k] <- stringr::str_c("1",":",TextAnn[k,1],"_")
-      for (l in 2:ncol(TextAnn)) {
-        if(is.na(TextAnn[k,l])==FALSE){
-          tag[k] <- stringr::str_c(tag[k],l,":", colnames[l],":",TextAnn[k,l],"_")
-        }else{next()}
+      tag <- character(0)
+      for (k in 1:nrow(events)) {
+        tag[k] <- stringr::str_c("1",":",TextAnn[k,1],"_")
+        for (l in 2:ncol(TextAnn)) {
+          if(is.na(TextAnn[k,l])==FALSE){
+            tag[k] <- stringr::str_c(tag[k],l,":", colnames[l],":",TextAnn[k,l],"_")
+          }else{next()}
+        }
+        tag[k] <- stringr::str_replace(tag[k], "_$",";")
       }
-      tag[k] <- stringr::str_replace(tag[k], "_$",";")
-    }
-    events$tag =tag
+      events$tag =tag
 
-    # merge annotations that belong to the same word together -----------------
-    u <- 2
-    doubleRow <- numeric(0)
-    for (u in 2:nrow(events)) {
-      if(events[u,"Start"]==events[u-1,"Start"]){
-        events[u,"tag"] <- stringr::str_c(events[u-1,"tag"],events[u,"tag"])
-        doubleRow <- c(doubleRow, u-1)
+      # merge annotations that belong to the same word together -----------------
+      u <- 2
+      doubleRow <- numeric(0)
+      for (u in 2:nrow(events)) {
+        if(events[u,"Start"]==events[u-1,"Start"]){
+          events[u,"tag"] <- stringr::str_c(events[u-1,"tag"],events[u,"tag"])
+          doubleRow <- c(doubleRow, u-1)
+        }
       }
-    }
-    events <- events[-(doubleRow),]
+      events <- events[-(doubleRow),]
     # add events to tier ------------------------------------------------------
-    for (i in 1:nrow(events)) {
-      xml2::xml_add_child(xml2::xml_find_first(file,XPath) ,"event", start= events[i,"Start"], end=events[i,"End"])
-      xml2::xml_set_text(xml2::xml_child(xml2::xml_find_first(file,".//tier[@type='a']"),i), events[i,"tag"])
+      if(nrow(events)!=0){
+        for (i in 1:nrow(events)) {
+          xml2::xml_add_child(xml2::xml_find_first(file,XPath) ,"event", start= events[i,"Start"], end=events[i,"End"])
+          xml2::xml_set_text(xml2::xml_child(xml2::xml_find_first(file,".//tier[@type='a']"),i), events[i,"tag"])
+        }
+      }
     }
-
   }
  xml2::write_xml(file, PathNewFile)
 }
