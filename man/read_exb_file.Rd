@@ -4,21 +4,19 @@
 \alias{read_exb_file}
 \title{read_exb_file()}
 \usage{
-read_exb_file(path, PathTagSet, addMetaData = FALSE, sortMetaData = TRUE)
+read_exb_file(path, addMetaData = FALSE, sortMetaData = TRUE)
 }
 \arguments{
 \item{path}{Path of an exb transcription file}
 
-\item{PathTagSet}{Path of the Tag Set used to annotate the file}
-
 \item{addMetaData}{Logical Value, wheter Metadata should be read from the speakertable}
 }
 \value{
-Returns a data frame that contains the transcription an the annotations
+Returns a data frame that contains the transcription and the annotations
 }
 \description{
 Function that reads an exb transcription file
 }
 \examples{
-read_exb_file(path.PathTagSet)
+read_exb_file(path,PathTagSet)
 }
