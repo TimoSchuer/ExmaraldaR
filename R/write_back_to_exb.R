@@ -16,12 +16,12 @@ write_back_to_exb <- function(CsvFile,sep=",", PathExb, PathNewFile = PathExb){
     xml2::xml_remove(xml2::xml_find_first(file, XPath))
     xml2::xml_add_sibling(xml2::xml_child(xml2::xml_child(file, 2), 2),"tier", id= annotationTiers[[r]][["id"]], speaker= annotationTiers[[r]][["speaker"]], category =annotationTiers[[r]][["category"]], type =annotationTiers[[r]][["type"]])
     xml2::xml_set_attr(xml2::xml_find_first(file, XPath), "display-name",annotationTiers[[r]][["display-name"]] )
-    events <- dplyr::filter(annotations ,Speaker== annotationTiers[[r]][["speaker"]] & is.na(annotations[,which(colnames(annotations)==Variable)])==FALSE)
+    events <- dplyr::filter(annotations ,Speaker== annotationTiers[[r]][["speaker"]] & is.na(annotations[,which(colnames(annotations)=="Variable")])==FALSE)
     ColNum <- which(colnames(events)=="Variable")
     TextAnn <- dplyr::select(events, ColNum:ncol(events))
     colnames <- colnames(TextAnn)
     if(nrow(events)!=0){
-  # rebuild tags -------------------------------------------------------------
+      # rebuild tags -------------------------------------------------------------
       tag <- character(0)
       for (k in 1:nrow(events)) {
         tag[k] <- stringr::str_c("1",":",TextAnn[k,1],"_")
@@ -44,7 +44,7 @@ write_back_to_exb <- function(CsvFile,sep=",", PathExb, PathNewFile = PathExb){
         }
       }
       events <- events[-(doubleRow),]
-    # add events to tier ------------------------------------------------------
+      # add events to tier ------------------------------------------------------
       if(nrow(events)!=0){
         for (i in 1:nrow(events)) {
           xml2::xml_add_child(xml2::xml_find_first(file,XPath) ,"event", start= events[i,"Start"], end=events[i,"End"])
@@ -53,5 +53,5 @@ write_back_to_exb <- function(CsvFile,sep=",", PathExb, PathNewFile = PathExb){
       }
     }
   }
- xml2::write_xml(file, PathNewFile)
+  xml2::write_xml(file, PathNewFile)
 }
