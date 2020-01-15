@@ -12,7 +12,7 @@ read_exb_dir <- function(pathDir, addMetaData= FALSE){
   exb <- read_exb_file(path= unlist(stringr::str_c(pathDir,"\\",files[1])), addMetaData=addMetaDataDir, sortMetaData=FALSE)
   k <- 2
   for (k in 2:length(files)) {
-    help <- read_exb_file(path= unlist(stringr::str_c(pathDir,"\\",files[k])),PathTagSet, addMetaData=addMetaDataDir, sortMetaData=FALSE)
+    help <- read_exb_file(path= unlist(stringr::str_c(pathDir,"\\",files[k])), addMetaData=addMetaDataDir, sortMetaData=FALSE)
     exb <- dplyr::bind_rows(exb,help)
   }
   if(addMetaDataDir==TRUE){
