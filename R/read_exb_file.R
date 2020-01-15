@@ -10,7 +10,7 @@
 #' @export
 #'
 #' @examples
-#' read_exb_file(path,PathTagSet)
+#' read_exb_file(path, addMetaData=True)
 read_exb_file <- function(path, addMetaData= FALSE,sortMetaData=TRUE){
   if(check_exb(path)){
     file <- xml2::read_xml(path, encoding="UTF-8")

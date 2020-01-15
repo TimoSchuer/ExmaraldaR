@@ -5,7 +5,7 @@
 #' @return returns dataframe that contains all events, an IP number and formatted annotations
 #' @export
 #'
-#' @examples read_exb_dir(pathDir, PathTagSet)
+#' @examples read_exb_dir(pathDir)
 read_exb_dir <- function(pathDir, addMetaData= FALSE){
   files <- list.files(pathDir,".\\.exb")
   addMetaDataDir <- addMetaData
