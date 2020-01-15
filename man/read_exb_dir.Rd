@@ -4,12 +4,10 @@
 \alias{read_exb_dir}
 \title{Read entire directory of exb files annotated with the same annotation specification}
 \usage{
-read_exb_dir(pathDir, PathTagSet, addMetaData = FALSE)
+read_exb_dir(pathDir, addMetaData = FALSE)
 }
 \arguments{
 \item{pathDir}{path of the directory}
-
-\item{PathTagSet}{path of the annotation specification used for the annotation}
 
 \item{addMetaData}{Logical Value, wheter Metadata should be read from the speakertable}
 }

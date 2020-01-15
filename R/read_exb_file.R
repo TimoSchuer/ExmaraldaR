@@ -4,6 +4,7 @@
 #'
 #' @param path Path of an exb transcription file
 #' @param addMetaData Logical Value, wheter Metadata should be read from the speakertable
+#' @param sortMetaDate Logical value, wheter metadata should be sorted directly after the speaker name or at the end
 #'
 #' @return Returns a data frame that contains the transcription and the annotations
 #' @export

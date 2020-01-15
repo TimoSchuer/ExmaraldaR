@@ -1,16 +1,15 @@
 #' Read entire directory of exb files annotated with the same annotation specification
 #'
 #' @param pathDir path of the directory
-#' @param PathTagSet path of the annotation specification used for the annotation
 #'@param addMetaData Logical Value, wheter Metadata should be read from the speakertable
 #' @return returns dataframe that contains all events, an IP number and formatted annotations
 #' @export
 #'
 #' @examples read_exb_dir(pathDir, PathTagSet)
-read_exb_dir <- function(pathDir, PathTagSet,addMetaData= FALSE){
+read_exb_dir <- function(pathDir, addMetaData= FALSE){
   files <- list.files(pathDir,".\\.exb")
   addMetaDataDir <- addMetaData
-  exb <- read_exb_file(path= unlist(stringr::str_c(pathDir,"\\",files[1])),PathTagSet, addMetaData=addMetaDataDir, sortMetaData=FALSE)
+  exb <- read_exb_file(path= unlist(stringr::str_c(pathDir,"\\",files[1])), addMetaData=addMetaDataDir, sortMetaData=FALSE)
   k <- 2
   for (k in 2:length(files)) {
     help <- read_exb_file(path= unlist(stringr::str_c(pathDir,"\\",files[k])),PathTagSet, addMetaData=addMetaDataDir, sortMetaData=FALSE)
