@@ -51,6 +51,11 @@ read_events <- function(file, path){
     filename_help <- paste(filename_help, filename)
   }
   speaker <- stringr::str_trim(speaker)
+  if(length(length(end)!=length(tierId))){#if theres an dummy element at the end of a splitted transcription adjust lenght
+    name <- name[1:length(end)]
+    tierId <- tierId[1:length(end)]
+    speaker <- speaker[1:length(end)]
+  }
   events <- data.frame(File = filename_help, Speaker = speaker, TierID = tierId, Name= name,Text= text,Start =start,End= end, stringsAsFactors = FALSE)
   return(events)
 }
