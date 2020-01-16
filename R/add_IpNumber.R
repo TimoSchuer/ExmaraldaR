@@ -37,6 +37,9 @@ add_IpNumber <- function(events_sorted){
       k <- k+1
     }
   }
+  if(length(IpNumber)!=nrow(events_sorted)){ # adjust length if there is a dummy event at the end of splitted transcription
+    IpNumber <- IpNumber[1:nrow(events_sorted)]
+  }
   events_sorted <-  cbind(IpNumber, events_sorted)
   return(events_sorted)
 }
