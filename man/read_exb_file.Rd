@@ -20,5 +20,5 @@ Returns a data frame that contains the transcription and the annotations
 Function that reads an exb transcription file
 }
 \examples{
-read_exb_file(path,PathTagSet)
+read_exb_file(path, addMetaData=True)
 }

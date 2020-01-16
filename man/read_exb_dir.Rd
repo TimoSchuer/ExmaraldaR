@@ -18,5 +18,5 @@ returns dataframe that contains all events, an IP number and formatted annotatio
 Read entire directory of exb files annotated with the same annotation specification
 }
 \examples{
-read_exb_dir(pathDir, PathTagSet)
+read_exb_dir(pathDir)
 }
