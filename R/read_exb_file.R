@@ -17,11 +17,16 @@ read_exb_file <- function(path, addMetaData= FALSE,sortMetaData=TRUE){
     timeline <- read_timeline(file)
     events <- read_events(file, path)
     events[,5] <- stringr::str_trim(events[,5])
-    annotations <- read_annotations_exb(file)
     events_sorted <- sort_events(events, timeline)
     events_sorted <- add_IpNumber(events_sorted)
-    exb <- dplyr::left_join(events_sorted, annotations,by = c("Speaker", "Start", "End"))
-    exb <- sort_anntotations_linear(exb)
+    AnnotationTiers <- xml2::xml_find_all(file,".//tier[@type='a']") #findet alle Annotationsspuren
+    if(length(AnnotationTiers) !=0){
+      annotations <- read_annotations_exb(file)
+      exb <- dplyr::left_join(events_sorted, annotations,by = c("Speaker", "Start", "End"))
+      exb <- sort_anntotations_linear(exb)
+    }else{
+      exb <- events_sorted
+    }
     if(addMetaData==TRUE){
       MetaData <- read_metadata(path)
       exb2 <- dplyr::left_join(exb, MetaData, by= "Speaker")
