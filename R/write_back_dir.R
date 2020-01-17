@@ -24,7 +24,7 @@ write_back_dir <- function(exb,sep=",", PathExbDir, PathNewFiles = PathExbDir, s
   for (k in 1:length(files)) {
     ann <- dplyr::filter(annotations, File==files[k])
     PathFile <- stringr::str_glue(PathExbDir,"\\",stringr::str_trim(files[k]),".exb")
-    PathNewFile <- stringr::str_glue(PathNewFiles,"\\",stringr::str_trim(files[k]),suffix,".exb")
+    PathNewFile <- PathNewFiles
     write_back_to_exb(ann, PathExb = PathFile,PathNewFile = PathNewFile )
   }
 }

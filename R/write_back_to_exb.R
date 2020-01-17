@@ -1,4 +1,16 @@
-write_back_to_exb <- function(CsvFile,sep=",", PathExb, PathNewFile = PathExb){
+#' Write_back_to Exb
+#' writes back changes in annotations to an exb
+#'
+#' @param CsvFile File or object with data.frame as created by read_exb_file or read_exb_dir
+#' @param sep seperator in Csv file
+#' @param PathExb Path of the ExbFile
+#' @param PathNewFile Directory where the new file is saved
+#'
+#' @return
+#' @export
+#'
+#' @examples
+write_back_to_exb <- function(CsvFile,sep=",", PathExb, PathNewFile = PathExb, suffix="_new"){
   file <- xml2::read_xml(PathExb) #Read transcription
   if(is.data.frame(CsvFile)){
     annotations <- CsvFile
@@ -53,5 +65,6 @@ write_back_to_exb <- function(CsvFile,sep=",", PathExb, PathNewFile = PathExb){
       }
     }
   }
+  PathNewFile <- stringr::str_glue(PathNewFile,"\\",stringr::str_trim(files[k]),suffix,".exb")
   xml2::write_xml(file, PathNewFile)
 }
