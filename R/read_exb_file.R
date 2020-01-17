@@ -27,6 +27,7 @@ read_exb_file <- function(path, addMetaData= FALSE,sortMetaData=TRUE){
     }else{
       exb <- events_sorted
     }
+
     if(addMetaData==TRUE){
       MetaData <- read_metadata(path)
       exb2 <- dplyr::left_join(exb, MetaData, by= "Speaker")
