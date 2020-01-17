@@ -47,15 +47,17 @@ write_back_to_exb <- function(CsvFile,sep=",", PathExb, PathNewFile = dirname(Pa
       events$tag =tag
 
       # merge annotations that belong to the same word together -----------------
-      u <- 2
-      doubleRow <- numeric(0)
-      for (u in 2:nrow(events)) {
-        if(events[u,"Start"]==events[u-1,"Start"]){
-          events[u,"tag"] <- stringr::str_c(events[u-1,"tag"],events[u,"tag"])
-          doubleRow <- c(doubleRow, u-1)
+      if(nrow(events)>1){
+        u <- 2
+        doubleRow <- numeric(0)
+        for (u in 2:nrow(events)) {
+          if(events[u,"Start"]==events[u-1,"Start"]){
+            events[u,"tag"] <- stringr::str_c(events[u-1,"tag"],events[u,"tag"])
+            doubleRow <- c(doubleRow, u-1)
+          }
         }
+        events <- events[-(doubleRow),]
       }
-      events <- events[-(doubleRow),]
       # add events to tier ------------------------------------------------------
       if(nrow(events)!=0){
         for (i in 1:nrow(events)) {
