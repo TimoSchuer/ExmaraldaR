@@ -65,6 +65,7 @@ write_back_to_exb <- function(CsvFile,sep=",", PathExb, PathNewFile = dirname(Pa
       }
     }
   }
-  PathNewFile <- stringr::str_glue(PathNewFile,"\\",stringr::str_trim(files[k]),suffix,".exb")
+  fileName <- stringr::str_remove(basename(PathExb), "\\.exb")
+  PathNewFile <- stringr::str_glue(PathNewFile,"\\",stringr::str_trim(fileName),suffix,".exb")
   xml2::write_xml(file, PathNewFile)
 }
