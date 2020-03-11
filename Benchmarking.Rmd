@@ -1,0 +1,34 @@
+---
+title: "Evaluate Functions"
+output: html_notebook
+---
+Testdatei festlegen
+```{r}
+path <- choose.files()
+path
+file <- xml2::read_xml(path, encoding="UTF-8")
+```
+
+
+Gesamtzeit
+
+```{r}
+start <- Sys.time()
+test <- read_exb_file(path=path, readAnn = FALSE)
+end <- Sys.time()
+time <- start-end
+time
+```
+Benchmarking Werte: Zeit pro Transkriptionsevent, Zeit pro Annotationsevent, Zeit pro Events (Gesamt)
+```{r}
+
+```
+Zeiten der einzelnen Funktionen ermitteln: read_timeline
+```{r}
+startTimeline <- Sys.time()
+timeline <- read_timeline(file)
+endTimeline <- Sys.time()
+timeTimeline <- startTimeline-endTimeline
+timeTimeline
+```
+
