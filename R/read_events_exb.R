@@ -27,14 +27,8 @@ read_events <- function(file, path){
     #text_help <- stringr::str_trim(text_help)
     tierAttrs <- xml2::xml_attrs(tier) #TierId, Sprecher und Sprechername auslesen
     # Start und Endzeitpunkte auslesen ----------------------------------------
-    start_help <- character(0)
-    end_help <- character(0)
-
-    for (k in 1:length(event)[1]) {
-      start_help[k] <- xml2::xml_attr(event[k], "start")
-      end_help[k] <- xml2::xml_attr(event[k],"end")
-      k <- k+1
-    }
+    start_help <- xml2::xml_attrs(event) %>% sapply('[','start') %>% unname()
+    end_help <- xml2::xml_attrs(event) %>% sapply('[','end') %>% unname()
     start <- c(start,start_help)
     end <- c(end,end_help)
     text <- c(text, text_help)
