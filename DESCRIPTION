@@ -16,4 +16,5 @@ Imports:
     xml2,
     stringr,
     dplyr,
-    dummies
+    dummies,
+    purrr
