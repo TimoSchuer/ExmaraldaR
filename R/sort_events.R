@@ -50,7 +50,7 @@ sort_events <- function(events, timeline){
       }
     }
   }
-  events_sorted <- events_sorted[vecIp,]
+  events_sorted <- events_sorted[vecIp,] %>% `row.names<-`(seq(1:nrow(.)))
   return(events_sorted)
 }
 
