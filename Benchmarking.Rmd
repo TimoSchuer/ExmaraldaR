@@ -2,6 +2,15 @@
 title: "Evaluate Functions"
 output: html_notebook
 ---
+Aktuellste Paketversion installieren und laden
+```{r}
+library(devtools)
+install_github("https://github.com/TimoSchuer/ExmaraldaR", force = TRUE)
+library(ExmaraldaR)
+library(xml2)
+library(dplyr)
+```
+
 Testdatei festlegen
 ```{r}
 path <- choose.files()
@@ -28,7 +37,23 @@ Zeiten der einzelnen Funktionen ermitteln: read_timeline
 startTimeline <- Sys.time()
 timeline <- read_timeline(file)
 endTimeline <- Sys.time()
-timeTimeline <- startTimeline-endTimeline
+timeTimeline <- endTimeline-startTimeline
 timeTimeline
+```
+Read_events
+```{r}
+start <- Sys.time()
+events <- read_events(file, path)
+end <- Sys.time()
+timeReadEvents <- end-start
+timeReadEvents
+```
+sort_events
+```{r}
+start <- Sys.time()
+events_sorted <- sort_events(events, timeline)
+end <- Sys.time()
+timeSortEvents <- end-start
+timeSortEvents
 ```
 
