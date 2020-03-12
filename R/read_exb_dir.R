@@ -2,14 +2,16 @@
 #'
 #' @param pathDir path of the directory
 #'@param addMetaData Logical Value, wheter Metadata should be read from the speakertable
+#'@param readAnn Logical Value, whetaer annotation tiers should be read and sorted
 #' @return returns dataframe that contains all events, an IP number and formatted annotations
 #' @export
 #'
 #' @examples read_exb_dir(pathDir)
-read_exb_dir <- function(pathDir, addMetaData= FALSE){
+read_exb_dir <- function(pathDir, addMetaData= FALSE, readAnn=TRUE){
   files <- list.files(pathDir,".\\.exb")
   addMetaDataDir <- addMetaData
-  exb <- read_exb_file(path= unlist(stringr::str_c(pathDir,"\\",files[1])), addMetaData=addMetaDataDir, sortMetaData=FALSE)
+  readAnnDir <- readAnn
+  exb <- read_exb_file(path= unlist(stringr::str_c(pathDir,"\\",files[1])), addMetaData=addMetaDataDir, readAnn= readAnnDir , sortMetaData=FALSE)
   k <- 2
   for (k in 2:length(files)) {
     help <- read_exb_file(path= unlist(stringr::str_c(pathDir,"\\",files[k])), addMetaData=addMetaDataDir, sortMetaData=FALSE)
