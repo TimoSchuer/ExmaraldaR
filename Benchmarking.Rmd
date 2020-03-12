@@ -23,7 +23,7 @@ Gesamtzeit
 
 ```{r}
 start <- Sys.time()
-test <- read_exb_file(path=path, readAnn = FALSE)
+test <- read_exb_file(path=path)
 end <- Sys.time()
 time <- start-end
 time
