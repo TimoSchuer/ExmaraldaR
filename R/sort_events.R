@@ -28,6 +28,7 @@ sort_events <- function(events, timeline){
               stringr::str_ends(events_sorted[k,'Text'], "([.;?,-]{1}| \\Q|\\E|\\Q/\\E|\\u01C0)(?=>)")|
               stringr::str_ends(events_sorted[k,'Text'], "\\d\\)")|
               stringr::str_ends(events_sorted[k,'Text'], "\\)\\)")|
+              # stringr::str_ends(events_sorted[k,'Text'], "\\)")|
               stringr::str_ends(events_sorted[k,'Text'], "([.;?,-]{1}| \\Q|\\E|\\Q/\\E|\\u01C0)(?=\\])")|
               stringr::str_ends(events_sorted[k,'Text'],"="))== TRUE){
           vecIp <- c(vecIp,k)
@@ -42,6 +43,7 @@ sort_events <- function(events, timeline){
              stringr::str_ends(events_sorted[n,'Text'], "([.;?,-]{1}| \\Q|\\E|\\Q/\\E|\\u01C0)(?=>)")|
              stringr::str_ends(events_sorted[n,'Text'], "\\d\\)")|
              stringr::str_ends(events_sorted[n,'Text'], "\\)\\)")|
+             # stringr::str_ends(events_sorted[n,'Text'], "\\)")|
              stringr::str_ends(events_sorted[n,'Text'], "([.;?,-]{1}| \\Q|\\E|\\Q/\\E|\\u01C0)(?=\\])")|
              stringr::str_ends(events_sorted[n,'Text'],"="))== FALSE){
         subset <- dplyr::slice(events_sorted, n+1:nrow(events_sorted))
