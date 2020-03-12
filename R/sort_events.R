@@ -14,7 +14,7 @@ sort_events <- function(events, timeline){
   for (i in 1:length(timeline)) {
     vec_sort <- c(vec_sort, which(events$Start== timeline[i]))
   }
-  events_sorted <- events[vec_sort,] %>% `rownames<-`(seq(1:nrow(events_sorted)))
+  events_sorted <- events[vec_sort,] %>% `rownames<-`(seq(1:nrow(.)))
 
 # Sort events so that IPs are held together -------------------------------
   vecIp <- c()
