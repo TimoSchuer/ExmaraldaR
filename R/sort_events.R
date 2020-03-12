@@ -50,8 +50,8 @@ sort_events <- function(events, timeline){
       }
     }
   }
-
-
+  events_sorted <- events_sorted[vecIp,]
+  return(events_sorted)
 }
 
 #IDEE: nicht Zeilen sortieren, sondern nur Vektor mit Zeilennummern erstellen und damit dann sortieren
