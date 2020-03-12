@@ -4,10 +4,12 @@
 \alias{read_exb_file}
 \title{read_exb_file()}
 \usage{
-read_exb_file(path, addMetaData = FALSE, sortMetaData = TRUE)
+read_exb_file(path, readAnn = TRUE, addMetaData = FALSE, sortMetaData = TRUE)
 }
 \arguments{
 \item{path}{Path of an exb transcription file}
+
+\item{readAnn}{Logical Value, whetaer annotation tiers should be read and sorted}
 
 \item{addMetaData}{Logical Value, wheter Metadata should be read from the speakertable}
 

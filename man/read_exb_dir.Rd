@@ -4,12 +4,14 @@
 \alias{read_exb_dir}
 \title{Read entire directory of exb files annotated with the same annotation specification}
 \usage{
-read_exb_dir(pathDir, addMetaData = FALSE)
+read_exb_dir(pathDir, addMetaData = FALSE, readAnn = TRUE)
 }
 \arguments{
 \item{pathDir}{path of the directory}
 
 \item{addMetaData}{Logical Value, wheter Metadata should be read from the speakertable}
+
+\item{readAnn}{Logical Value, whetaer annotation tiers should be read and sorted}
 }
 \value{
 returns dataframe that contains all events, an IP number and formatted annotations

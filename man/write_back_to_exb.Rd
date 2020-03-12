@@ -9,7 +9,7 @@ write_back_to_exb(
   CsvFile,
   sep = ",",
   PathExb,
-  PathNewFile = PathExb,
+  PathNewFile = dirname(PathExb),
   suffix = "_new"
 )
 }
