@@ -29,7 +29,7 @@ read_annotations_exb <- function(file) {
     Ann <- character(0)
     AnnSpeaker <- character(0)
     if(length(xml2::xml_children(AnnotationTiers[k]))!=0){
-    for (l in 1:length(xml2::xml_children(AnnotationTiers[[k]]))) {
+      for (l in 1:length(xml2::xml_children(AnnotationTiers[[k]]))) {
         s[l] <- xml2::xml_attrs(xml2::xml_child(AnnotationTiers[[k]], l))[["start"]] #Startzeitpunkt auslesen
         e[l] <- xml2::xml_attrs(xml2::xml_child(AnnotationTiers[[k]], l))[["end"]] #Endzeitpunkt auslesen
         Ann[l] <- xml2::xml_text(xml2::xml_child(AnnotationTiers[[k]], l)) #Annotation auslesen
