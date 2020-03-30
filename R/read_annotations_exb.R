@@ -13,7 +13,7 @@
 #'
 #' @examples
 #' read_annotations(file)
-read_annotations_exb <- function(file) {
+read_annotations_linar <- function(file) {
   AnnotationTiers <- xml2::xml_find_all(file,".//tier[@type='a']") #findet alle Annotationsspuren
 
   # Definiert Variablen -----------------------------------------------------

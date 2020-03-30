@@ -12,7 +12,7 @@
 #'
 #' @examples
 #' read_exb_file(path, addMetaData=True)
-read_exb_file <- function(path, readAnn=TRUE,addMetaData= FALSE,sortMetaData=TRUE){
+read_exb_file <- function(path, readAnn=TRUE,annotation= c("linear", "multilayer"),addMetaData= FALSE,sortMetaData=TRUE){
   if(check_exb(path)){
     file <- xml2::read_xml(path, encoding="UTF-8")
     timeline <- read_timeline(file)
@@ -22,9 +22,13 @@ read_exb_file <- function(path, readAnn=TRUE,addMetaData= FALSE,sortMetaData=TRU
     events_sorted <- add_IpNumber(events_sorted)
     AnnotationTiers <- xml2::xml_find_all(file,".//tier[@type='a']") #findet alle Annotationsspuren
     if(readAnn==TRUE & length(AnnotationTiers) !=0){
-      annotations <- read_annotations_exb(file)
-      exb <- dplyr::left_join(events_sorted, annotations,by = c("Speaker", "Start", "End"))
-      exb <- sort_anntotations_linear(exb)
+      if(annotation=="linear"){
+        annotations <- read_annotations_linear(file)
+        exb <- dplyr::left_join(events_sorted, annotations,by = c("Speaker", "Start", "End"))
+        exb <- sort_anntotations_linear(exb)
+      }else if(annotation=="multilayer"){
+        annotations <- sort_annotations_multilayer(file, AnnotationTiers, events_sorted)
+      }
     }else{
       exb <- events_sorted
     }
