@@ -1,5 +1,4 @@
 sort_annotations_multilayer <- function(file, AnnotationTiers,events_sorted){
-
   AnnText <- xml2::xml_text( xml2::xml_children(AnnotationTiers[1]))
   time <-  xml2::xml_attrs(xml2::xml_children(AnnotationTiers[[1]]))
   time <- data.frame(matrix(unlist(time), ncol = max(lengths(time)), byrow = TRUE))
