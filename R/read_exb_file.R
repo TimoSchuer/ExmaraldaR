@@ -25,6 +25,16 @@ read_exb_file <- function(path, readAnn=TRUE,annotation= c("linear", "multilayer
       if(annotation=="linear"){
         annotations <- read_annotations_linear(file)
         exb <- dplyr::left_join(events_sorted, annotations,by = c("Speaker", "Start", "End"))
+        MultiEventAnn <- dplyr::anti_join( annotations,events_sorted, by=c("Speaker", "Start", "End")) # check for annotations for more than 1 event
+        if(nrow(MultiEventAnn)!=0){
+          exb <- events_sorted
+          for (n in 1:nrow(MultiEventAnn)) {
+            a <- which(events_sorted[,'Start']==MultiEventAnn[n, 'Start'])
+            b <- which(events_sorted[,'End']==MultiEventAnn[n, 'End'])
+            exb[a:b,colnames(MultiEventAnn)[ncol(MultiEventAnn)]] <- MultiEventAnn[n, ncol(MultiEventAnn)]
+          }
+        }
+
         exb <- sort_anntotations_linear(exb)
       }else if(annotation=="multilayer"){
         annotations <- sort_annotations_multilayer(file, AnnotationTiers, events_sorted)
