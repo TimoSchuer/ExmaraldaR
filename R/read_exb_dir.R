@@ -7,11 +7,12 @@
 #' @export
 #'
 #' @examples read_exb_dir(pathDir)
-read_exb_dir <- function(pathDir, addMetaData= FALSE, readAnn=TRUE){
+read_exb_dir <- function(pathDir, addMetaData= FALSE, readAnn=TRUE,annotation= c("linear", "multilayer")){
   files <- list.files(pathDir,".\\.exb")
   addMetaDataDir <- addMetaData
   readAnnDir <- readAnn
-  exb <- read_exb_file(path= unlist(stringr::str_c(pathDir,"\\",files[1])), addMetaData=addMetaDataDir, readAnn= readAnnDir , sortMetaData=FALSE)
+  AnnotationDir <- annotation
+  exb <- read_exb_file(path= unlist(stringr::str_c(pathDir,"\\",files[1])),annotation= AnnotationDir, addMetaData=addMetaDataDir, readAnn= readAnnDir , sortMetaData=FALSE)
   k <- 2
   for (k in 2:length(files)) {
     help <- read_exb_file(path= unlist(stringr::str_c(pathDir,"\\",files[k])), addMetaData=addMetaDataDir, readAnn= readAnnDir, sortMetaData=FALSE)
