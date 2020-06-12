@@ -13,7 +13,7 @@
 #' read_events(file)
 read_events <- function(file, path){
   transcriptions <- xml2::xml_find_all(file, "/basic-transcription/basic-body[1]/tier[@type='t']") # findet alle Transkriptionszeilen; da ich immer eine Pausenzeile (benannt mit P) einfüge, wird diese ausgeschlossn
-  events <- character(0)
+  event <- character(0)
   start <- character(0)
   end <- character(0)
   text <- character(0)
@@ -50,6 +50,6 @@ read_events <- function(file, path){
     tierId <- tierId[1:length(end)]
     speaker <- speaker[1:length(end)]
   }
-  events <- data.frame(File = filename_help, Speaker = speaker, TierID = tierId, Name= name,Text= text,Start =start,End= end, stringsAsFactors = FALSE)
+  events <- data.frame(File = filename_help, Speaker = speaker, TierID = tierId, Name= name,Text= text,Start =unlist(unname(start)),End=unlist(unname(end)), stringsAsFactors = FALSE)
   return(events)
 }
