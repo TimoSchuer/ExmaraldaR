@@ -23,7 +23,7 @@ read_exb_file <- function(path, readAnn=TRUE,annotation= c("linear", "multilayer
     AnnotationTiers <- xml2::xml_find_all(file,".//tier[@type='a']") #findet alle Annotationsspuren
     if(readAnn==TRUE & length(AnnotationTiers) !=0){
       if(annotation=="linear"){
-        annotations <- read_annotations_linear(file)
+        annotations <- read_annotations_linar(file)
         exb <- dplyr::left_join(events_sorted, annotations,by = c("Speaker", "Start", "End"))
         MultiEventAnn <- dplyr::anti_join( annotations,events_sorted, by=c("Speaker", "Start", "End")) # check for annotations for more than 1 event
         if(nrow(MultiEventAnn)!=0){
