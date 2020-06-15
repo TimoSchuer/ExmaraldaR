@@ -11,7 +11,6 @@
 #' @return
 #' @export
 #'
-#' @examples
 write_back_dir <- function(exb,sep=",", PathExbDir, PathNewFiles = PathExbDir, suffix="_new"){
 
 # Check if exb is object or csv file, save in annotations -----------------

@@ -8,8 +8,7 @@
 #'
 #' @return
 #' @export
-#'
-#' @examples
+
 write_back_to_exb <- function(CsvFile,sep=",", PathExb, PathNewFile = dirname(PathExb), suffix="_new"){
   file <- xml2::read_xml(PathExb) #Read transcription
   if(is.data.frame(CsvFile)){
