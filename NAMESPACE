@@ -2,7 +2,7 @@
 
 export(add_IpNumber)
 export(check_exb)
-export(read_annotations_exb)
+export(read_annotations_linar)
 export(read_events)
 export(read_exb_dir)
 export(read_exb_file)

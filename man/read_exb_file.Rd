@@ -4,7 +4,13 @@
 \alias{read_exb_file}
 \title{read_exb_file()}
 \usage{
-read_exb_file(path, readAnn = TRUE, addMetaData = FALSE, sortMetaData = TRUE)
+read_exb_file(
+  path,
+  readAnn = TRUE,
+  annotation = c("linear", "multilayer"),
+  addMetaData = FALSE,
+  sortMetaData = TRUE
+)
 }
 \arguments{
 \item{path}{Path of an exb transcription file}

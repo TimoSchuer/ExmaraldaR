@@ -4,7 +4,12 @@
 \alias{read_exb_dir}
 \title{Read entire directory of exb files annotated with the same annotation specification}
 \usage{
-read_exb_dir(pathDir, addMetaData = FALSE, readAnn = TRUE)
+read_exb_dir(
+  pathDir,
+  addMetaData = FALSE,
+  readAnn = TRUE,
+  annotation = c("linear", "multilayer")
+)
 }
 \arguments{
 \item{pathDir}{path of the directory}
