@@ -36,20 +36,21 @@ sort_events <- function(events, timeline){
     }else{
       n <- k
       vecIp <- c(vecIp,n)
-      while((stringr::str_ends(events_sorted[n,'Text'], "[.;?,-]")|
-             stringr::str_ends(events_sorted[n,'Text'], "\\Q|\\E")|
-             stringr::str_ends(events_sorted[n,'Text'], "\\u01C0") |
-             stringr::str_ends(events_sorted[n,'Text'], "\\Q/\\E")|
-             stringr::str_ends(events_sorted[n,'Text'], "([.;?,-]{1}| \\Q|\\E|\\Q/\\E|\\u01C0)(?=>)")|
-             stringr::str_ends(events_sorted[n,'Text'], "\\d\\)")|
-             stringr::str_ends(events_sorted[n,'Text'], "\\)\\)")|
-             # stringr::str_ends(events_sorted[n,'Text'], "\\)")|
-             stringr::str_ends(events_sorted[n,'Text'], "([.;?,-]{1}| \\Q|\\E|\\Q/\\E|\\u01C0)(?=\\])")|
-             stringr::str_ends(events_sorted[n,'Text'],"="))== FALSE){
-        subset <- dplyr::slice(events_sorted, n+1:nrow(events_sorted))
-        n <- match(events_sorted[n,'Speaker'],subset$Speaker) +n
-        vecIp <- c(vecIp,n)
-      }
+      tryCatch(
+        while((stringr::str_ends(events_sorted[n,'Text'], "[.;?,-]")|
+               stringr::str_ends(events_sorted[n,'Text'], "\\Q|\\E")|
+               stringr::str_ends(events_sorted[n,'Text'], "\\u01C0") |
+               stringr::str_ends(events_sorted[n,'Text'], "\\Q/\\E")|
+               stringr::str_ends(events_sorted[n,'Text'], "([.;?,-]{1}| \\Q|\\E|\\Q/\\E|\\u01C0)(?=>)")|
+               stringr::str_ends(events_sorted[n,'Text'], "\\d\\)")|
+               stringr::str_ends(events_sorted[n,'Text'], "\\)\\)")|
+               # stringr::str_ends(events_sorted[n,'Text'], "\\)")|
+               stringr::str_ends(events_sorted[n,'Text'], "([.;?,-]{1}| \\Q|\\E|\\Q/\\E|\\u01C0)(?=\\])")|
+               stringr::str_ends(events_sorted[n,'Text'],"="))== FALSE){
+          subset <- dplyr::slice(events_sorted, n+1:nrow(events_sorted))
+          n <- match(events_sorted[n,'Speaker'],subset$Speaker) +n
+          vecIp <- c(vecIp,n)
+        }, error=function(e){print(paste("Last event doesn't have an IP-ending sign."))})
     }
   }
   events_sorted <- events_sorted[vecIp,] %>% `row.names<-`(seq(1:nrow(.)))
