@@ -1,13 +1,13 @@
 Package: ExmaraldaR
-Title: What the Package Does (One Line, Title Case)
+Title: Importing transcripts (with and without annotations) from EXMARaLDA
 Version: 0.0.0.9000
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Timo",
+           family = "Schürmann",
            role = c("aut", "cre"),
-           email = "first.last@example.com",
+           email = "timo.schuermann@uni-muenster.de",
            comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+Description: Importing transcripts (with and without annotations) from EXMARaLDA
 License: What license it uses
 Encoding: UTF-8
 LazyData: true
@@ -17,4 +17,4 @@ Imports:
     stringr,
     dplyr,
     dummies,
-    purrr
+    magrittr
