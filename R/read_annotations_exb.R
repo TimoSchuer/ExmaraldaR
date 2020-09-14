@@ -21,7 +21,7 @@ read_annotations_linar <- function(file) {
   End <- character(0)
   Annot <- character(0)
   Speaker <- character(0)
-  if(length(AnnotationTiers!=0)){
+  if(length(AnnotationTiers)!=0){
     for (k in 1:length(AnnotationTiers)) {
       AnnSp <- xml2::xml_attrs(AnnotationTiers[[k]])[["speaker"]] #Annotierte Transkriptionsspur auslesen
       l <- 1
