@@ -10,6 +10,7 @@ sort_anntotations_linear <- function(exb){
   if(all(is.na(exb$Annotation)==TRUE)){
     return(exb)
   }else{
+    #check if there are more than one linear annotation ending with ";" in one event, if so split them up
     for (k in 1:nrow(exb)) {
       if(is.na(exb[k,"Annotation"])== FALSE & stringr::str_detect(exb[k,"Annotation"], ";[\\d\\s]")==TRUE){
         SplitAnn <- character(0)
@@ -28,7 +29,7 @@ sort_anntotations_linear <- function(exb){
     # variableNames <- unlist(xml2::xml_attrs(xml2::xml_children(tagSet)))
     # variableNames <- stringr::str_remove_all(variableNames, " ")
     # get highest number of Variables to set up data frame
-    VarNum <- stringr::str_extract_all(exb$Annotation, "[0-9]+")
+    VarNum <- stringr::str_extract_all(exb$Annotation, "_[0-9]+\\:{1}") %>%  stringr::str_extract_all("\\d")
     VarNum <- lapply(VarNum, as.numeric)
     VarNum <- max(unlist(VarNum),na.rm=TRUE)
     annotation_sorted <- data.frame(matrix(ncol = VarNum,nrow = nrow(exb)), stringsAsFactors = FALSE)
@@ -39,22 +40,22 @@ sort_anntotations_linear <- function(exb){
         next()
       }else{
         TagSplit <- unlist(stringr::str_split(VecAnn[k], "_"))
-        VTag <- unlist(stringr::str_split(TagSplit[1],":"))
-        VTag <- stringr::str_c(VTag[2],":",VTag[3])
-        annotation_sorted[k,1] <- VTag
-        if(length(TagSplit)>1){
-          i <- 2
-          for (i in 2:length(TagSplit)) {
+        # VTag <- unlist(stringr::str_split(TagSplit[1],":"))
+        # VTag <- stringr::str_c(VTag[2],":",VTag[3])
+        # annotation_sorted[k,1] <- VTag
+        #if(length(TagSplit)>1){
+          #i <- 2
+          for (i in 1:length(TagSplit)) {
             TagAtomic <- unlist(stringr::str_split(TagSplit[i],":"))
             TagAtomic <- stringr::str_remove_all(TagAtomic, "\\W")
             #annotation_sorted[k,as.numeric(TagAtomic[1])] <- as.character(TagAtomic[3])
             tryCatch(annotation_sorted[k,as.numeric(TagAtomic[1])] <- as.character(TagAtomic[3]), error= function(e) print_error(exb,k))
             tryCatch(colnames(annotation_sorted)[as.numeric(TagAtomic[1])] <- as.character(TagAtomic[2]), error= function(e) print_error(exb,k))
           }
-        }
+        #}
       }
     }
-    colnames(annotation_sorted)[1] <- "Variable"
+    #colnames(annotation_sorted)[1] <- "Variable"
     annotation_sorted <- dplyr::bind_cols(exb, annotation_sorted)
     annotation_sorted <- dplyr::select(annotation_sorted,-(Annotation))
     return(annotation_sorted)
