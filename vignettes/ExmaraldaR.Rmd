@@ -1,0 +1,37 @@
+---
+title: "Importing annotated EXMARaLDA transcripts with ExmaraldaR"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{ExmaraldaR}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(ExmaraldaR)
+```
+This package was developed to import transcripts of spoken language created with EXMARALDA (ADD CITATION) into R in a comfortable and fast way. First there will be some comments on how EXMARaLDA works and how transcription and annotation must be formatted to be easily readable. As I try to include more ways of transcribing and annotating data into this package, please write to me if your style does not work yet (timo.schuermann@uni-muenster.de).  
+
+## Transcribing and annotating in EXMARaLDA
+
+EXMARaLDA is a software package developed and maintained by Thomas Schmidt. Besides the transcription and annotation tool Partitur Editor, it includes a tool for managing corpora(Corpus-Manager) and a tool for searching and analysing (EXAKT). This package only contains a interface between R and the .exb format of the Partitur Editor. Maybe there will be options for segmetented files (.exs). Partitur Editor saves transcritions as an xml-based data format, which makes it possible to extract all relevant informations into a data table.
+As this is can not be an extensive introduction in the EXMARaLDA-Software package i will in the forthgoing assume that the users of this package know:
+
+1. how to create a transcription
+2. how allign audio/video data and transcrition
+3. how to transcribe 
+4. how to annotate a transcription (including allinging)
+
+In the following I will consider some features of the work process that lead to a well formed R- object.
+
+
+## Metadata
+
+![](C:\Users\Admin\sciebo\R\Kookkurrenz\Paket\metadata.png)
