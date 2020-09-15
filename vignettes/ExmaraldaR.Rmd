@@ -15,10 +15,17 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
+<<<<<<< HEAD
 library(devtools)
 install_github("TimoSchuer/ExmaraldaR", force = TRUE)
 library(ExmaraldaR)
 system.file("extdata", "Example_basic.exb", package = "ExmaraldaR", mustWork = TRUE)
+=======
+install_github("TimoSchuer/ExmaraldaR", force = TRUE)
+library(ExmaraldaR)
+system.file("extdata", file, package = "ExmaraldaR", mustWork = TRUE)
+
+>>>>>>> 0a8544cad50432ce3bc49b811d7996639012ea6e
 ```
 This package was developed to import transcripts of spoken language created with EXMARALDA (ADD CITATION) into R in a comfortable and fast way. First there will be some comments on how EXMARaLDA works and how transcription and annotation must be formatted to be easily readable. As I try to include more ways of transcribing and annotating data into this package, please write to me if your style does not work yet (timo.schuermann@uni-muenster.de).  
 
