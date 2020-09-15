@@ -36,7 +36,7 @@ read_exb_file <- function(path, readAnn=TRUE,annotation= c("linear", "multilayer
 
         exb <- sort_anntotations_linear(exb)
       }else if(annotation=="multilayer"){
-        annotations <- sort_annotations_multilayer(file, AnnotationTiers, events_sorted)
+        exb <- sort_annotations_multilayer(file, AnnotationTiers, events_sorted)
       }
     }else{
       exb <- events_sorted
