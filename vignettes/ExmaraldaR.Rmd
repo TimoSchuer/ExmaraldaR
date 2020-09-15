@@ -15,7 +15,6 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
-
 library(devtools)
 install_github("TimoSchuer/ExmaraldaR", force = TRUE)
 library(ExmaraldaR)
@@ -36,7 +35,7 @@ As this is can not be an extensive introduction in the EXMARaLDA-Software packag
 In the following I will consider some features of the work process that lead to a well formed R- object. I will therefore go backwards, showing you the output of example files and then the parameter in the Partitur Editor leading to this specific output.
 
 ```{r}
-read_exb_file(path= system.file("extdata", "Example_basic.exb", package = "ExmaraldaR", mustWork = TRUE), readAnn = FALSE, addMetaData = TRUE)
+read_exb_file(path= system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mustWork = TRUE), readAnn = FALSE, addMetaData = TRUE)
 ```
 
 
