@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (c) http://www.rrz.uni-hamburg.de/exmaralda -->
+<basic-transcription>
+<head>
+<meta-information><project-name></project-name><transcription-name></transcription-name><referenced-file url="../../../Studium/Master/Masterarbeit/Aufnahmen/Aufnahmen_verwendet/MA1_anonym.wav"/><ud-meta-information></ud-meta-information><comment></comment><transcription-convention></transcription-convention></meta-information><speakertable><speaker id="SPK0">
+<abbreviation>SPK1</abbreviation>
+<sex value="m"/>
+<languages-used><language lang="eng"/></languages-used>
+<l1><language lang="deu"/></l1>
+<l2><language lang="eng"/></l2>
+<ud-speaker-information>
+<ud-information attribute-name="Age">25</ud-information></ud-speaker-information>
+<comment>medium nice person</comment>
+</speaker>
+<speaker id="SPK1">
+<abbreviation>SPK2</abbreviation>
+<sex value="f"/>
+<languages-used><language lang="eng"/></languages-used>
+<l1><language lang="deu"/></l1>
+<l2><language lang="eng"/></l2>
+<ud-speaker-information>
+<ud-information attribute-name="Age">22</ud-information></ud-speaker-information>
+<comment>very nice person</comment>
+</speaker>
+</speakertable></head>
+<basic-body>
+<common-timeline>
+<tli id="T0" time="0.0"/>
+<tli id="T16"/>
+<tli id="T17"/>
+<tli id="T1"/>
+<tli id="T18"/>
+<tli id="T19"/>
+<tli id="T2"/>
+<tli id="T3"/>
+<tli id="T4"/>
+<tli id="T6"/>
+<tli id="T7"/>
+<tli id="T8" time="2.0"/>
+<tli id="T9" time="4.0"/>
+<tli id="T11" time="5.466666666666667" type="intp"/>
+<tli id="T10" time="6.0"/>
+<tli id="T12" time="8.0"/>
+<tli id="T13" time="10.0"/>
+<tli id="T14" time="11.986666903401323"/>
+<tli id="T15" time="14.0"/>
+<tli id="T5" time="1346.757"/>
+</common-timeline>
+<tier id="TIE0" speaker="SPK0" category="v" type="t" display-name="SPK1 [v]"><event start="T0" end="T16">this is a </event>
+<event start="T16" end="T17">test</event>
+<event start="T17" end="T1"> file|</event>
+<event start="T1" end="T18">it is just for </event>
+<event start="T18" end="T19">one</event>
+<event start="T19" end="T2"> purpose|</event>
+<event start="T3" end="T4">right|</event>
+<event start="T4" end="T6">and maybe proving </event>
+<event start="T6" end="T7">that</event>
+<event start="T7" end="T8"> it works at all|</event>
+<event start="T9" end="T11">just some features of gat2 basic </event>
+<event start="T11" end="T10">transcripts|</event>
+<event start="T12" end="T13">yes|</event>
+<event start="T13" end="T14">and some random annotations|</event>
+</tier><tier id="TIE2" speaker="SPK0" category="v" type="a" display-name="SPK1 [v]"><event start="T0" end="T16"></event>
+<event start="T16" end="T17">1:Tag:NN_2:test1:test_test2:test;</event>
+<event start="T17" end="T1">1:Tag:NN_test2:test;</event>
+<event start="T1" end="T18"></event>
+<event start="T18" end="T19">2:test2_real;</event>
+<event start="T19" end="T2"></event>
+<event start="T3" end="T4"></event>
+<event start="T4" end="T6"></event>
+<event start="T6" end="T7"></event>
+<event start="T7" end="T8"></event>
+<event start="T9" end="T11"></event>
+<event start="T11" end="T10"></event>
+<event start="T12" end="T13"></event>
+<event start="T13" end="T14"></event>
+</tier><tier id="TIE1" speaker="SPK1" category="v" type="t" display-name="SPK2 [v]"><event start="T2" end="T3">showing how it works|</event>
+<event start="T3" end="T4">right</event>
+<event start="T6" end="T7">((laughs))</event>
+<event start="T8" end="T9">so what does this show|</event>
+<event start="T11" end="T10">like</event>
+<event start="T10" end="T12">overlapping speak|</event>
+<event start="T14" end="T15">sounds useful|</event>
+</tier><tier id="TIE3" speaker="SPK1" category="v" type="t" display-name="SPK2 [v]"><event start="T2" end="T3"></event>
+<event start="T3" end="T4"></event>
+<event start="T6" end="T7"></event>
+<event start="T8" end="T9"></event>
+<event start="T11" end="T10"></event>
+<event start="T10" end="T12"></event>
+<event start="T14" end="T15"></event>
+</tier></basic-body>
+</basic-transcription>
