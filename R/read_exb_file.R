@@ -55,7 +55,7 @@ read_exb_file <- function(path, readAnn=TRUE,annotation= c("linear", "multilayer
         exb <- exb2
       }
     }
-    names(exb)[names(exb) == "IpNumber"] <- "IP Number"
+    #names(exb)[names(exb) == "IpNumber"] <- "IP Number"
     return(exb)
   } else {
     stop("File has to be an EXMARaLDA basis-transcription (.exb)")
