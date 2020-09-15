@@ -29,7 +29,7 @@ sort_anntotations_linear <- function(exb){
     # variableNames <- unlist(xml2::xml_attrs(xml2::xml_children(tagSet)))
     # variableNames <- stringr::str_remove_all(variableNames, " ")
     # get highest number of Variables to set up data frame
-    VarNum <- stringr::str_extract_all(exb$Annotation, "_[0-9]+\\:{1}") %>%  stringr::str_extract_all("\\d")
+    suppressWarnings(VarNum <- stringr::str_extract_all(exb$Annotation, "_[0-9]+\\:{1}") %>%  stringr::str_extract_all("\\d"))
     VarNum <- lapply(VarNum, as.numeric)
     VarNum <- max(unlist(VarNum),na.rm=TRUE)
     annotation_sorted <- data.frame(matrix(ncol = VarNum,nrow = nrow(exb)), stringsAsFactors = FALSE)
