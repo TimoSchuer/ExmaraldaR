@@ -15,7 +15,10 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
+library(devtools)
+install_github("TimoSchuer/ExmaraldaR", force = TRUE)
 library(ExmaraldaR)
+system.file("extdata", "Example_basic.exb", package = "ExmaraldaR", mustWork = TRUE)
 ```
 This package was developed to import transcripts of spoken language created with EXMARALDA (ADD CITATION) into R in a comfortable and fast way. First there will be some comments on how EXMARaLDA works and how transcription and annotation must be formatted to be easily readable. As I try to include more ways of transcribing and annotating data into this package, please write to me if your style does not work yet (timo.schuermann@uni-muenster.de).  
 
@@ -30,6 +33,11 @@ As this is can not be an extensive introduction in the EXMARaLDA-Software packag
 4. how to annotate a transcription (including allinging)
 
 In the following I will consider some features of the work process that lead to a well formed R- object. I will therefore go backwards, showing you the output of example files and then the parameter in the Partitur Editor leading to this specific output.
+
+```{r}
+read_exb_file(path= system.file("extdata", "Example_basic.exb", package = "ExmaraldaR", mustWork = TRUE), readAnn = FALSE, addMetaData = TRUE)
+```
+
 
 
 ## Metadata
