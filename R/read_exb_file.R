@@ -55,7 +55,7 @@ read_exb_file <- function(path, readAnn=TRUE,annotation= c("linear", "multilayer
         exb <- exb2
       }
     }
-    exb <- exb %>% dplyr::rename(IpNumer=IP)
+    exb <- exb %>% dplyr::rename(IpNumer = IP)
     return(exb)
   } else {
     stop("File has to be an EXMARaLDA basis-transcription (.exb)")
