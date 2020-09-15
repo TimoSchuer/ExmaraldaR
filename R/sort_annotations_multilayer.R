@@ -24,7 +24,7 @@ sort_annotations_multilayer <- function(file, AnnotationTiers,events_sorted){
         time <- data.frame(matrix(unlist(time), ncol = max(lengths(time)), byrow = TRUE))
         Speaker <-  xml2::xml_attr(AnnotationTiers[[k]], "speaker")
         AnnTier <- data.frame(Speaker= Speaker, Start= time[,1], End= time[,2],AnnText= AnnText)
-        AnnTier<- `colnames<-`(AnnTier, c("Speaker","Start","End",xml2::xml_attr(AnnotationTiers[k], "category")))
+        AnnTier<- `colnames<-`(AnnTier, c("Speaker","Start","End",xml2::xml_attr(AnnotationTiers[k], "display-name")))
         exb <- suppressWarnings(dplyr::left_join(exb, AnnTier, by=c("Speaker", "Start", "End")))
         MultiEventAnn <- dplyr::anti_join( AnnTier,events_sorted, by=c("Speaker", "Start", "End")) # check for annotations for more than 1 event
         if(nrow(MultiEventAnn)!=0){
@@ -37,5 +37,6 @@ sort_annotations_multilayer <- function(file, AnnotationTiers,events_sorted){
         }
       }
     }
-  }
+    }
+  return(exb)
 }
