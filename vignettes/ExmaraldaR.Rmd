@@ -45,7 +45,9 @@ example <- read_exb_file(path, readAnn = TRUE, annotation= "linear", addMetaData
 kable(example)
 ```
 
-This is the table froma an annotated exb. file using a linear annotation putting serveral information in just one tag (see further below).
+This is the table froma an annotated exb. file using a linear annotation putting serveral information in just one tag (see further below). So lets have a look at the different columns and the information they contain.
+
+### IP Number 
 
 
 ## Metadata
