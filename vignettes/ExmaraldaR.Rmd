@@ -49,8 +49,50 @@ This is the table froma an annotated exb. file using a linear annotation putting
 
 ### IP Number 
 
-The first row contains a IP numbering based on
+The first row contains a IP numbering based on the intonation phrase in GAT2 (ZITATION). It uses the set of delimiters as the signs for intonation at the end of a phrase or the neutral "|". If there are overlapping speech events, the one starting first gets the lower number.
+
+### File
+
+The name of the file. Important if more than one file (via read_exb_dir()) is imported.
+
+### Speaker
+
+Speaker sigle as named in the speaker table (see below).
+
+### Tier ID
+
+ID of each tier. Just important for files creating .exb files as add_min_tier() or write_back_to_exb()
+
+### Name
+
+Name of the speaker.
+
+### Text 
+
+Transcription text divided into events as in the Partitur Editor.
+
+### Metadata
+
+Some additional information about the speaker added via the Speaker table. In this example file it is sex, languages used, L1, L2, comment and age.
+
+### Start and End of event
+
+Contains the end and start in the timeline of an event. Just important for files creating .exb files as add_min_tier() or write_back_to_exb().
+
+### Annotations
+
+This is sorted version of the annotated data.
+
+So the dataframe contains every information that could be useful for further analysis. And also some information thats only useful if you for example change something in the R data frame or excel file and want the data to be consistent to the exb files and therefore write it back.
+
+In the next step we will look at the options in the speakertable that lead to the metadata columns.
+
 
 ## Metadata
 
 ![](C:\Users\Admin\sciebo\R\Kookkurrenz\Paket\metadata.png)
+In some point of your transcription process you have to create speaker via the speakertable (Transcription > Speakertable). In Sektion (1) there are fixed attributes. This includes speakerabbrevation (presented in the column 'speaker'), sex and languages. In section (2) you can leave additional comments to the speaker. For most analytical puporses it can be useful to define some person related information to include it into the analysis or subset your data to certain groups. The name of the self defined attributes will be the name of the column. All Information set here can be included or excluded from the dataframe with the parameter *addMetaData*.
+
+## Linear annotation
+
+With the (probably incorrect) term linear annotation i mean a 
