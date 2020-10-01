@@ -1,5 +1,5 @@
 ---
-title: "Importing annotated EXMARaLDA transcripts with ExmaraldaR"
+title: "ExmaraldaR"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{ExmaraldaR}
@@ -95,4 +95,15 @@ In some point of your transcription process you have to create speaker via the s
 
 ## Linear annotation
 
-With the (probably incorrect) term linear annotation i mean a 
+![](C:\Users\Admin\sciebo\R\Kookkurrenz\Paket\linear.png)
+
+With the (probably incorrect) term linear annotation i denote a format where more than one information is coded in one tag. This is useful for some tasks, especially variable centered analysis, where more than one variable can occur in a transcription unit. I adopted this approach form LANWER 2015 ZITATION and analysis of cooccurrence of phonological variants. Therefore it contains first the variable coded, then the variant and the some contextual features. Of course it can also be used to code non-variable centered analysis. Formally every  information to be coded is structured as followed: ONGOING NUMBER OF CATEGORY:CATEGORY:SPEZIFICATION . The first part is a ongoing number that is assigned to every category. This has to be consistent, because it is exessential for sorting the category in the right number. Second part is the name of the category. This will also be the name of the collumn. The third part contains the specification of the category. The categories are seperated through '_' and the tag ends with ';', so that a tag could look like this: *1:Category1:Spec1_2:Category2: Spec2_5:Category5:Spec5;* .A tag coding a variable with context information (e.g. in a phonological paper) would look like this: *1:VARIABLe:VARIABLENAME_2:VARIANT:VARIANTSPECIFICATION_3:CONTEXT1:SPEZIFICATION;* A mayor improvement comparing to copying an EXAKT result to a EXCEL file is that if a category is not specified there is no need to annotate it. The code will automatically sort it into the right column via the number.
+I recomend highly to use a self defined annotation tag set (LINK EINFÜGEN).
+
+## Multilayer annotation
+
+![](C:\Users\Admin\sciebo\R\Kookkurrenz\Paket\multi.png)
+
+The probably more common annotation is a multilayer annotation. This means that every annotation category has its own tier. This has some advantages AUFSATZ FINDEN but one mayor drawback is that the partitur editor can get very slow having many tiers and long recordings. On the other hand the annotation process is much faster and the revision process much easier. The annotation tiers in the example are speaker related. This is not necessary as annotation tiers can also be without a speaker assignment. This has no influence on the output.
+
+## 
