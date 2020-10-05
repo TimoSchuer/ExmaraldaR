@@ -21,17 +21,17 @@ library(ExmaraldaR)
 library(knitr)
 
 ```
-This package was developed to import transcripts of spoken language created with EXMARALDA (ADD CITATION) into R in a comfortable and fast way. First there will be some comments on how EXMARaLDA works and how transcription and annotation must be formatted to be easily readable. As I try to include more ways of transcribing and annotating data into this package, please write to me if your style does not work yet (timo.schuermann@uni-muenster.de).  
+
+This package was developed to import transcripts of spoken language created with EXMARALDA (ADD CITATION) into R in a comfortable and fast way. First there will be some comments on how EXMARaLDA works and how transcription and annotation must be formatted to be easily readable. As I try to include more ways of transcribing and annotating data into this package, please write to me if your style does not work yet ([timo.schuermann\@uni-muenster.de](mailto:timo.schuermann@uni-muenster.de){.email}).
 
 ## Transcribing and annotating in EXMARaLDA
 
-EXMARaLDA is a software package developed and maintained by Thomas Schmidt. Besides the transcription and annotation tool Partitur Editor, it includes a tool for managing corpora(Corpus-Manager) and a tool for searching and analysing (EXAKT). This package only contains a interface between R and the .exb format of the Partitur Editor. Maybe there will be options for segmetented files (.exs). Partitur Editor saves transcritions as an xml-based data format, which makes it possible to extract all relevant informations into a data table.
-As this is can not be an extensive introduction in the EXMARaLDA-Software package i will in the forthgoing assume that the users of this package know:
+EXMARaLDA is a software package developed and maintained by Thomas Schmidt. Besides the transcription and annotation tool Partitur Editor, it includes a tool for managing corpora(Corpus-Manager) and a tool for searching and analysing (EXAKT). This package only contains a interface between R and the .exb format of the Partitur Editor. Maybe there will be options for segmetented files (.exs). Partitur Editor saves transcritions as an xml-based data format, which makes it possible to extract all relevant informations into a data table. As this is can not be an extensive introduction in the EXMARaLDA-Software package i will in the forthgoing assume that the users of this package know:
 
-1. how to create a transcription
-2. how allign audio/video data and transcrition
-3. how to transcribe 
-4. how to annotate a transcription (including allinging)
+1.  how to create a transcription
+2.  how allign audio/video data and transcrition
+3.  how to transcribe
+4.  how to annotate a transcription (including allinging)
 
 In the following I will consider some features of the work process that lead to a well formed R- object. I will therefore go backwards, showing you the output of example files and then the parameter in the Partitur Editor leading to this specific output.
 
@@ -39,6 +39,7 @@ In the following I will consider some features of the work process that lead to 
 path <- system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mustWork = TRUE)
 read_exb_file(path, readAnn = TRUE, annotation= "linear", addMetaData = TRUE)
 ```
+
 ```{r echo=FALSE, results='asis', warning=FALSE}
 path <- system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mustWork = TRUE)
 example <- read_exb_file(path, readAnn = TRUE, annotation= "linear", addMetaData = TRUE)
@@ -47,13 +48,13 @@ kable(example)
 
 This is the table froma an annotated exb. file using a linear annotation putting serveral information in just one tag (see further below). So lets have a look at the different columns and the information they contain.
 
-### IP Number 
+### IP Number
 
-The first row contains a IP numbering based on the intonation phrase in GAT2 (ZITATION). It uses the set of delimiters as the signs for intonation at the end of a phrase or the neutral "|". If there are overlapping speech events, the one starting first gets the lower number.
+The first row contains a IP numbering based on the intonation phrase in GAT2 (ZITATION). It uses the set of delimiters as the signs for intonation at the end of a phrase or the neutral "\|". If there are overlapping speech events, the one starting first gets the lower number.
 
 ### File
 
-The name of the file. Important if more than one file (via read_exb_dir()) is imported.
+The name of the file. Important if more than one file (via read\_exb\_dir()) is imported.
 
 ### Speaker
 
@@ -61,13 +62,13 @@ Speaker sigle as named in the speaker table (see below).
 
 ### Tier ID
 
-ID of each tier. Just important for files creating .exb files as add_min_tier() or write_back_to_exb()
+ID of each tier. Just important for files creating .exb files as add\_min\_tier() or write\_back\_to\_exb()
 
 ### Name
 
 Name of the speaker.
 
-### Text 
+### Text
 
 Transcription text divided into events as in the Partitur Editor.
 
@@ -77,7 +78,7 @@ Some additional information about the speaker added via the Speaker table. In th
 
 ### Start and End of event
 
-Contains the end and start in the timeline of an event. Just important for files creating .exb files as add_min_tier() or write_back_to_exb().
+Contains the end and start in the timeline of an event. Just important for files creating .exb files as add\_min\_tier() or write\_back\_to\_exb().
 
 ### Annotations
 
@@ -87,22 +88,19 @@ So the dataframe contains every information that could be useful for further ana
 
 In the next step we will look at the options in the speakertable that lead to the metadata columns.
 
-
 ## Metadata
 
-![](C:\Users\Admin\sciebo\R\Kookkurrenz\Paket\metadata.png)
-In some point of your transcription process you have to create speaker via the speakertable (Transcription > Speakertable). In Sektion (1) there are fixed attributes. This includes speakerabbrevation (presented in the column 'speaker'), sex and languages. In section (2) you can leave additional comments to the speaker. For most analytical puporses it can be useful to define some person related information to include it into the analysis or subset your data to certain groups. The name of the self defined attributes will be the name of the column. All Information set here can be included or excluded from the dataframe with the parameter *addMetaData*.
+![](images/metadata.png)
 
-## Linear annotation
+In some point of your transcription process you have to create speaker via the speakertable (Transcription \> Speakertable). In Sektion (1) there are fixed attributes. This includes speakerabbrevation (presented in the column 'speaker'), sex and languages. In section (2) you can leave additional comments to the speaker. For most analytical puporses it can be useful to define some person related information to include it into the analysis or subset your data to certain groups. The name of the self defined attributes will be the name of the column. All Information set here can be included or excluded from the dataframe with the parameter *addMetaData*.
 
-![](C:\Users\Admin\sciebo\R\Kookkurrenz\Paket\linear.png)
+## Linear annotation![](images/linear.png) 
 
-With the (probably incorrect) term linear annotation i denote a format where more than one information is coded in one tag. This is useful for some tasks, especially variable centered analysis, where more than one variable can occur in a transcription unit. I adopted this approach form LANWER 2015 ZITATION and analysis of cooccurrence of phonological variants. Therefore it contains first the variable coded, then the variant and the some contextual features. Of course it can also be used to code non-variable centered analysis. Formally every  information to be coded is structured as followed: ONGOING NUMBER OF CATEGORY:CATEGORY:SPEZIFICATION . The first part is a ongoing number that is assigned to every category. This has to be consistent, because it is exessential for sorting the category in the right number. Second part is the name of the category. This will also be the name of the collumn. The third part contains the specification of the category. The categories are seperated through '_' and the tag ends with ';', so that a tag could look like this: *1:Category1:Spec1_2:Category2: Spec2_5:Category5:Spec5;* .A tag coding a variable with context information (e.g. in a phonological paper) would look like this: *1:VARIABLe:VARIABLENAME_2:VARIANT:VARIANTSPECIFICATION_3:CONTEXT1:SPEZIFICATION;* A mayor improvement comparing to copying an EXAKT result to a EXCEL file is that if a category is not specified there is no need to annotate it. The code will automatically sort it into the right column via the number.
-I recomend highly to use a self defined annotation tag set (LINK EINFÜGEN).
+With the (probably incorrect) term linear annotation i denote a format where more than one information is coded in one tag. This is useful for some tasks, especially variable centered analysis, where more than one variable can occur in a transcription unit. I adopted this approach form LANWER 2015 ZITATION and analysis of cooccurrence of phonological variants. Therefore it contains first the variable coded, then the variant and the some contextual features. Of course it can also be used to code non-variable centered analysis. Formally every information to be coded is structured as followed: ONGOING NUMBER OF CATEGORY:CATEGORY:SPEZIFICATION . The first part is a ongoing number that is assigned to every category. This has to be consistent, because it is exessential for sorting the category in the right number. Second part is the name of the category. This will also be the name of the collumn. The third part contains the specification of the category. The categories are seperated through '\_' and the tag ends with ';', so that a tag could look like this: *1:Category1:Spec1\_2:Category2: Spec2\_5:Category5:Spec5;* .A tag coding a variable with context information (e.g. in a phonological paper) would look like this: *1:VARIABLe:VARIABLENAME\_2:VARIANT:VARIANTSPECIFICATION\_3:CONTEXT1:SPEZIFICATION;* A mayor improvement comparing to copying an EXAKT result to a EXCEL file is that if a category is not specified there is no need to annotate it. The code will automatically sort it into the right column via the number. I recomend highly to use a self defined annotation tag set (LINK EINFÜGEN).
 
 ## Multilayer annotation
 
-![](C:\Users\Admin\sciebo\R\Kookkurrenz\Paket\multi.png)
+![](images/multi.png){width="644"}
 
 The probably more common annotation is a multilayer annotation. This means that every annotation category has its own tier. This has some advantages AUFSATZ FINDEN but one mayor drawback is that the partitur editor can get very slow having many tiers and long recordings. On the other hand the annotation process is much faster and the revision process much easier. The annotation tiers in the example are speaker related. This is not necessary as annotation tiers can also be without a speaker assignment. This has no influence on the output.
 
