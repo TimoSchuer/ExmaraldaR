@@ -18,5 +18,7 @@ Returns data.frame containing all Information; events are not sortetd
 Reads events from an .exb transcription file
 }
 \examples{
-read_events(file)
+ path <- system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mustWork = TRUE)
+ file <- xml2::read_xml(path, encoding="UTF-8")
+read_events(file, path)
 }

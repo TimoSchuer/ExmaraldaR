@@ -18,5 +18,7 @@ Returns list of sorted events
 sort_events()
 }
 \examples{
-sort_events(events, timeline)
+path <- system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mustWork = TRUE)
+ file <- xml2::read_xml(path, encoding="UTF-8")
+sort_events(events = read_events(file, path), timeline= read_timeline(file))
 }
