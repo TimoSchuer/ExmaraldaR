@@ -7,6 +7,7 @@
 #' @export
 #'
 #' @examples
+#' path <- system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mustWork = TRUE)
 #' check_exb(path)
 check_exb <- function(path) {
   if(stringr::str_ends(path, "\\.exb")== TRUE){

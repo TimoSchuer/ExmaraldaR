@@ -1,8 +1,8 @@
-#' Title
+#' Reads and sorts annotations in multilayer format
 #'
-#' @param file
-#' @param AnnotationTiers
-#' @param events_sorted
+#' @param file object returned by xml2::read_xml() of an .exb-file
+#' @param AnnotationTiers vector containing the annotation tiers
+#' @param events_sorted data.frame returned by sort_events()
 #'
 #' @return
 #' @export

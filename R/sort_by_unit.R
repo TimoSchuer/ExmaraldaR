@@ -2,13 +2,16 @@
 #'
 #' @param exb needs a dataframe as given by read_exb_file or read_exb_dir
 #' @param Unit_column column where the unit is defined. Needs to be consisted. Default is 1 as the output of read_exb_file and read_exb_dir saves the IP number there
-#' @param drop logical value, wheter rows without an obeservation should be dropped or not
-#' @param percentage logical valuem wether values per Variable per Unite should be relative or absolute
+#' @param drop logical value, whether rows without an obeservation should be dropped or not
+#' @param percentage logical value whether values per Variable per Unite should be relative or absolute
 #'
 #' @return returns data.frame
 #' @export
 #'
-#' @examples sort_by_unit(exb, Unit_column=1, drop= TRUE)
+#' @examples
+#' path <- system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mustWork = TRUE) # for a linear annotation
+#' example_linear <- read_exb_file(path, readAnn = TRUE, annotation= "linear", addMetaData = TRUE)
+#' sort_by_unit(example_linear, Unit_column=1, drop= TRUE, percentage= TRUE)
 #'
 sort_by_unit <- function(exb, Unit_column= 1,noObservationAsNA=TRUE, drop= FALSE, percentage= TRUE){
   dummies <- as.data.frame(dummies::dummy("Variable",exb, sep=":")) #create binary values of variable; ÜBERLEGEN OB FAST DUMMIES

@@ -2,18 +2,22 @@
 % Please edit documentation in R/sort_annotations_multilayer.R
 \name{sort_annotations_multilayer}
 \alias{sort_annotations_multilayer}
-\title{Title}
+\title{Reads and sorts annotations in multilayer format}
 \usage{
 sort_annotations_multilayer(file, AnnotationTiers, events_sorted)
 }
 \arguments{
-\item{events_sorted}{}
+\item{file}{object returned by xml2::read_xml() of an .exb-file}
+
+\item{AnnotationTiers}{vector containing the annotation tiers}
+
+\item{events_sorted}{data.frame returned by sort_events()}
 }
 \value{
 
 }
 \description{
-Title
+Reads and sorts annotations in multilayer format
 }
 \examples{
 path <- system.file("extdata", "Example_multi.exb", package = "ExmaraldaR", mustWork = TRUE)

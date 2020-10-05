@@ -2,18 +2,20 @@
 % Please edit documentation in R/add_metadata.R
 \name{read_metadata}
 \alias{read_metadata}
-\title{Title}
+\title{read_metadata
+Reads metadata added via the speakertable}
 \usage{
 read_metadata(path)
 }
 \arguments{
-\item{path}{}
+\item{path}{path of an .exb file}
 }
 \value{
-
+Returns a data.table
 }
 \description{
-Title
+read_metadata
+Reads metadata added via the speakertable
 }
 \examples{
 path <- system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mustWork = TRUE)

@@ -1,8 +1,9 @@
-#' Title
+#' read_metadata
+#' Reads metadata added via the speakertable
 #'
-#' @param path
+#' @param path path of an .exb file
 #'
-#' @return
+#' @return Returns a data.table
 #' @export
 #'
 #' @examples

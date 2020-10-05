@@ -16,5 +16,6 @@ Returns logical value
 Check Filetype
 }
 \examples{
+path <- system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mustWork = TRUE)
 check_exb(path)
 }
