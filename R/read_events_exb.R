@@ -10,7 +10,9 @@
 #' @export
 #'
 #' @examples
-#' read_events(file)
+#'  path <- system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mustWork = TRUE)
+#'  file <- xml2::read_xml(path, encoding="UTF-8")
+#' read_events(file, path)
 read_events <- function(file, path){
   transcriptions <- xml2::xml_find_all(file, "/basic-transcription/basic-body[1]/tier[@type='t']") # findet alle Transkriptionszeilen; da ich immer eine Pausenzeile (benannt mit P) einfüge, wird diese ausgeschlossn
   event <- character(0)

@@ -1,3 +1,23 @@
+#' Title
+#'
+#' @param exb
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' path <- system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mustWork = TRUE) # for a linear annotation
+#'  annotations <- read_annotations_linar(file= xml2::read_xml(path, encoding="UTF-8"))
+#'  exb <- dplyr::left_join(events_sorted, annotations,by = c("Speaker", "Start", "End"))
+#'  MultiEventAnn <- dplyr::anti_join( annotations,events_sorted, by=c("Speaker", "Start", "End")) # check for annotations for more than 1 event
+#'  if(nrow(MultiEventAnn)!=0){
+#'  for (n in 1:nrow(MultiEventAnn)) {
+#'  a <- which(events_sorted[,'Start']==MultiEventAnn[n, 'Start'])
+#'  b <- which(events_sorted[,'End']==MultiEventAnn[n, 'End'])
+#'  exb[a:b,colnames(MultiEventAnn)[ncol(MultiEventAnn)]] <- MultiEventAnn[n, ncol(MultiEventAnn)]
+#'  }
+#'  }
+#'  sort_anntotations_linear(exb)
 sort_anntotations_linear <- function(exb){
 
   # Get Tag Set an set up table ---------------------------------------------

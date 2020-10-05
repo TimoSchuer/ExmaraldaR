@@ -1,3 +1,13 @@
+#' Title
+#'
+#' @param path
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' path <- system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mustWork = TRUE)
+#' read_metadata(path)
 read_metadata <- function(path){
   file <- xml2::read_xml(path) #read file;
   SpeakerTable <- xml2::xml_children(xml2::xml_child(xml2::xml_child(file, 1), 2)) #read Speakertable

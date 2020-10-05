@@ -12,7 +12,8 @@
 #' @export
 #'
 #' @examples
-#' read_annotations(file)
+#' path <- system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mustWork = TRUE)
+#' read_annotations_linear(file= xml2::read_xml(path, encoding="UTF-8"))
 read_annotations_linar <- function(file) {
   AnnotationTiers <- xml2::xml_find_all(file,".//tier[@type='a']") #findet alle Annotationsspuren
 

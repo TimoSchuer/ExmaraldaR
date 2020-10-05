@@ -1,3 +1,16 @@
+#' Title
+#'
+#' @param file
+#' @param AnnotationTiers
+#' @param events_sorted
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#' path <- system.file("extdata", "Example_multi.exb", package = "ExmaraldaR", mustWork = TRUE)
+#' events_sorted <- sort_events(events= read_events(file, path), timeline= read_timeline(file)) %>% add_IpNumber(events_sorted)
+#' sort_annoations_multilayer(file= xml2::read_xml(path, AnnotationTiers= xml2::xml_find_all(file,".//tier[@type='a']"), encoding="UTF-8"), events_sorted)
 sort_annotations_multilayer <- function(file, AnnotationTiers,events_sorted){
   AnnText <- xml2::xml_text( xml2::xml_children(AnnotationTiers[1]))
   time <-  xml2::xml_attrs(xml2::xml_children(AnnotationTiers[[1]]))
