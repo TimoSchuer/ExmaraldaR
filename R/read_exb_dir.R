@@ -18,7 +18,7 @@ read_exb_dir <- function(pathDir, addMetaData= FALSE, readAnn=TRUE,annotation= c
   exb <- read_exb_file(path= unlist(stringr::str_c(pathDir,"\\",files[1])),annotation= AnnotationDir, addMetaData=addMetaDataDir, readAnn= readAnnDir , sortMetaData=FALSE)
   k <- 2
   for (k in 2:length(files)) {
-    help <- read_exb_file(path= unlist(stringr::str_c(pathDir,"\\",files[k])), addMetaData=addMetaDataDir, readAnn= readAnnDir, sortMetaData=FALSE)
+    help <- read_exb_file(path= unlist(stringr::str_c(pathDir,"\\",files[k])), addMetaData=addMetaDataDir, readAnn= readAnnDir, sortMetaData=FALSE, annotation= AnnotationDir)
     exb <- dplyr::bind_rows(exb,help)
   }
   if(addMetaDataDir==TRUE){

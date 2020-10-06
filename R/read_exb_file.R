@@ -14,7 +14,7 @@
 #' @examples
 #' path <- system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mustWork = TRUE) # for a linear annotation
 #' example_linear <- read_exb_file(path, readAnn = TRUE, annotation= "linear", addMetaData = TRUE)
-#' path <- system.file("extdata", "Example_multi.exb", package = "ExmaraldaR", mustWork = TRUE) # for a linear annotation
+#' path <- system.file("extdata", "Example_multi.exb", package = "ExmaraldaR", mustWork = TRUE) # for a multilayer annotation
 #' example_multi <- read_exb_file(path, readAnn = TRUE, annotation= "mutlilayer", addMetaData = TRUE)
 #'
 read_exb_file <- function(path, readAnn=TRUE,annotation= c("linear", "multilayer"),addMetaData= FALSE,sortMetaData=TRUE){
