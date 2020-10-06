@@ -1,7 +1,7 @@
 #' Write_back_to Exb
 #' writes back changes in annotations to an exb
 #'
-#' @param CsvFile File or object with data.frame as created by read_exb_file or read_exb_dir
+#' @param exb File or object with data.frame as created by read_exb_file or read_exb_dir
 #' @param sep seperator in Csv file
 #' @param PathExb Path of the ExbFile
 #' @param PathNewFile Directory where the new file is saved
@@ -9,12 +9,12 @@
 #' @return
 #' @export
 
-write_back_to_exb <- function(CsvFile,sep=",", PathExb, PathNewFile = dirname(PathExb), suffix="_new"){
+write_back_to_exb <- function(exb,sep=",", PathExb, PathNewFile = dirname(PathExb), suffix="_new"){
   file <- xml2::read_xml(PathExb) #Read transcription
-  if(is.data.frame(CsvFile)){
-    annotations <- CsvFile
+  if(is.data.frame(exb)){
+    annotations <- exb
   }else{
-    annotations <- read.delim(CsvFile, header = TRUE,sep=sep, row.names = 1, check.names = FALSE, stringsAsFactors = FALSE)
+    annotations <- read.delim(exb, header = TRUE,sep=sep, row.names = 1, check.names = FALSE, stringsAsFactors = FALSE)
   }
   #annotations <- unique(annotations)
   #save attributs of annotation tears
