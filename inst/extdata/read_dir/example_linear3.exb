@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- (c) http://www.rrz.uni-hamburg.de/exmaralda -->
+<basic-transcription>
+<head>
+<meta-information><project-name></project-name><transcription-name></transcription-name><referenced-file url="../../../../Studium/Master/Masterarbeit/Aufnahmen/Aufnahmen_verwendet/MA1_anonym.wav"/><ud-meta-information></ud-meta-information><comment></comment><transcription-convention></transcription-convention></meta-information><speakertable><speaker id="SPK0">
+<abbreviation>SPK1</abbreviation>
+<sex value="m"/>
+<languages-used><language lang="eng"/></languages-used>
+<l1><language lang="deu"/></l1>
+<l2><language lang="eng"/></l2>
+<ud-speaker-information>
+<ud-information attribute-name="Age">25</ud-information></ud-speaker-information>
+<comment>medium nice person</comment>
+</speaker>
+<speaker id="SPK1">
+<abbreviation>SPK2</abbreviation>
+<sex value="f"/>
+<languages-used><language lang="eng"/></languages-used>
+<l1><language lang="deu"/></l1>
+<l2><language lang="eng"/></l2>
+<ud-speaker-information>
+<ud-information attribute-name="Age">22</ud-information></ud-speaker-information>
+<comment>very nice person</comment>
+</speaker>
+</speakertable></head>
+<basic-body>
+<common-timeline>
+<tli id="T7"/>
+<tli id="T8" time="2.0"/>
+<tli id="T9" time="4.0"/>
+<tli id="T11" time="5.466666666666667" type="intp"/>
+<tli id="T10" time="6.0"/>
+<tli id="T12" time="8.0"/>
+</common-timeline>
+<tier id="TIE0" speaker="SPK0" category="v" type="t" display-name="SPK1 [v]"><event start="T7" end="T8"> it works at all|</event>
+<event start="T9" end="T11">just some features of gat2 basic </event>
+<event start="T11" end="T10">transcripts|</event>
+</tier><tier id="TIE2" speaker="SPK0" category="v" type="a" display-name="SPK1 [v]"><event start="T7" end="T8"></event>
+<event start="T9" end="T11"></event>
+<event start="T11" end="T10">1:Tag:NN_3:test2:real;</event>
+</tier><tier id="TIE1" speaker="SPK1" category="v" type="t" display-name="SPK2 [v]"><event start="T8" end="T9">so what does this show|</event>
+<event start="T11" end="T10">like</event>
+<event start="T10" end="T12">overlapping speak|</event>
+</tier><tier id="TIE3" speaker="SPK1" category="v" type="a" display-name="SPK2 [v]"><event start="T8" end="T9"></event>
+<event start="T11" end="T10">1:Tag:Adv;</event>
+<event start="T10" end="T12"></event>
+</tier></basic-body>
+</basic-transcription>

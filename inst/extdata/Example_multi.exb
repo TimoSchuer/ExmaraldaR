@@ -2,7 +2,7 @@
 <!-- (c) http://www.rrz.uni-hamburg.de/exmaralda -->
 <basic-transcription>
 <head>
-<meta-information><project-name></project-name><transcription-name></transcription-name><referenced-file url="../../../Studium/Master/Masterarbeit/Aufnahmen/Aufnahmen_verwendet/MA1_anonym.wav"/><ud-meta-information></ud-meta-information><comment></comment><transcription-convention></transcription-convention></meta-information><speakertable><speaker id="SPK0">
+<meta-information><project-name></project-name><transcription-name></transcription-name><referenced-file url="../../../Studium/Master/Masterarbeit/Aufnahmen/Aufnahmen_verwendet/MA1_anonym.wav"/><ud-meta-information><ud-information attribute-name="AutoSave">;C:\Users\Admin\EXMARaLDA_AutoBackup_2020_09_17_01_03_03.exb at 2020_09_17_01_03_04;C:\Users\Admin\EXMARaLDA_AutoBackup_2020_09_17_02_35_01.exb at 2020_09_17_02_35_01;C:\Users\Admin\EXMARaLDA_AutoBackup_2020_09_17_03_36_01.exb at 2020_09_17_03_36_01;C:\Users\Admin\EXMARaLDA_AutoBackup_2020_09_18_08_58_35.exb at 2020_09_18_08_58_35;C:\Users\Admin\EXMARaLDA_AutoBackup_2020_09_18_10_13_45.exb at 2020_09_18_10_13_45;C:\Users\Admin\EXMARaLDA_AutoBackup_2020_09_18_11_43_53.exb at 2020_09_18_11_43_53;C:\Users\Admin\EXMARaLDA_AutoBackup_2020_09_18_01_54_19.exb at 2020_09_18_01_54_19;C:\Users\Admin\EXMARaLDA_AutoBackup_2020_09_18_02_55_19.exb at 2020_09_18_02_55_19;C:\Users\Admin\EXMARaLDA_AutoBackup_2020_09_20_09_14_17.exb at 2020_09_20_09_14_17;C:\Users\Admin\EXMARaLDA_AutoBackup_2020_09_21_11_45_34.exb at 2020_09_21_11_45_34;C:\Users\Admin\EXMARaLDA_AutoBackup_2020_10_01_04_35_29.exb at 2020_10_01_04_35_29;C:\Users\Admin\EXMARaLDA_AutoBackup_2020_10_04_08_27_02.exb at 2020_10_04_08_27_02;C:\Users\Admin\EXMARaLDA_AutoBackup_2020_10_05_10_43_29.exb at 2020_10_05_10_43_29;C:\Users\Admin\EXMARaLDA_AutoBackup_2020_10_05_11_44_29.exb at 2020_10_05_11_44_30;C:\Users\Admin\EXMARaLDA_AutoBackup_2020_10_05_02_11_22.exb at 2020_10_05_02_11_22;C:\Users\Admin\EXMARaLDA_AutoBackup_2020_10_05_03_12_22.exb at 2020_10_05_03_12_22;C:\Users\Admin\EXMARaLDA_AutoBackup_2020_10_05_04_13_22.exb at 2020_10_05_04_13_22;C:\Users\Admin\EXMARaLDA_AutoBackup_2020_10_06_10_17_44.exb at 2020_10_06_10_17_44</ud-information></ud-meta-information><comment></comment><transcription-convention></transcription-convention></meta-information><speakertable><speaker id="SPK0">
 <abbreviation>SPK1</abbreviation>
 <sex value="m"/>
 <languages-used><language lang="eng"/></languages-used>
@@ -60,11 +60,8 @@
 <event start="T11" end="T10">transcripts|</event>
 <event start="T12" end="T13">yes|</event>
 <event start="T13" end="T14">and some random annotations|</event>
-</tier><tier id="TIE2" speaker="SPK0" category="Tag" type="a" display-name="SPK1 [Tag]"><event start="T0" end="T16"></event>
-<event start="T17" end="T1">NN</event>
-<event start="T1" end="T18"></event>
+</tier><tier id="TIE2" speaker="SPK0" category="Tag" type="a" display-name="SPK1 [Tag]"><event start="T17" end="T1">NN</event>
 <event start="T18" end="T19">NN</event>
-<event start="T19" end="T2"></event>
 <event start="T3" end="T4"></event>
 <event start="T4" end="T6"></event>
 <event start="T6" end="T7"></event>
