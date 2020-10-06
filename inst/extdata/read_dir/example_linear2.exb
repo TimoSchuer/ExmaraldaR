@@ -35,7 +35,7 @@
 <tier id="TIE0" speaker="SPK0" category="v" type="t" display-name="SPK1 [v]"><event start="T19" end="T2"> purpose|</event>
 <event start="T3" end="T4">right|</event>
 <event start="T4" end="T6">and maybe proving </event>
-<event start="T6" end="T7">that</event>
+<event start="T6" end="T7">that|</event>
 </tier><tier id="TIE2" speaker="SPK0" category="v" type="a" display-name="SPK1 [v]"><event start="T19" end="T2"></event>
 <event start="T3" end="T4"></event>
 <event start="T4" end="T6"></event>
