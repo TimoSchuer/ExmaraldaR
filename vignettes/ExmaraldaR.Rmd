@@ -22,18 +22,18 @@ library(knitr)
 
 ```
 
-This package was developed to import transcripts of spoken language created with EXMARALDA (ADD CITATION) into R in a comfortable and fast way. First there will be some comments on how EXMARaLDA works and how transcription and annotation must be formatted to be easily readable. As I try to include more ways of transcribing and annotating data into this package, please write to me if your style does not work yet ([timo.schuermann\@uni-muenster.de](mailto:timo.schuermann@uni-muenster.de){.email}).
+This package was developed to import transcripts of spoken language created with EXMARaLDA (ADD CITATION) into R in a comfortable and fast way. First there will be some comments on how EXMARaLDA works and how transcription and annotation must be formatted to be easily readable. As I try to include more ways of transcribing and annotating data into this package, please write to me if your style does not work yet ([timo.schuermann\@uni-muenster.de](mailto:timo.schuermann@uni-muenster.de){.email}).
 
 ## Transcribing and annotating in EXMARaLDA
 
-EXMARaLDA is a software package developed and maintained by Thomas Schmidt. Besides the transcription and annotation tool Partitur Editor, it includes a tool for managing corpora(Corpus-Manager) and a tool for searching and analyzing (EXAKT). This package only contains a interface between R and the .exb format of the Partitur Editor. Maybe there will be options for segmented files (.exs). Partitur Editor saves transcriptions as an xml-based data format, which makes it possible to extract all relevant information into a data table. As this is can not be an extensive introduction in the EXMARaLDA-Software package i will in the forthcoming assume that the users of this package know:
+EXMARaLDA is a software package developed and maintained by Thomas Schmidt. Besides the transcription and annotation tool Partitur Editor, it includes a tool for managing corpora (Corpus-Manager) and a tool for searching and analyzing (EXAKT). This package only contains an interface between R and the .exb format of the Partitur Editor. Maybe there will be options for segmented files (.exs). Partitur Editor saves transcriptions as an xml-based data format, which makes it possible to extract all relevant information into a data table. As this is not be an extensive introduction to the EXMARaLDA-Software package I will in the following assume that the users of this package know:
 
 1.  how to create a transcription
 2.  how align audio/video data and transcription
 3.  how to transcribe
 4.  how to annotate a transcription (including aligning)
 
-In the following I will consider some features of the work process that lead to a well formed R- object. I will therefore go backwards, showing you the output of example files and then the parameter in the Partitur Editor leading to this specific output.
+In the following I will consider some features of the work process that lead to a well-formed R- object. For that I will go backwards, showing you the output of example files and then the parameter in the Partitur Editor leading to this specific output.
 
 ```{r eval=FALSE}
 path <- system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mustWork = TRUE)
@@ -46,11 +46,11 @@ example <- read_exb_file(path, readAnn = TRUE, annotation= "linear", addMetaData
 kable(example)
 ```
 
-This is the table from a an annotated exb. file using a linear annotation putting several information in just one tag (see further below). So lets have a look at the different columns and the information they contain.
+This is the table from a an annotated exb. file using a linear annotation putting several information in just one tag (for more information see further below). So let's have a look at the different columns and the information they contain.
 
 ### IP Number
 
-The first row contains a IP numbering based on the intonation phrase in GAT2 (ZITATION). It uses the set of delimiters as the signs for intonation at the end of a phrase or the neutral "\|". If there are overlapping speech events, the one starting first gets the lower number.
+The first row contains an IP numbering based on the intonation phrase in GAT2 (ZITATION). It uses the set of delimiters as the signs for intonation at the end of a phrase or the neutral "\|". If there are overlapping speech events, the one starting first gets the lower number.
 
 ### File
 
@@ -58,7 +58,7 @@ The name of the file. Important if more than one file (via read\_exb\_dir()) is 
 
 ### Speaker
 
-Speaker single as named in the speaker table (see below).
+Speaker single as named in the speaker table (see below).SINGLE?
 
 ### Tier ID
 
@@ -78,32 +78,31 @@ Some additional information about the speaker added via the Speaker table. In th
 
 ### Start and End of event
 
-Contains the end and start in the timeline of an event. Just important for files creating .exb files as add\_min\_tier() or write\_back\_to\_exb().
+Contains the start and the end in the timeline of an event. Only important for files creating .exb files as add\_min\_tier() or write\_back\_to\_exb().
 
 ### Annotations
 
 This is sorted version of the annotated data.
 
-So the data.frame contains every information that could be useful for further analysis. And also some information that is only useful if you for example change something in the R data frame or excel file and want the data to be consistent to the exb files and therefore write it back.
+The data.frame contains all pieces of information that could be useful for further analysis. There is also some information that is only useful if, for example, you change something in the R data frame or excel file and want the data to be consistent with the exb files and therefore write it back. WRITE IT BACK?
 
 In the next step we will look at the options in the speakertable that lead to the metadata columns.
 
 ## Metadata
 
 ![](images/metadata.png)
-
-In some point of your transcription process you have to create speaker via the speakertable (Transcription \> Speakertable). In Section (1) there are fixed attributes. This includes speakerabbrevation (presented in the column 'speaker'), sex and languages. In section (2) you can leave additional comments to the speaker. For most analytical purposes it can be useful to define some person related information to include it into the analysis or subset your data to certain groups. The name of the self defined attributes will be the name of the column. All Information set here can be included or excluded from the data.frame with the parameter *addMetaData*.
+At some point of your transcription process you have to create speakers via the speakertable (Transcription \> Speakertable). In Section (1) there are fixed attributes. This includes speakerabbrevation (presented in the column 'speaker'), sex and languages. In section (2) you can make additional comments on the speaker. For most analytical purposes it can be useful to define some person-related information to include it into the analysis or subset your data to certain groups. The name of the self-defined (DAS HEIßT DASS DIE ATTRIBUTES SICH SELBST DEFINIEREN; LASS DAS ADJEKTIV EINFACH WEG) attributes will be the name of the column. All information set here can be included or excluded from the data.frame with the parameter *addMetaData*.
 
 ## Linear annotation![](images/linear.png) 
 
-With the (probably incorrect) term linear annotation i denote a format where more than one information is coded in one tag. This is useful for some tasks, especially variable centered analysis, where more than one variable can occur in a transcription unit. I adopted this approach form LANWER 2015 ZITATION and analysis of cooccurrence of phonological variants. Therefore it contains first the variable coded, then the variant and the some contextual features. Of course it can also be used to code non-variable centered analysis. Formally every information to be coded is structured as followed: ONGOING NUMBER OF CATEGORY:CATEGORY:SPEZIFICATION . The first part is a ongoing number that is assigned to every category. This has to be consistent, because it is essential for sorting the category in the right number. Second part is the name of the category. This will also be the name of the column. The third part contains the specification of the category. The categories are separated through '\_' and the tag ends with ';', so that a tag could look like this: *1:Category1:Spec1\_2:Category2: Spec2\_5:Category5:Spec5;* .A tag coding a variable with context information (e.g. in a phonological paper) would look like this: *1:VARIABLe:VARIABLENAME\_2:VARIANT:VARIANTSPECIFICATION\_3:CONTEXT1:SPEZIFICATION;* A mayor improvement comparing to copying an EXAKT result to a EXCEL file is that if a category is not specified there is no need to annotate it. The code will automatically sort it into the right column via the number. I recommend highly to use a self defined annotation tag set (LINK EINFÜGEN).
+With the (probably incorrect) term linear annotation I mean a format in which more than one piece of information is coded in one tag. This is useful for some tasks, especially in variable centered analysis, where more than one variable can occur in a transcription unit. I adopted this approach from LANWER 2015 ZITATION and (WESSEN?) analysis of cooccurrence of phonological variants. Therefore it contains first the variable coded, then the variant and some contextual features. Of course it can also be used to code non-variable centered analysis. Formally every piece of  information to be coded is structured as follows: ONGOING NUMBER OF CATEGORY:CATEGORY:SPECIFICATION . The first part is an ongoing number that is assigned to every category. This has to be consistent, because it is essential for sorting the category in the right number (MEINST DU "ORDER", ALSO REIHENFOLGE?). The second part is the name of the category. This will also be the name of the column. The third part contains the specification of the category. The categories are separated by '\_' and the tag ends with ';', so that a tag could look like this: *1:Category1:Spec1\_2:Category2: Spec2\_5:Category5:Spec5;* .A tag coding a variable with context information (e.g. in a phonological paper MEINST DU PAPER ON PHONOLOGY?) would look like this: *1:VARIABLE:VARIABLENAME\_2:VARIANT:VARIANTSPECIFICATION\_3:CONTEXT1:SPECIFICATION;* A major improvement comparing to copying an EXACT result to an EXCEL file is that if a category is not specified there is no need to annotate it. The code will automatically sort it into the right column via the number. I highly recommend to use a self-defined (S.O.) annotation tag set (LINK EINFÜGEN).
 
 ## Multilayer annotation
 
 ![](images/multi.png){width="644"}
 
-The probably more common annotation is a multilayer annotation. This means that every annotation category has its own tier. This has some advantages AUFSATZ FINDEN but one mayor drawback is that the partitur editor can get very slow having many tiers and long recordings. On the other hand the annotation process is much faster and the revision process much easier. The annotation tiers in the example are speaker related. This is not necessary as annotation tiers can also be without a speaker assignment. This has no influence on the output.
+The probably more common annotation is a multi-layer annotation. This means that every annotation category has its own tier. This has some advantages AUFSATZ FINDEN but one major drawback is that the partitur editor can get very slow having many tiers and long recordings. On the other hand the annotation process is much faster and the revision process much easier. The annotation tiers in the example are speaker-related. This is not necessary as annotation tiers can also be without a speaker assignment. It has no influence on the output.
 
 ## Write changes back to .exb files
 
-Sometimes it can be useful to fix errors or merge or divide a annotation category because the analysis hints that this could be useful. Of course it is possible to change it directly in the original file but i can be very inconvenient. A more direct way can be to change it in the R data.frame or in an exported csv or EXCEL file. If done so it can be useful to write it back into an .exb file in order to keep the data consistent and keep the benefits of having annotation an audio aligned. There are two functions for achieving this: write\_back\_dir() writes back an entire directory of exb files. As input a data.frame or csv file created by read\_exb\_dir() is needed. write\_back\_to\_exb() does the same for a single file needing a data.frame or csv-file created by read\_exb\_file().
+Sometimes it can be useful to fix errors or merge or divide an annotation category because the analysis indicates that this could be useful. Of course it is possible to change it directly in the original file but this can be very inconvenient. A more direct way is to change it in the R data.frame or in an exported csv or EXCEL file. If done so it can be useful to write it back into an .exb file in order to keep the data consistent and keep the benefits of having annotation and audio aligned. There are two functions for achieving this: write\_back\_dir() writes back an entire directory of exb files. As input a data.frame or csv file created by read\_exb\_dir() is needed. write\_back\_to\_exb() does the same for a single file needing a data.frame or csv-file created by read\_exb\_file().
