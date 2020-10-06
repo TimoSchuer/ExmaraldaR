@@ -2,7 +2,7 @@
 #' Writes back edited annotations to original files
 #' needs csv file form data.frame created by red_exb_dir()
 #'
-#' @param exb  data.frame created by red_exb_dir() or csv file created by such an object
+#' @param exb  data.frame created by read_exb_dir() or csv file created by such an object
 #' @param sep Seperator in the csv file, if object can be left out
 #' @param PathExbDir Path of the original files. Attention: the files must have the same names as in the "File" collumn
 #' @param PathNewFiles Default is the original Directory, can be changend

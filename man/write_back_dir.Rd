@@ -15,7 +15,7 @@ write_back_dir(
 )
 }
 \arguments{
-\item{exb}{data.frame created by red_exb_dir() or csv file created by such an object}
+\item{exb}{data.frame created by read_exb_dir() or csv file created by such an object}
 
 \item{sep}{Seperator in the csv file, if object can be left out}
 
