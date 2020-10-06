@@ -17,6 +17,8 @@ read_exb_dir(
 \item{addMetaData}{Logical Value, wheter Metadata should be read from the speakertable}
 
 \item{readAnn}{Logical Value, whetaer annotation tiers should be read and sorted}
+
+\item{annotation}{"linear" or multilayer. See vignette for further information}
 }
 \value{
 returns dataframe that contains all events, an IP number and formatted annotations
@@ -25,5 +27,6 @@ returns dataframe that contains all events, an IP number and formatted annotatio
 Read entire directory of exb files annotated with the same annotation specification
 }
 \examples{
-read_exb_dir(pathDir)
+path <- system.file("extdata\\\\read_dir", package = "ExmaraldaR", mustWork = TRUE)
+read_exb_dir(path, addMetaData = TRUE, readAnn = TRUE, annotation = "linear")
 }

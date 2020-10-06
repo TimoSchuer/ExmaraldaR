@@ -17,7 +17,9 @@ sort_by_unit(
 
 \item{Unit_column}{column where the unit is defined. Needs to be consisted. Default is 1 as the output of read_exb_file and read_exb_dir saves the IP number there}
 
-\item{drop}{logical value, whether rows without an obeservation should be dropped or not}
+\item{noObservationAsNA}{logical value, whether empty cells should be counted as NA or zero}
+
+\item{drop}{logical value, whether rows without an observation should be dropped or not}
 
 \item{percentage}{logical value whether values per Variable per Unite should be relative or absolute}
 }

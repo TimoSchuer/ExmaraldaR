@@ -3,10 +3,13 @@
 #' @param pathDir path of the directory
 #'@param addMetaData Logical Value, wheter Metadata should be read from the speakertable
 #'@param readAnn Logical Value, whetaer annotation tiers should be read and sorted
+#'@param annotation "linear" or multilayer. See vignette for further information
 #' @return returns dataframe that contains all events, an IP number and formatted annotations
 #' @export
 #'
-#' @examples read_exb_dir(pathDir)
+#' @examples
+#' path <- system.file("extdata\\read_dir", package = "ExmaraldaR", mustWork = TRUE)
+#' read_exb_dir(path, addMetaData = TRUE, readAnn = TRUE, annotation = "linear")
 read_exb_dir <- function(pathDir, addMetaData= FALSE, readAnn=TRUE,annotation= c("linear", "multilayer")){
   files <- list.files(pathDir,".\\.exb")
   addMetaDataDir <- addMetaData

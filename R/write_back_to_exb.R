@@ -5,6 +5,7 @@
 #' @param sep seperator in Csv file
 #' @param PathExb Path of the ExbFile
 #' @param PathNewFile Directory where the new file is saved
+#' @param suffix suffix to be added to the new files, default is "_new"
 #'
 #' @return
 #' @export

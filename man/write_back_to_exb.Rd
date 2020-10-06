@@ -21,6 +21,8 @@ write_back_to_exb(
 \item{PathExb}{Path of the ExbFile}
 
 \item{PathNewFile}{Directory where the new file is saved}
+
+\item{suffix}{suffix to be added to the new files, default is "_new"}
 }
 \value{
 

@@ -4,8 +4,9 @@
 #'
 #' @param path Path of an exb transcription file
 #' @param addMetaData Logical Value, wheter Metadata should be read from the speakertable
-#' @param sortMetaDate Logical value, wheter metadata should be sorted directly after the speaker name or at the end
+#' @param sortMetaData Logical value, wheter metadata should be sorted directly after the speaker name or at the end
 #' @param readAnn Logical Value, whetaer annotation tiers should be read and sorted
+#' @param annotation "linear" or multilayer. See vignette for further information
 #'
 #' @return Returns a data frame that contains the transcription and the annotations
 #' @export
@@ -27,7 +28,7 @@ read_exb_file <- function(path, readAnn=TRUE,annotation= c("linear", "multilayer
     AnnotationTiers <- xml2::xml_find_all(file,".//tier[@type='a']") #findet alle Annotationsspuren
     if(readAnn==TRUE & length(AnnotationTiers) !=0){
       if(annotation=="linear"){
-        annotations <- read_annotations_linar(file)
+        annotations <- read_annotations_linear(file)
         exb <- dplyr::left_join(events_sorted, annotations,by = c("Speaker", "Start", "End"))
         MultiEventAnn <- dplyr::anti_join( annotations,events_sorted, by=c("Speaker", "Start", "End")) # check for annotations for more than 1 event
         if(nrow(MultiEventAnn)!=0){

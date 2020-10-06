@@ -17,9 +17,11 @@ read_exb_file(
 
 \item{readAnn}{Logical Value, whetaer annotation tiers should be read and sorted}
 
+\item{annotation}{"linear" or multilayer. See vignette for further information}
+
 \item{addMetaData}{Logical Value, wheter Metadata should be read from the speakertable}
 
-\item{sortMetaDate}{Logical value, wheter metadata should be sorted directly after the speaker name or at the end}
+\item{sortMetaData}{Logical value, wheter metadata should be sorted directly after the speaker name or at the end}
 }
 \value{
 Returns a data frame that contains the transcription and the annotations
