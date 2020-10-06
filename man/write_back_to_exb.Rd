@@ -6,7 +6,7 @@
 writes back changes in annotations to an exb}
 \usage{
 write_back_to_exb(
-  CsvFile,
+  exb,
   sep = ",",
   PathExb,
   PathNewFile = dirname(PathExb),
@@ -14,7 +14,7 @@ write_back_to_exb(
 )
 }
 \arguments{
-\item{CsvFile}{File or object with data.frame as created by read_exb_file or read_exb_dir}
+\item{exb}{File or object with data.frame as created by read_exb_file or read_exb_dir}
 
 \item{sep}{seperator in Csv file}
 

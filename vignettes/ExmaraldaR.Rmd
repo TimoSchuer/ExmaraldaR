@@ -131,3 +131,11 @@ path <- system.file("extdata\\read_dir", package = "ExmaraldaR", mustWork = TRUE
 exb <- read_exb_dir(path, addMetaData = TRUE, readAnn = TRUE, annotation = "linear")
 write_back_dir(exb, PathExbDir = path, PathNewFiles = path, suffix = "_new")
 ```
+
+The same is possible for a single file.
+
+```{r, eval= FALSE}
+path <- system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mustWork = TRUE)
+read_exb_file(path, readAnn = TRUE, annotation= "linear", addMetaData = TRUE)
+write_back_to_exb(exb, PathExb = path, PathNewFile = path)
+```
