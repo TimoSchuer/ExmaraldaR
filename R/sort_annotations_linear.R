@@ -1,6 +1,6 @@
 #' Title
 #'
-#' @param exb
+#' @param exb data.frame containing sorted events and raw linear annotations
 #'
 #' @return
 #' @export
