@@ -1,6 +1,6 @@
 #' Converts a basic GAT2 Transcript to an Mininmal transcript
 #'
-#' @param file
+#' @param file path of an exb file
 #'
 #' @return
 #' @export

@@ -7,7 +7,7 @@
 AddMinTier(file)
 }
 \arguments{
-\item{file}{}
+\item{file}{path of an exb file}
 }
 \value{
 

@@ -7,7 +7,12 @@
 #'
 #' @examples
 #' path <- system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mustWork = TRUE) # for a linear annotation
-#'  annotations <- read_annotations_linar(file= xml2::read_xml(path, encoding="UTF-8"))
+#'      file <- xml2::read_xml(path, encoding="UTF-8")
+#'      timeline <- read_timeline(file)
+#'      events <- read_events(file, path)
+#'  events_sorted <- sort_events(events, timeline)
+#'  events_sorted <- add_IpNumber(events_sorted)
+#'  annotations <- read_annotations_linear(file= xml2::read_xml(path, encoding="UTF-8"))
 #'  exb <- dplyr::left_join(events_sorted, annotations,by = c("Speaker", "Start", "End"))
 #'  MultiEventAnn <- dplyr::anti_join( annotations,events_sorted, by=c("Speaker", "Start", "End")) # check for annotations for more than 1 event
 #'  if(nrow(MultiEventAnn)!=0){

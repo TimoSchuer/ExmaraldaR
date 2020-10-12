@@ -8,7 +8,8 @@
 #' @export
 #'
 #' @examples
-#' file <- xml2::read_xml(path= system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mustWork = TRUE), encoding="UTF-8")
+#' path <- system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mustWork = TRUE)
+#' file <- xml2::read_xml(path, encoding="UTF-8")
 #' read_timeline(file)
 read_timeline <- function(file) {
    # read timeline and supress a meaningless warning

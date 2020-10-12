@@ -16,6 +16,7 @@ Returns a Vector of the timeline in an EXMARaLDA transcription file
 Reads timestamps from an exb Transcription file
 }
 \examples{
-file <- xml2::read_xml(path= system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mustWork = TRUE), encoding="UTF-8")
+path <- system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mustWork = TRUE)
+file <- xml2::read_xml(path, encoding="UTF-8")
 read_timeline(file)
 }
