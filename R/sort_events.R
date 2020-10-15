@@ -13,8 +13,8 @@
 sort_events <- function(events, timeline){
 # Sort events by common timeline ------------------------------------------
   vec_sort <- c()
-  for (i in 1:length(timeline)) {
-    vec_sort <- c(vec_sort, which(events$Start== timeline[i]))
+  for (i in 1:nrow(timeline)) {
+    vec_sort <- c(vec_sort, which(events$Start== timeline[i,1]))
   }
   events_sorted <- events[vec_sort,] %>% `rownames<-`(seq(1:nrow(.)))
 
