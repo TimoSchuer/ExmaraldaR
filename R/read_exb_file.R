@@ -24,6 +24,8 @@ read_exb_file <- function(path, readAnn=TRUE,annotation= c("linear", "multilayer
     events <- read_events(file, path)
     events[,5] <- stringr::str_trim(events[,5])
     events_sorted <- sort_events(events, timeline)
+    events_sorted <- dplyr::left_join(events_sorted,timeline, by=c("Start" = "id")) %>% dplyr::rename(Start_time = time) #Add absolute timepoints for start
+    events_sorted <- dplyr::left_join(events_sorted,timeline, by=c("End" = "id")) %>% dplyr::rename(End_time = time) #Add absolute timepoints for start
     events_sorted <- add_IpNumber(events_sorted)
     AnnotationTiers <- xml2::xml_find_all(file,".//tier[@type='a']") #findet alle Annotationsspuren
     if(readAnn==TRUE & length(AnnotationTiers) !=0){
