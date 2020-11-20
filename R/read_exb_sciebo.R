@@ -49,6 +49,19 @@ read_events_xml <- read_events <- function(file,name){
   events <- data.frame(File = filename_help, Speaker = speaker, TierID = tierId, Name= name,Text= text,Start =unlist(unname(start)),End=unlist(unname(end)), stringsAsFactors = FALSE)
   return(events)
 }
+#' Title
+#'
+#' @param file
+#' @param name
+#' @param readAnn
+#' @param annotation
+#' @param addMetaData
+#' @param sortMetaData
+#'
+#' @return
+#' @export
+#'
+#' @examples
 read_exb_xml <- function(file,name, readAnn=TRUE,annotation= c("linear", "multilayer"),addMetaData= FALSE,sortMetaData=TRUE){
   timeline <- read_timeline(file)
   events <- read_events_xml(file, name)
@@ -96,6 +109,20 @@ read_exb_xml <- function(file,name, readAnn=TRUE,annotation= c("linear", "multil
 }
 
 
+#' Title
+#'
+#' @param path_list
+#' @param username
+#' @param password
+#' @param readAnn
+#' @param annotation
+#' @param addMetaData
+#' @param sortMetaData
+#'
+#' @return
+#' @export
+#'
+#' @examples
 read_exb_sciebo <- function(path_list,username, password, readAnn=TRUE,annotation= c("linear", "multilayer"),addMetaData= FALSE,sortMetaData=TRUE){
 
   addMetaDataDir <- addMetaData
@@ -107,7 +134,7 @@ read_exb_sciebo <- function(path_list,username, password, readAnn=TRUE,annotatio
   # k <- 2
   for (p in 1:length(path_list)) {
     uri <- URLencode(paste(path_list[p]))
-    file <- httr::GET(uri, httr::authenticate(username,password)) %>% httr::content("raw") %>% readBin("character") %>% xml2::xml_read(encoding= "UTF-8")
+    file <- httr::GET(uri, httr::authenticate(username,password)) %>% httr::content("raw") %>% readBin("character") %>% xml2::read_xml(encoding= "UTF-8")
     help <- read_exb_xml(file, name = names[p],readAnn = readAnnDir,annotation = AnnotationDir, addMetaData = addMetaDataDir)
     exb <- append(exb, help)
   }
