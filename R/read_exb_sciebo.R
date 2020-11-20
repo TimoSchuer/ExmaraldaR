@@ -1,4 +1,4 @@
-read_evens_xml <- read_events <- function(file,name){
+read_events_xml <- read_events <- function(file,name){
   transcriptions <- xml2::xml_find_all(file, "/basic-transcription/basic-body[1]/tier[@type='t']") # findet alle Transkriptionszeilen; da ich immer eine Pausenzeile (benannt mit P) einfüge, wird diese ausgeschlossn
   event <- character(0)
   start <- character(0)
@@ -42,7 +42,7 @@ read_evens_xml <- read_events <- function(file,name){
 }
 read_exb_xml <- function(file,name, readAnn=TRUE,annotation= c("linear", "multilayer"),addMetaData= FALSE,sortMetaData=TRUE){
   timeline <- read_timeline(file)
-  events <- read_events(file, name)
+  events <- read_events_xml(file, name)
   events[,5] <- stringr::str_trim(events[,5])
   events_sorted <- sort_events(events, timeline)
   events_sorted <- dplyr::left_join(events_sorted,timeline, by=c("Start" = "id")) %>% dplyr::rename(Start_time = time) #Add absolute timepoints for start
@@ -84,8 +84,6 @@ read_exb_xml <- function(file,name, readAnn=TRUE,annotation= c("linear", "multil
     }
   }
   return(exb)
-}else {
-  stop("File has to be an EXMARaLDA basis-transcription (.exb)")
 }
 
 
