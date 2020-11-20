@@ -17,7 +17,8 @@ Imports:
     stringr,
     dplyr,
     dummies,
-    magrittr
+    magrittr,
+    httr
 Suggests: 
     testthat,
     knitr,

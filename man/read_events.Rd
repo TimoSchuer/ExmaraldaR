@@ -4,7 +4,7 @@
 \alias{read_events}
 \title{read_events()}
 \usage{
-read_events(file, path)
+read_events(file, name)
 }
 \arguments{
 \item{file}{xml Object from an .exb transcription file}
