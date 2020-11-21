@@ -62,7 +62,7 @@ read_exb_file <- function(path, readAnn=TRUE,annotation= c("linear", "multilayer
         exb <- exb2
       }
     }
-    return(exb)
+    return(as.data.frame(exb))
   } else {
     stop("File has to be an EXMARaLDA basis-transcription (.exb)")
   }

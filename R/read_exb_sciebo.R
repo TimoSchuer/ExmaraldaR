@@ -105,7 +105,7 @@ read_exb_xml <- function(file,name, readAnn=TRUE,annotation= c("linear", "multil
       exb <- exb2
     }
   }
-  return(exb)
+  return(as.data.frame(exb))
 }
 
 
