@@ -5,10 +5,10 @@
 \title{read_metadata
 Reads metadata added via the speakertable}
 \usage{
-read_metadata(path)
+read_metadata(file)
 }
 \arguments{
-\item{path}{path of an .exb file}
+\item{file}{xml object of a exb file}
 }
 \value{
 Returns a data.table

@@ -93,7 +93,7 @@ read_exb_xml <- function(file,name, readAnn=TRUE,annotation= c("linear", "multil
   }
 
   if(addMetaData==TRUE){
-    MetaData <- read_metadata(path)
+    MetaData <- read_metadata(file)
     exb2 <- dplyr::left_join(exb, MetaData, by= "Speaker")
     if(sortMetaData==TRUE){
       n <- ncol(exb2)-ncol(exb)

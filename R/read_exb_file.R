@@ -50,7 +50,7 @@ read_exb_file <- function(path, readAnn=TRUE,annotation= c("linear", "multilayer
     }
 
     if(addMetaData==TRUE){
-      MetaData <- read_metadata(path)
+      MetaData <- read_metadata(file)
       exb2 <- dplyr::left_join(exb, MetaData, by= "Speaker")
       if(sortMetaData==TRUE){
         n <- ncol(exb2)-ncol(exb)
