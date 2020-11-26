@@ -6,7 +6,7 @@
 \usage{
 read_exb_xml(
   file,
-  name,
+  filename,
   readAnn = TRUE,
   annotation = c("linear", "multilayer"),
   addMetaData = FALSE,

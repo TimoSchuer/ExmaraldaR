@@ -4,10 +4,10 @@
 \alias{read_events_xml}
 \title{Title}
 \usage{
-read_events_xml(file, name)
+read_events_xml(file, filename)
 }
 \arguments{
-\item{name}{}
+\item{filename}{}
 }
 \value{
 
