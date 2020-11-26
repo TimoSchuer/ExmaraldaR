@@ -136,7 +136,7 @@ read_exb_sciebo <- function(path_list,username, password, readAnn=TRUE,annotatio
     uri <- URLencode(paste(path_list[p]))
     file <- httr::GET(uri, httr::authenticate(username,password)) %>% httr::content("raw") %>% readBin("character") %>% xml2::read_xml(encoding= "UTF-8")
     help <- read_exb_xml(file, name = names[p],readAnn = readAnnDir,annotation = AnnotationDir, addMetaData = addMetaDataDir)
-    exb <- append(exb, help)
+    exb <- bind_rows(exb, help)
   }
   if(addMetaDataDir==TRUE){
     startMetaData <- which(colnames(exb)=="sex")
