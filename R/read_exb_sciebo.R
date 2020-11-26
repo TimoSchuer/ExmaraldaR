@@ -7,7 +7,7 @@
 #' @export
 #'
 #' @examples
-read_events_xml <-  function(file,name){
+read_events_xml <-  function(file,filename){
   transcriptions <- xml2::xml_find_all(file, "/basic-transcription/basic-body[1]/tier[@type='t']") # findet alle Transkriptionszeilen; da ich immer eine Pausenzeile (benannt mit P) einfüge, wird diese ausgeschlossn
   event <- character(0)
   start <- character(0)
@@ -16,7 +16,6 @@ read_events_xml <-  function(file,name){
   speaker <- character(0)
   tierId <- character(0)
   name <- character(0)
-  filename <- name
   for(tier in transcriptions){
     event <- xml2::xml_children(tier)
     text_help <- xml2::xml_text(event, trim= TRUE) #Transkriptionstext auslesen
