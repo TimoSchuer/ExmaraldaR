@@ -1,7 +1,7 @@
 #' Title
 #'
 #' @param file
-#' @param name
+#' @param filename
 #'
 #' @return
 #' @export
@@ -61,9 +61,9 @@ read_events_xml <-  function(file,filename){
 #' @export
 #'
 #' @examples
-read_exb_xml <- function(file,name, readAnn=TRUE,annotation= c("linear", "multilayer"),addMetaData= FALSE,sortMetaData=TRUE){
+read_exb_xml <- function(file,filename, readAnn=TRUE,annotation= c("linear", "multilayer"),addMetaData= FALSE,sortMetaData=TRUE){
   timeline <- read_timeline(file)
-  events <- read_events_xml(file, name)
+  events <- read_events_xml(file, filename)
   events[,5] <- stringr::str_trim(events[,5])
   events_sorted <- sort_events(events, timeline)
   events_sorted <- dplyr::left_join(events_sorted,timeline, by=c("Start" = "id")) %>% dplyr::rename(Start_time = time) #Add absolute timepoints for start
@@ -134,7 +134,7 @@ read_exb_sciebo <- function(path_list,username, password, readAnn=TRUE,annotatio
   for (p in 1:length(path_list)) {
     uri <- URLencode(paste(path_list[p]))
     file <- httr::GET(uri, httr::authenticate(username,password)) %>% httr::content("raw") %>% readBin("character") %>% xml2::read_xml(encoding= "UTF-8")
-    help <- read_exb_xml(file, name = names[p],readAnn = readAnnDir,annotation = AnnotationDir, addMetaData = addMetaDataDir)
+    help <- read_exb_xml(file, filename = names[p],readAnn = readAnnDir,annotation = AnnotationDir, addMetaData = addMetaDataDir)
     exb <- bind_rows(exb, help)
   }
   if(addMetaDataDir==TRUE){
