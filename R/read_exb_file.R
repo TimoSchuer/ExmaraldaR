@@ -7,6 +7,7 @@
 #' @param sortMetaData Logical value, wheter metadata should be sorted directly after the speaker name or at the end
 #' @param readAnn Logical Value, whetaer annotation tiers should be read and sorted
 #' @param annotation "linear" or multilayer. See vignette for further information
+#' @param addDescription logical value wheter description tiers should be inclouded
 #'
 #' @return Returns a data frame that contains the transcription and the annotations
 #' @export
@@ -17,7 +18,7 @@
 #' path <- system.file("extdata", "Example_multi.exb", package = "ExmaraldaR", mustWork = TRUE) # for a multilayer annotation
 #' example_multi <- read_exb_file(path, readAnn = TRUE, annotation= "multilayer", addMetaData = TRUE)
 #'
-read_exb_file <- function(path, readAnn=TRUE,annotation= c("linear", "multilayer"),addMetaData= FALSE,sortMetaData=TRUE){
+read_exb_file <- function(path, readAnn=TRUE,annotation= c("linear", "multilayer"),addDescription= TRUE, addMetaData= FALSE,sortMetaData=TRUE){
   if(check_exb(path)){
     file <- xml2::read_xml(path, encoding="UTF-8")
     timeline <- read_timeline(file)
@@ -26,6 +27,15 @@ read_exb_file <- function(path, readAnn=TRUE,annotation= c("linear", "multilayer
     events_sorted <- sort_events(events, timeline)
     events_sorted <- dplyr::left_join(events_sorted,timeline, by=c("Start" = "id")) %>% dplyr::rename(Start_time = time) #Add absolute timepoints for start
     events_sorted <- dplyr::left_join(events_sorted,timeline, by=c("End" = "id")) %>% dplyr::rename(End_time = time) #Add absolute timepoints for start
+    if(addDescription == TRUE & length(xml2::xml_find_all(file, "/basic-transcription/basic-body[1]/tier[@type='d']")) != 0  ){
+      descriptions <- read_description(file, path)
+      vec_sort <- c()
+      for (i in 1:nrow(timeline)) {
+        vec_sort <- c(vec_sort, which(descriptions$Start== timeline[i,1]))
+      }
+     descriptions<- descriptions[vec_sort,] %>% `rownames<-`(seq(1:nrow(.)))
+     descriptions <- descriptions %>% dplyr::rename(description = Text)
+    }
     events_sorted <- add_IpNumber(events_sorted)
     AnnotationTiers <- xml2::xml_find_all(file,".//tier[@type='a']") #findet alle Annotationsspuren
     if(readAnn==TRUE & length(AnnotationTiers) !=0){
