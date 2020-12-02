@@ -56,18 +56,29 @@ read_events_xml <-  function(file,filename){
 #' @param annotation
 #' @param addMetaData
 #' @param sortMetaData
+#' @param addDescription logical value wheter description tiers should be inclouded
+
+#'
 #'
 #' @return
 #' @export
 #'
 #' @examples
-read_exb_xml <- function(file,filename, readAnn=TRUE,annotation= c("linear", "multilayer"),addMetaData= FALSE,sortMetaData=TRUE){
+read_exb_xml <- function(file,filename, readAnn=TRUE,annotation= c("linear", "multilayer"),addDescription= FALSE, addMetaData= FALSE,sortMetaData=TRUE){
   timeline <- read_timeline(file)
   events <- read_events_xml(file, filename)
   events[,5] <- stringr::str_trim(events[,5])
   events_sorted <- sort_events(events, timeline)
   events_sorted <- dplyr::left_join(events_sorted,timeline, by=c("Start" = "id")) %>% dplyr::rename(Start_time = time) #Add absolute timepoints for start
   events_sorted <- dplyr::left_join(events_sorted,timeline, by=c("End" = "id")) %>% dplyr::rename(End_time = time) #Add absolute timepoints for start
+  if(addDescription == TRUE &
+     length(xml2::xml_find_all(file, "/basic-transcription/basic-body[1]/tier[@type='d']")) != 0  ){
+    descriptions <- read_description(file)
+    ##check for annotations over more than one tier
+    MultiAnn <- dplyr::anti_join( descriptions,events_sorted, by= c("Start", "End", "Start_time", "End_time"))
+    MultiAnn<- MultiAnn[which((MultiAnn$Start %in% events_sorted$Start)|(MultiAnn$End %in% events_sorted$End)),]
+    events_sorted <- dplyr::full_join(events_sorted, descriptions, by= c("Start", "End", "Start_time", "End_time")) %>%filter_all(any_vars(!is.na(.))) %>%  mutate_at(vars(Start_time,End_time), as.numeric) %>% arrange(Start_time)
+  }
   events_sorted <- add_IpNumber(events_sorted)
   AnnotationTiers <- xml2::xml_find_all(file,".//tier[@type='a']") #findet alle Annotationsspuren
   if(readAnn==TRUE & length(AnnotationTiers) !=0){
@@ -117,16 +128,18 @@ read_exb_xml <- function(file,filename, readAnn=TRUE,annotation= c("linear", "mu
 #' @param annotation
 #' @param addMetaData
 #' @param sortMetaData
+#' @param addDescription logical value wheter description tiers should be inclouded
 #'
 #' @return
 #' @export
 #'
 #' @examples
-read_exb_sciebo <- function(path_list,username, password, readAnn=TRUE,annotation= c("linear", "multilayer"),addMetaData= FALSE,sortMetaData=TRUE){
+read_exb_sciebo <- function(path_list,username, password, readAnn=TRUE,addDescription = FALSE, annotation= c("linear", "multilayer"),addMetaData= FALSE,sortMetaData=TRUE){
 
   addMetaDataDir <- addMetaData
   readAnnDir <- readAnn
   AnnotationDir <- annotation
+  addDescriptionDir <- addDescription
   exb <- data.frame()
   names <- str_extract_all(path_list, "/[^/]*\\.exb") %>% str_remove_all("/")
   # exb <- read_exb_xml(path= unlist(stringr::str_c(pathDir,"\\",files[1])),annotation= AnnotationDir, addMetaData=addMetaDataDir, readAnn= readAnnDir , sortMetaData=FALSE)
@@ -134,7 +147,7 @@ read_exb_sciebo <- function(path_list,username, password, readAnn=TRUE,annotatio
   for (p in 1:length(path_list)) {
     uri <- URLencode(paste(path_list[p]))
     file <- httr::GET(uri, httr::authenticate(username,password)) %>% httr::content("raw") %>% readBin("character") %>% xml2::read_xml(encoding= "UTF-8")
-    help <- read_exb_xml(file, filename = names[p],readAnn = readAnnDir,annotation = AnnotationDir, addMetaData = addMetaDataDir)
+    help <- read_exb_xml(file, filename = names[p],readAnn = readAnnDir,annotation = AnnotationDir, addMetaData = addMetaDataDir, addDescription= addDescriptionDir)
     exb <- bind_rows(exb, help)
   }
   if(addMetaDataDir==TRUE){
