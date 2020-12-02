@@ -31,9 +31,9 @@ read_exb_file <- function(path, readAnn=TRUE,annotation= c("linear", "multilayer
        length(xml2::xml_find_all(file, "/basic-transcription/basic-body[1]/tier[@type='d']")) != 0  ){
       descriptions <- read_description(file)
       ##check for annotations over more than one tier
-      MultiAnn <- dplyr::anti_join( descriptions,events_sorted, by= c("Start", "End", "Start_time", "End_time"))
-      MultiAnn<- MultiAnn[which((MultiAnn$Start %in% events_sorted$Start)|(MultiAnn$End %in% events_sorted$End)),]
-      events_sorted <- dplyr::full_join(events_sorted, descriptions, by= c("Start", "End", "Start_time", "End_time")) %>%filter_all(any_vars(!is.na(.))) %>%  mutate_at(vars(Start_time,End_time), as.numeric) %>% arrange(Start_time)
+      #MultiAnn <- dplyr::anti_join( descriptions,events_sorted, by= c("Start", "End", "Start_time", "End_time"))
+      #MultiAnn<- MultiAnn[which((MultiAnn$Start %in% events_sorted$Start)|(MultiAnn$End %in% events_sorted$End)),]
+      events_sorted <- dplyr::full_join(events_sorted, descriptions, by= c("Start", "End", "Start_time", "End_time")) %>%dplyr::filter_all(any_vars(!is.na(.))) %>%  dplyr::mutate_at(vars(Start_time,End_time), as.numeric) %>% dplyr::arrange(Start_time)
       }
     events_sorted <- add_IpNumber(events_sorted)
     AnnotationTiers <- xml2::xml_find_all(file,".//tier[@type='a']") #findet alle Annotationsspuren
