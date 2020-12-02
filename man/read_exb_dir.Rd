@@ -8,7 +8,8 @@ read_exb_dir(
   pathDir,
   addMetaData = FALSE,
   readAnn = TRUE,
-  annotation = c("linear", "multilayer")
+  annotation = c("linear", "multilayer"),
+  addDescription = FALSE
 )
 }
 \arguments{
@@ -19,6 +20,8 @@ read_exb_dir(
 \item{readAnn}{Logical Value, whetaer annotation tiers should be read and sorted}
 
 \item{annotation}{"linear" or multilayer. See vignette for further information}
+
+\item{addDescription}{logical value wheter description tiers should be inclouded}
 }
 \value{
 returns dataframe that contains all events, an IP number and formatted annotations

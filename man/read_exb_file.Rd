@@ -8,6 +8,7 @@ read_exb_file(
   path,
   readAnn = TRUE,
   annotation = c("linear", "multilayer"),
+  addDescription = FALSE,
   addMetaData = FALSE,
   sortMetaData = TRUE
 )
@@ -18,6 +19,8 @@ read_exb_file(
 \item{readAnn}{Logical Value, whetaer annotation tiers should be read and sorted}
 
 \item{annotation}{"linear" or multilayer. See vignette for further information}
+
+\item{addDescription}{logical value wheter description tiers should be inclouded}
 
 \item{addMetaData}{Logical Value, wheter Metadata should be read from the speakertable}
 

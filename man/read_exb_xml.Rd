@@ -9,12 +9,13 @@ read_exb_xml(
   filename,
   readAnn = TRUE,
   annotation = c("linear", "multilayer"),
+  addDescription = FALSE,
   addMetaData = FALSE,
   sortMetaData = TRUE
 )
 }
 \arguments{
-\item{sortMetaData}{}
+\item{addDescription}{logical value wheter description tiers should be inclouded}
 }
 \value{
 

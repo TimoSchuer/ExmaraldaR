@@ -9,13 +9,14 @@ read_exb_sciebo(
   username,
   password,
   readAnn = TRUE,
+  addDescription = FALSE,
   annotation = c("linear", "multilayer"),
   addMetaData = FALSE,
   sortMetaData = TRUE
 )
 }
 \arguments{
-\item{sortMetaData}{}
+\item{addDescription}{logical value wheter description tiers should be inclouded}
 }
 \value{
 
