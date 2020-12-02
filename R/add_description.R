@@ -1,6 +1,16 @@
 
 
-read_description<- function(file){
+#' Title
+#'
+#' @param file
+#' @param timeline
+#'
+#' @return
+#' @export
+#'
+#' @examples
+#'
+read_description<- function(file, timeline){
   descriptionTiers <- xml2::xml_find_all(file, "/basic-transcription/basic-body[1]/tier[@type='d']")
   DesText <- xml2::xml_text( xml2::xml_children(descriptionTiers[1]))
   time <-  xml2::xml_attrs(xml2::xml_children(descriptionTiers[[1]]))

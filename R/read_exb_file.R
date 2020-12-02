@@ -29,7 +29,7 @@ read_exb_file <- function(path, readAnn=TRUE,annotation= c("linear", "multilayer
     events_sorted <- dplyr::left_join(events_sorted,timeline, by=c("End" = "id")) %>% dplyr::rename(End_time = time) #Add absolute timepoints for start
     if(addDescription == TRUE &
        length(xml2::xml_find_all(file, "/basic-transcription/basic-body[1]/tier[@type='d']")) != 0  ){
-      descriptions <- read_description(file)
+      descriptions <- read_description(file, timeline)
       ##check for annotations over more than one tier
       #MultiAnn <- dplyr::anti_join( descriptions,events_sorted, by= c("Start", "End", "Start_time", "End_time"))
       #MultiAnn<- MultiAnn[which((MultiAnn$Start %in% events_sorted$Start)|(MultiAnn$End %in% events_sorted$End)),]
