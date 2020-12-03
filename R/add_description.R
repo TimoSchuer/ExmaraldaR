@@ -36,7 +36,7 @@ read_description<- function(file, timeline){
   }
   desTier <- dplyr::left_join(desTier, timeline, by=c("Start" = "id"))%>% dplyr::rename(Start_time = time)
   desTier <- dplyr::left_join(desTier, timeline, by=c("End" = "id"))%>% dplyr::rename(End_time = time)
-  order <- c(1:3, seq(ncol(desTier)-1, p),seq(4,ncol(desTier)-2))
+  order <- c(1:3, seq(ncol(desTier)-1, ncol(desTier)),seq(4,ncol(desTier)-2))
   desTier <- desTier[,order]
   desTier <- desTier %>% dplyr::mutate_all(dplyr::na_if, "")
   desTier <- dplyr::arrange(desTier, Start_time)
