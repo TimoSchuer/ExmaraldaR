@@ -46,7 +46,7 @@ read_exb_file <- function(path, readAnn=TRUE,annotation= c("linear", "multilayer
           for (n in 1:nrow(MultiEventAnn)) {
             a <- which(events_sorted[,'Start']==MultiEventAnn[n, 'Start'])
             b <- which(events_sorted[,'End']==MultiEventAnn[n, 'End'])
-            exb[a:b,colnames(MultiEventAnn)[ncol(MultiEventAnn)]] <- MultiEventAnn[n, ncol(MultiEventAnn)]
+            exb[seq(a:b),colnames(MultiEventAnn)[ncol(MultiEventAnn)]] <- MultiEventAnn[n, ncol(MultiEventAnn)]
           }
         }
 
