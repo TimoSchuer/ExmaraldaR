@@ -36,7 +36,6 @@ read_exb_file <- function(path, readAnn=TRUE,annotation= c("linear", "multilayer
       #MultiAnn<- MultiAnn[which((MultiAnn$Start %in% events_sorted$Start)|(MultiAnn$End %in% events_sorted$End)),]
       events_sorted <- dplyr::full_join(events_sorted, descriptions, by= c("Start", "End", "Start_time", "End_time"), suffix= c("", "_yy")) %>% dplyr::select(!dplyr::ends_with("_yy")) %>%dplyr::filter_all(dplyr::any_vars(!is.na(.))) %>%  dplyr::mutate_at(dplyr::vars(Start_time,End_time), as.numeric) %>% dplyr::arrange(Start_time)
       }
-    events_sorted <- add_IpNumber(events_sorted)
     AnnotationTiers <- xml2::xml_find_all(file,".//tier[@type='a']") #findet alle Annotationsspuren
     if(readAnn==TRUE & length(AnnotationTiers) !=0){
       if(annotation=="linear"){
