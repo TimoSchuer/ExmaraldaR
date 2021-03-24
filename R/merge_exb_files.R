@@ -12,7 +12,7 @@ merge_exb_files <- function(files=list()){
   for (f in files[-1]) {
     appFile <- xml2::read_xml(f, encoding="UTF-8")
   #append timeline elements
-    appTimeline <- xml2::xml_children(xmls2::xml_child(appFile, 2))[1]
+    appTimeline <- xml2::xml_children(xml2::xml_child(appFile, 2))[1]
     xml2::xml_add_child(xml2::xml_children(xml2::xml_child(file, 2))[1], xml2::xml_children(appTimeline))
   #append events to other tiers
     appBody <- xml2::xml_children(xml2::xml_child(appFile, 2))[-1]
