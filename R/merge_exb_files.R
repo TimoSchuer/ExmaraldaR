@@ -12,19 +12,19 @@ merge_exb_files <- function(files=list()){
   for (f in files[-1]) {
     appFile <- xml2::read_xml(f, encoding="UTF-8")
   #append timeline elements
-    appTimeline <- xml_children(xml_child(appFile, 2))[1]
-    xml_add_child(xml_children(xml_child(file, 2))[1], xml_children(appTimeline))
+    appTimeline <- xml2::xml_children(xmls2::xml_child(appFile, 2))[1]
+    xml2::xml_add_child(xml2::xml_children(xml2::xml_child(file, 2))[1], xml2::xml_children(appTimeline))
   #append events to other tiers
-    appBody <- xml_children(xml_child(appFile, 2))[-1]
+    appBody <- xml2::xml_children(xml2::xml_child(appFile, 2))[-1]
 
     for (t in appBody) {
-      xPath <- stringr::str_glue("//tier[@display-name='",stringr::str_remove(xml_attrs(t)[["display-name"]],"'"),"']")
-      if(length(xml_find_all(file, xPath))==0){
-       xml_add_child(xml_child(file, 2),read_xml(as.character(t)))
-      }else if(length(xml_children(t))==0){
+      xPath <- stringr::str_glue("//tier[@display-name='",stringr::str_remove(xml2::xml_attrs(t)[["display-name"]],"'"),"']")
+      if(length(xml2::xml_find_all(file, xPath))==0){
+        xml2::xml_add_child(xml2::xml_child(file, 2),xml2::read_xml(as.character(t)))
+      }else if(length(xml2::xml_children(t))==0){
         next
       }else{
-        xml_add_child(xml_find_all(file, xPath), xml_children(t))
+        xml2::xml_add_child(xml2::xml_find_all(file, xPath), xml2::xml_children(t))
       }
     }
   }
