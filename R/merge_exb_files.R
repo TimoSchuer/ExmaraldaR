@@ -32,6 +32,6 @@ merge_exb_files <- function(files=list()){
   test <- test[[1]]
   file <- test[!(which(stringr::str_starts(test,"\\s*<event|\\s*<tli") ) %in% which(duplicated(test)))]
   file <- paste0(file, collapse= "\n")
-  file <- read_xml(file)
+  file <- xml2::read_xml(file)
   return(file)
 }
