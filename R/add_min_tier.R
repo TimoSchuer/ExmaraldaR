@@ -2,13 +2,13 @@
 #'
 #' @param file path of an exb file
 #'
-#' @return
+#' @return NULL saves file to original path with suffix _M;in
 #' @export
 #' @importFrom magrittr %>%
 #'
 #' @importFrom utils read.delim
 #'
-AddMinTier <- function(file){
+add_MinimalTier <- function(file){
 
   # Datei einlesen ----------------------------------------------------------
   content <- xml2::read_xml(file)
