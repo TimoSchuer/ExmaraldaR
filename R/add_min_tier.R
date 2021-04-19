@@ -34,7 +34,7 @@ add_MinimalTier <- function(file){
       sapply(stringr::str_replace_all, "[,.;:?!=]$","|") %>%
       sapply(stringr::str_replace,"[,;?-]", "|") %>%
       sapply(stringr::str_remove_all, ":") %>%
-      sapply(stringr::str_remove_all, "\\U209") %>%
+      #sapply(stringr::str_remove_all, "\\U209") %>%
       sapply(stringr::str_replace_all,"\\[|\\]"," ") %>%
       sapply(stringr::str_replace_all,"\\(\\.\\)", " ") %>%
       sapply(stringr::str_remove_all, "<<[^>]+>") %>%
