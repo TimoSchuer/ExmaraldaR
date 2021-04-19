@@ -148,3 +148,5 @@ It can be useful for searchability of the transcript to remove focus accents and
 path <- system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mustWork = TRUE)
 add_MinimalTier(path)
 ```
+
+![](C:/Users/Admin/AppData/Local/RStudio/tmp/paste-8C2285FD.png)
