@@ -139,3 +139,12 @@ path <- system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mus
 read_exb_file(path, readAnn = TRUE, annotation= "linear", addMetaData = TRUE)
 write_back_to_exb(exb, PathExb = path, PathNewFile = path)
 ```
+
+## **Add minimal tier to basic transcript (GAT2)**
+
+It can be useful for searchability of the transcript to remove focus accents and other transcription conventions of the basic transcript. For this purpose the function add\_MinimalTier adds a minimal tier to a transcribed file. The new file can be found in the origin folder and has the suffix "\_min".
+
+```{r, eval= FALSE}
+path <- system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mustWork = TRUE)
+add_MinimalTier(path)
+```
