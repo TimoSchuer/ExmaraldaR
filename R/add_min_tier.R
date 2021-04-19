@@ -71,9 +71,9 @@ add_MinimalTier <- function(file){
 
   fileNew <- stringr::str_extract(file, ".+[:punct:]") %>%
     stringr::str_remove( "\\.") %>%
-    stringr::str_glue("_Min.exb") %>%   # Wenn umgewandelte Dateien in anderen Ordner: vor Dateinamen zusätzlich Pfad eingeben (ACHTUNG: Vorwärtsslash beachten)
-    stringr::str_remove(., "\\.") %>%
-    stringr::str_glue(., "_Min.exb")  # Wenn umgewandelte Dateien in anderen Ordner: vor Dateinamen zusätzlich Pfad eingeben (ACHTUNG: Vorwärtsslash beachten)
+    stringr::str_glue("_Min.exb") #%>%   # Wenn umgewandelte Dateien in anderen Ordner: vor Dateinamen zusätzlich Pfad eingeben (ACHTUNG: Vorwärtsslash beachten)
+    # stringr::str_remove(., "\\.") %>%
+    # stringr::str_glue(., "_Min.exb")  # Wenn umgewandelte Dateien in anderen Ordner: vor Dateinamen zusätzlich Pfad eingeben (ACHTUNG: Vorwärtsslash beachten)
   xml2::write_xml(content, fileNew)
   #remove(content, n, events, tier, TierAttr,transcriptions,displName,end, file,fileNew,k,nodeTier,NumTier,start,text)
 
