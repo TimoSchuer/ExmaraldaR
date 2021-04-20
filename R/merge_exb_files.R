@@ -28,10 +28,10 @@ merge_exb_files <- function(files=list()){
       }
     }
   }
-  test <- as.character(file) %>% stringr::str_split(.,"\\n")
-  test <- test[[1]]
-  file <- test[!(which(stringr::str_starts(test,"\\s*<event|\\s*<tli") ) %in% which(duplicated(test)))]
-  file <- paste0(file, collapse= "\n")
-  file <- xml2::read_xml(file)
+  # test <- as.character(file) %>% stringr::str_split(.,"\\n")
+  # test <- test[[1]]
+  # file <- test[!(which(stringr::str_starts(test,"\\s*<event|\\s*<tli") ) %in% which(duplicated(test)))]
+  # file <- paste0(file, collapse= "")
+  # file <- xml2::read_xml(file)
   return(file)
 }
