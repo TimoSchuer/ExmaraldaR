@@ -52,7 +52,7 @@ sort_events <- function(events, timeline){
           subset <- dplyr::slice(events_sorted, n+1:nrow(events_sorted))
           n <- match(events_sorted[n,'Speaker'],subset$Speaker) +n
           vecIp <- c(vecIp,n)
-        }, error=function(e){print(paste("Last event doesn't have an IP-ending sign."))})
+        }, error=function(e){print(paste(events$File, ":Last event doesn't have an IP-ending sign."))})
     }
   }
   events_sorted <- events_sorted[vecIp,] %>% `row.names<-`(seq(1:nrow(.)))
