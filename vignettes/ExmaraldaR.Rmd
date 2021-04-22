@@ -22,7 +22,17 @@ library(knitr)
 
 ```
 
-This package was developed to import transcripts of spoken language created with EXMARaLDA (ADD CITATION) into R in a comfortable and fast way. First there will be some comments on how EXMARaLDA works and how transcription and annotation must be formatted to be easily readable. As I try to include more ways of transcribing and annotating data into this package, please write to me if your style does not work yet ([timo.schuermann\@uni-muenster.de](mailto:timo.schuermann@uni-muenster.de){.email}).
+This package was developed to import transcripts of spoken language created with EXMARaLDA into R in a comfortable and fast way. First there will be some comments on how EXMARaLDA works and how transcription and annotation must be formatted to be easily readable. As I try to include more ways of transcribing and annotating data into this package, please write to me if your style does not work yet ([timo.schuermann\@uni-muenster.de](mailto:timo.schuermann@uni-muenster.de){.email}).
+
+## Setup
+
+For now the package is available via GitHub. This version is preliminary and will be upgraded whenever I find the time.
+
+```{r eval= FALSE}
+library(devtools)
+devtools::install_github("TimoSchuer/ExmaraldaR",upgrade = "never", force = FALSE)
+library(ExmaraldaR)
+```
 
 ## Transcribing and annotating in EXMARaLDA
 
@@ -50,7 +60,7 @@ This is the table from a an annotated exb. file using a linear annotation puttin
 
 ### IP Number
 
-The first row contains an IP numbering based on the intonation phrase in GAT2 (ZITATION). It uses the set of delimiters as the signs for intonation at the end of a phrase or the neutral "\|". If there are overlapping speech events, the one starting first gets the lower number.
+The first row contains an IP numbering based on the intonation phrase in GAT2. It uses the set of delimiters as the signs for intonation at the end of a phrase or the neutral "\|". If there are overlapping speech events, the one starting first gets the lower number.
 
 ### File
 
@@ -94,7 +104,7 @@ In the next step we will look at the options in the speakertable that lead to th
 
 ## Linear annotation![](images/linear.png)
 
-With the (probably incorrect) term linear annotation I mean a format in which more than one piece of information is coded in one tag. This is useful for some tasks, especially in variable centered analysis, where more than one variable can occur in a transcription unit. I adopted this approach from LANWER 2015 and (WESSEN?) analysis of cooccurrence of phonological variants. Therefore it contains first the variable coded, then the variant and some contextual features. Of course it can also be used to code non-variable centered analysis. Formally every piece of information to be coded is structured as follows: ONGOING NUMBER OF CATEGORY:CATEGORY:SPECIFICATION . The first part is an ongoing number that is assigned to every category. This has to be consistent, because it is essential for sorting the category in the right column. The second part is the name of the category. This will also be the name of the column. The third part contains the specification of the category. The categories are separated by '\_' and the tag ends with ';', so that a tag could look like this: *1:Category1:Spec1\_2:Category2: Spec2\_5:Category5:Spec5;* .A tag coding a variable with context information would look like this: *1:VARIABLE:VARIABLENAME\_2:VARIANT:VARIANTSPECIFICATION\_3:CONTEXT1:SPECIFICATION;* A major improvement comparing to copying an EXACT result to an EXCEL file is that if a category is not specified there is no need to annotate it. The code will automatically sort it into the right column via the number. I highly recommend to use a self-defined (S.O.) annotation tag set (LINK EINFÜGEN).
+With the (probably incorrect) term linear annotation I mean a format in which more than one piece of information is coded in one tag. This is useful for some tasks, especially in variable centered analysis, where more than one variable can occur in a transcription unit. I adopted this approach from Lanwer 2015 and his analysis of cooccurrence of phonological variants. Therefore it contains first the variable coded, then the variant and some contextual features. Of course it can also be used to code non-variable centered analysis. Formally every piece of information to be coded is structured as follows: ONGOING NUMBER OF CATEGORY:CATEGORY:SPECIFICATION . The first part is an ongoing number that is assigned to every category. This has to be consistent, because it is essential for sorting the category in the right column. The second part is the name of the category. This will also be the name of the column. The third part contains the specification of the category. The categories are separated by '\_' and the tag ends with ';', so that a tag could look like this: *1:Category1:Spec1\_2:Category2: Spec2\_5:Category5:Spec5;* .A tag coding a variable with context information would look like this: *1:VARIABLE:VARIABLENAME\_2:VARIANT:VARIANTSPECIFICATION\_3:CONTEXT1:SPECIFICATION;* A major improvement comparing to copying an EXACT result to an EXCEL file is that if a category is not specified there is no need to annotate it. The code will automatically sort it into the right column via the number. I highly recommend to use a self-defined (S.O.) annotation tag set (LINK EINFÜGEN).
 
 ```{r, eval= FALSE}
 path <- system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mustWork = TRUE)
@@ -150,3 +160,16 @@ add_MinimalTier(path)
 ```
 
 ![](C:/Users/Admin/AppData/Local/RStudio/tmp/paste-8C2285FD.png)
+
+## Merge files
+
+It can be useful to merge files. E.g. if you distribute snippets to students. merge\_exb\_file() coalesces several files. This does the same as Transcription \> Merge transcriptions just with multiple files at a time. Therefore you provide a list of file e.g. via rChoiceDialogs::rchoose.files()
+
+```{r, eval= FALSE}
+files <- rChoiceDialogs::rchoose.files()
+mergedFile <- merge_exb_files(files)
+dir <- dirname(files[1]) # choose directory of the imported files
+filename <- "merged_file.exb" # filename
+path <- paste(dir, filename, sep= "/")
+xml2::write_xml(mergedFile, path)
+```
