@@ -32,5 +32,8 @@ read_exb_dir <- function(pathDir, addMetaData= FALSE, readAnn=TRUE,annotation= c
 
     exb <- exb[,c(1:6,startMetaData:k,7:l)]
   }
+  exb <- dplyr::mutate(exb, IPId=paste(File, IpNumber, sep= "_"))
+  exb <- dplyr::mutate(exb, EventId=paste(File, EventId, sep= "_"))
+  exb <- dplyr::bind_cols(IPId=exb$IPId, exb[,1:ncol(exb)-1])
   return(exb)
 }
