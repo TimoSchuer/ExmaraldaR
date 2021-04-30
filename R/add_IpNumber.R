@@ -43,7 +43,7 @@ add_IpNumber <- function(events_sorted){
   if(length(IpNumber)!=nrow(events_sorted)){ # adjust length if there is a dummy event at the end of splitted transcription
     IpNumber <- IpNumber[1:nrow(events_sorted)]
   }
-  IpNumber <- formatC(exb$IpNumber, width = 5, format = "d", flag = "0")
+  IpNumber <- formatC(IpNumber, width = 5, format = "d", flag = "0")
   events_sorted <-  cbind(IpNumber, events_sorted)
   return(events_sorted)
 }
