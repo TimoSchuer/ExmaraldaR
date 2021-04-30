@@ -12,7 +12,6 @@
 #' path <- system.file("extdata\\read_dir", package = "ExmaraldaR", mustWork = TRUE)
 #' read_exb_dir(path, addMetaData = TRUE, readAnn = TRUE, annotation = "linear")
 read_exb_dir <- function(pathDir, addMetaData= FALSE, readAnn=TRUE,annotation= c("linear", "multilayer"),addDescription= FALSE){
-  #TODO: Print filename with error message
   files <- list.files(pathDir,".\\.exb")
   addMetaDataDir <- addMetaData
   readAnnDir <- readAnn

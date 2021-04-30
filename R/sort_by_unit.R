@@ -24,18 +24,18 @@ sort_by_unit <- function(exb, Unit_column= 1,noObservationAsNA=TRUE, drop= FALSE
   exb <- dplyr::select(exb,-(Start),-(End),-(Variable))
 
 # Loop merges Ips together when there were mutiple rows -------------------
-  for (i in nrow(exb):2) {
-    if(exb[i,Unit_column]==exb[i-1,Unit_column] & exb[i,"EventNumber"]!= exb[i-1,"EventNumber"]){
-      exb[i-1,"Text"] <- stringr::str_c(exb[i-1,"Text"],exb[i,"Text"], sep= " ") # merge text
-      exb <- exb[-i,]
-      dummies[i-1,] <- dummies[i-1,]+dummies[i,] # add up variable values
-      dummies <- dummies[-i, ]
-    }else if(exb[i,Unit_column]==exb[i-1,Unit_column] & exb[i,"EventNumber"]==exb[i-1,"EventNumber"]){
-      exb <- exb[-i,]
-      dummies[i-1,] <- dummies[i-1,]+dummies[i,] # add up variable values
-      dummies <- dummies[-i, ]
+    for (i in nrow(exb):2) {
+      if(exb[i,Unit_column]==exb[i-1,Unit_column] & exb[i,"EventNumber"]!= exb[i-1,"EventNumber"]){
+        exb[i-1,"Text"] <- stringr::str_c(exb[i-1,"Text"],exb[i,"Text"], sep= " ") # merge text
+        exb <- exb[-i,]
+        dummies[i-1,] <- dummies[i-1,]+dummies[i,] # add up variable values
+        dummies <- dummies[-i, ]
+      }else if(exb[i,Unit_column]==exb[i-1,Unit_column] & exb[i,"EventNumber"]==exb[i-1,"EventNumber"]){
+        exb <- exb[-i,]
+        dummies[i-1,] <- dummies[i-1,]+dummies[i,] # add up variable values
+        dummies <- dummies[-i, ]
+      }
     }
-  }
   if(percentage==TRUE){
 # get percentage if theres more than  one observation per variable --------
     colnames <- colnames(dummies)

@@ -73,7 +73,7 @@ read_exb_file <- function(path, readAnn=TRUE,annotation= c("linear", "multilayer
     }
     #add Event ID
     eventID <- seq(1:nrow(exb))
-    exb <- dplyr::bind_cols(IpNumber=ContiCorp[,1],eventID= eventID, ContiCorp[,c(2:ncol(ContiCorp))])
+    exb <- dplyr::bind_cols(IpNumber=exb[,1],eventID= eventID, exb[,c(2:ncol(exb))])
     return(as.data.frame(exb))
   } else {
     stop("File has to be an EXMARaLDA basis-transcription (.exb)")
