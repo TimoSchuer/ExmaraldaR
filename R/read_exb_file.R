@@ -23,7 +23,7 @@ read_exb_file <- function(path, readAnn=TRUE,annotation= c("linear", "multilayer
     file <- xml2::read_xml(path, encoding="UTF-8")
     timeline <- read_timeline(file)
     events <- read_events(file, path)
-    events[,5] <- stringr::str_trim(events[,5])
+    #events[,5] <- stringr::str_trim(events[,5])
     events_sorted <- sort_events(events, timeline)
     events_sorted <- dplyr::left_join(events_sorted,timeline, by=c("Start" = "id")) %>% dplyr::rename(Start_time = time) #Add absolute timepoints for start
     events_sorted <- dplyr::left_join(events_sorted,timeline, by=c("End" = "id")) %>% dplyr::rename(End_time = time) #Add absolute timepoints for start
