@@ -23,15 +23,15 @@ sort_events <- function(events, timeline){
   for (k in 1:nrow(events_sorted)) {
     if(k %in% vecIp){
       next()
-    }else if((stringr::str_ends(events_sorted[k,'Text'], "[.;?,-]")|
-              stringr::str_ends(events_sorted[k,'Text'], "\\Q|\\E")|
-              stringr::str_ends(events_sorted[k,'Text'], "\\u01C0") |
-              stringr::str_ends(events_sorted[k,'Text'], "\\Q/\\E")|
-              stringr::str_ends(events_sorted[k,'Text'], "([.;?,-]{1}| \\Q|\\E|\\Q/\\E|\\u01C0)(?=>)")|
-              stringr::str_ends(events_sorted[k,'Text'], "\\d\\)")|
-              stringr::str_ends(events_sorted[k,'Text'], "\\)\\)")|
+    }else if((stringr::str_ends(events_sorted[k,'Text'], "[.;?,-]\\s?")|
+              stringr::str_ends(events_sorted[k,'Text'], "\\Q|\\E\\s?")|
+              stringr::str_ends(events_sorted[k,'Text'], "\\u01C0\\s?") |
+              stringr::str_ends(events_sorted[k,'Text'], "\\Q/\\E\\s?")|
+              stringr::str_ends(events_sorted[k,'Text'], "([.;?,-]{1}| \\Q|\\E|\\Q/\\E|\\u01C0)\\s?(?=>)")|
+              stringr::str_ends(events_sorted[k,'Text'], "\\d\\)\\s?")|
+              stringr::str_ends(events_sorted[k,'Text'], "\\)\\)\\s?")|
               # stringr::str_ends(events_sorted[k,'Text'], "\\)")|
-              stringr::str_ends(events_sorted[k,'Text'], "([.;?,-]{1}| \\Q|\\E|\\Q/\\E|\\u01C0)(?=\\])")|
+              stringr::str_ends(events_sorted[k,'Text'], "([.;?,-]{1}| \\Q|\\E|\\Q/\\E|\\u01C0)\\s?(?=\\])")|
               stringr::str_ends(events_sorted[k,'Text'],"="))== TRUE){
           vecIp <- c(vecIp,k)
 
@@ -39,15 +39,15 @@ sort_events <- function(events, timeline){
       n <- k
       vecIp <- c(vecIp,n)
       tryCatch(
-        while((stringr::str_ends(events_sorted[n,'Text'], "[.;?,-]")|
-               stringr::str_ends(events_sorted[n,'Text'], "\\Q|\\E")|
-               stringr::str_ends(events_sorted[n,'Text'], "\\u01C0") |
-               stringr::str_ends(events_sorted[n,'Text'], "\\Q/\\E")|
-               stringr::str_ends(events_sorted[n,'Text'], "([.;?,-]{1}| \\Q|\\E|\\Q/\\E|\\u01C0)(?=>)")|
-               stringr::str_ends(events_sorted[n,'Text'], "\\d\\)")|
-               stringr::str_ends(events_sorted[n,'Text'], "\\)\\)")|
+        while((stringr::str_ends(events_sorted[n,'Text'], "[.;?,-]\\s?")|
+               stringr::str_ends(events_sorted[n,'Text'], "\\Q|\\E\\s?")|
+               stringr::str_ends(events_sorted[n,'Text'], "\\u01C0\\s?") |
+               stringr::str_ends(events_sorted[n,'Text'], "\\Q/\\E\\s?")|
+               stringr::str_ends(events_sorted[n,'Text'], "([.;?,-]{1}| \\Q|\\E|\\Q/\\E|\\u01C0)\\s?(?=>)")|
+               stringr::str_ends(events_sorted[n,'Text'], "\\d\\)\\s?")|
+               stringr::str_ends(events_sorted[n,'Text'], "\\)\\)\\s?")|
                # stringr::str_ends(events_sorted[n,'Text'], "\\)")|
-               stringr::str_ends(events_sorted[n,'Text'], "([.;?,-]{1}| \\Q|\\E|\\Q/\\E|\\u01C0)(?=\\])")|
+               stringr::str_ends(events_sorted[n,'Text'], "([.;?,-]{1}| \\Q|\\E|\\Q/\\E|\\u01C0)\\s?(?=\\])")|
                stringr::str_ends(events_sorted[n,'Text'],"="))== FALSE){
           subset <- dplyr::slice(events_sorted, n+1:nrow(events_sorted))
           n <- match(events_sorted[n,'Speaker'],subset$Speaker) +n
