@@ -18,7 +18,7 @@ read_events_xml <-  function(file,filename){
   name <- character(0)
   for(tier in transcriptions){
     event <- xml2::xml_children(tier)
-    text_help <- xml2::xml_text(event, trim= TRUE) #Transkriptionstext auslesen
+    text_help <- xml2::xml_text(event, trim= FALSE) #Transkriptionstext auslesen
     #text_help <- stringr::str_trim(text_help)
     tierAttrs <- xml2::xml_attrs(tier) #TierId, Sprecher und Sprechername auslesen
     # Start und Endzeitpunkte auslesen ----------------------------------------
@@ -67,7 +67,7 @@ read_events_xml <-  function(file,filename){
 read_exb_xml <- function(file,filename, readAnn=TRUE,annotation= c("linear", "multilayer"),addDescription= FALSE, addMetaData= FALSE,sortMetaData=TRUE){
   timeline <- read_timeline(file)
   events <- read_events_xml(file, filename)
-  events[,5] <- stringr::str_trim(events[,5])
+  #events[,5] <- stringr::str_trim(events[,5])
   events_sorted <- sort_events(events, timeline)
   events_sorted <- dplyr::left_join(events_sorted,timeline, by=c("Start" = "id")) %>% dplyr::rename(Start_time = time) #Add absolute timepoints for start
   events_sorted <- dplyr::left_join(events_sorted,timeline, by=c("End" = "id")) %>% dplyr::rename(End_time = time) #Add absolute timepoints for start
