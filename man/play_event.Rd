@@ -4,19 +4,14 @@
 \alias{play_event}
 \title{play_event}
 \usage{
-play_event(
-  exb,
-  rowEvent = 1,
-  pathFile = character(0),
-  pathPraat = paste(getwd(), "/Praat.exe", sep = "")
-)
+play_event(exb, rowEvent = 1, pathFileDir = character(0), pathPraat = getwd())
 }
 \arguments{
 \item{exb}{exb object as created by exb_read_file or exb_read_dir; can also be a subset}
 
 \item{rowEvent}{row of the event you want to play}
 
-\item{pathFile}{path of the audio file (has to be .wav at the moment)}
+\item{pathFileDir}{path of the audio file dir (, to provide dir is useful if there are several audio files in one corpus;has to be .wav at the moment)}
 
 \item{pathPraat}{path of Praat.exe; if not provided it will be assumend praat is in the working directory}
 }

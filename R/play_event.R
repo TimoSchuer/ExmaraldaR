@@ -2,7 +2,7 @@
 #'
 #' @param exb exb object as created by exb_read_file or exb_read_dir; can also be a subset
 #' @param rowEvent row of the event you want to play
-#' @param pathFile path of the audio file (has to be .wav at the moment)
+#' @param pathFileDir path of the audio file dir (, to provide dir is useful if there are several audio files in one corpus;has to be .wav at the moment)
 #' @param pathPraat path of Praat.exe; if not provided it will be assumend praat is in the working directory
 #'
 #' @return NULL
