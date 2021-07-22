@@ -9,17 +9,18 @@
 #' @export
 #'
 #' @examples
-play_event <- function(exb, rowEvent= 1, pathFile= character(0),pathPraat= getwd()){
-  exb <- ContiCorp[rowEvent,]
+play_event <- function(exb, rowEvent= 1, pathFileDir= character(0),pathPraat= getwd()){
   if(identical(pathFile, character(0))){
-    pathFile <- paste(getwd(),"/",stringr::str_trim(exb$File), ".wav", sep= "" )
+    pathFile <- paste(getwd(),"/",stringr::str_trim(exb$File[rowEvent]), ".wav", sep= "" )
+  }else{
+    pathFile <- paste(pathFileDir,"/",stringr::str_trim(exb$File[rowEvent]), ".wav", sep= "" )
   }
   line1 <- paste0("Open long sound file: ","\"",pathFile,"\"")
-  if(exb$Start>1){
-    exb$Start_time <- as.numeric(exb$Start_time)-1
+  if(exb$Start_time[rowEvent] >1){
+    exb$Start_time[rowEvent] <- as.numeric(exb$Start_time[rowEvent])-1
   }
-  exb$End_time <- as.numeric(exb$End_time)+1
-  line2 <- paste0("Play part: ",exb$Start_time, ", ",exb$End_time, sep="")
+  exb$End_time[rowEvent] <- as.numeric(exb$End_time[rowEvent])+1
+  line2 <- paste0("Play part: ",exb$Start_time[rowEvent], ", ",exb$End_time[rowEvent], sep="")
   praat <- paste(line1,line2, sep="\n")
   write(praat, file= paste(pathPraat,"/","playEvent.praat", sep = ""))
   cmd <- paste0(pathPraat,"/Praat.exe"," --run ", pathPraat, "/playEvent.praat") %>% stringr::str_replace_all("/","\\\\\\")
