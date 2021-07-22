@@ -9,17 +9,18 @@
 #' @export
 #'
 #' @examples
-view_event <- function(exb, rowEvent= 1, pathFileDir= character(0),pathPraat= getwd()){
-  if(identical(pathFile, character(0))){
+view_event <- function(exb, rowEvent= 1, pathFileDir= character(0),pathPraat= getwd(), pathSendPraat= getwd()){
+  if(identical(pathFileDir, character(0))){
     pathFile <- paste(getwd(),"/",stringr::str_trim(exb$File[rowEvent]), ".wav", sep= "" )
   }else{
     pathFile <- paste(pathFileDir,"/",stringr::str_trim(exb$File[rowEvent]), ".wav", sep= "" )
   }
-  line1 <- paste0("Open long sound file: ","\"",pathFile,"\"")
-  line2 <- paste0("Select: ",exb$Start_time[rowEvent], ", ",exb$End_time[rowEvent], sep="")
-  praat <- paste(line1,"View",line2,"Zoom to selection", sep="\n")
+  line1 <- paste0("Open long sound file: \"",str_replace_all(pathFile,"\\\\", "/"),"\"")
+  line2 <- paste0("editor: \"LongSound ",stringr::str_trim(exb$File[rowEvent]), "\"")
+  line3 <-  paste0("Zoom: ",exb$Start_time[rowEvent], ", ",exb$End_time[rowEvent], sep="")
+  praat <- paste(line1,"View",line2,line3, sep="\n")
   write(praat, file= paste(pathPraat,"/","viewEvent.praat", sep = ""))
-  cmd <- paste0(pathPraat,"/Praat.exe"," --run ", pathPraat, "/viewEvent.praat") %>% stringr::str_replace_all("/","\\\\\\")
-  system(cmd)
+  cmd <- paste0("cd ", pathSendPraat, " && sendpraat praat \"runScript: \\\"",pathPraat,"/","viewEvent.praat\\\"\""  ) %>% stringr::str_replace_all("/","\\\\\\")
+  shell(cmd)
   unlink(paste(pathPraat, "/viewEvent.praat", sep = ""))
 }
