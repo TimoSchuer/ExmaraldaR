@@ -9,7 +9,7 @@
 #' @export
 #'
 #' @examples
-play_event <- function(exb, rowEvent= 1, pathFile= character(0),pathPraat= paste(getwd(),"/Praat.exe", sep= "")){
+play_event <- function(exb, rowEvent= 1, pathFile= character(0),pathPraat= getwd()){
   exb <- ContiCorp[rowEvent,]
   if(identical(pathFile, character(0))){
     pathFile <- paste(getwd(),"/",stringr::str_trim(exb$File), ".wav", sep= "" )
