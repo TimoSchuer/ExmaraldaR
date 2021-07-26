@@ -16,7 +16,7 @@ play_event <- function(exb, rowEvent= 1, pathFileDir= character(0),pathPraat= ge
     pathFile <- paste(pathFileDir,"/",stringr::str_trim(exb$File[rowEvent]), ".wav", sep= "" )
   }
   line1 <- paste0("Open long sound file: ","\"",pathFile,"\"")
-  if(exb$Start_time[rowEvent] >1){
+  if(as.numeric(exb$Start_time[rowEvent]) >1){
     exb$Start_time[rowEvent] <- as.numeric(exb$Start_time[rowEvent])-1
   }
   exb$End_time[rowEvent] <- as.numeric(exb$End_time[rowEvent])+1
