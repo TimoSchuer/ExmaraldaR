@@ -10,12 +10,12 @@
 #'
 #' @examples
 play_event <- function(exb, rowEvent= 1, pathFileDir= character(0),pathPraat= getwd()){
-  if(identical(pathFile, character(0))){
+  if(identical(pathFileDir, character(0))){
     pathFile <- paste(getwd(),"/",stringr::str_trim(exb$File[rowEvent]), ".wav", sep= "" )
   }else{
     pathFile <- paste(pathFileDir,"/",stringr::str_trim(exb$File[rowEvent]), ".wav", sep= "" )
   }
-  line1 <- paste0("Open long sound file: ","\"",pathFile,"\"")
+  line1 <- paste0("Open long sound file: ","\"",pathFileDir,"\"")
   if(as.numeric(exb$Start_time[rowEvent]) >1){
     exb$Start_time[rowEvent] <- as.numeric(exb$Start_time[rowEvent])-1
   }
