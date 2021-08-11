@@ -35,5 +35,4 @@ Suggests:
     knitr,
     rmarkdown
 VignetteBuilder: knitr
-Depends: 
-    ExmaraldaR (>= TimoSchuer/ExmaraldaR)
+
