@@ -5,7 +5,13 @@
 \title{view_event
 View event in Praat}
 \usage{
-view_event(exb, rowEvent = 1, pathFileDir = character(0), pathPraat = getwd())
+view_event(
+  exb,
+  rowEvent = 1,
+  pathFileDir = character(0),
+  pathPraat = getwd(),
+  pathSendPraat = getwd()
+)
 }
 \arguments{
 \item{exb}{exb object as created by exb_read_file or exb_read_dir; can also be a subset}
