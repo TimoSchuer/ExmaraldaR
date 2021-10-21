@@ -1,4 +1,15 @@
 ##TODO works only for wav; implement more file types
+#' Title
+#'
+#' @param path_files directory where transcriptions and audio is stored
+#' @param subDirs if the directory contains subdirs value should be TRUE
+#' @param summarize logical; wheter the whole list of audio files and transcription should be returned or just a summary
+#'
+#' @return data.frame of audio files and transcription or list of important measures (summary= TRUE)
+#' @export
+#'
+#' @examples
+#'
 corpus_Transcription_status <- function(path_files, subDirs=FALSE, summarize= TRUE){
   exb_files <- list.files(path_files, pattern = "\\.exb",full.names = TRUE, recursive = subDirs)
   audio_files <- list.files(path = path_files, pattern= "\\.wav|\\.mp3|\\.ogg", recursive = subDirs, full.names = TRUE)
