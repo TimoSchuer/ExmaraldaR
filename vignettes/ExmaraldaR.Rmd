@@ -16,7 +16,7 @@ knitr::opts_chunk$set(
 
 ```{r setup, include=FALSE}
 library(devtools)
-#devtools::install_github("TimoSchuer/ExmaraldaR", force = TRUE)
+devtools::install_github("TimoSchuer/ExmaraldaR", force = TRUE)
 library(ExmaraldaR)
 library(knitr)
 

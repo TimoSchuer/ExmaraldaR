@@ -1,5 +1,5 @@
 ##TODO works only for wav; implement more file types
-#' Title
+#' corpus_transcription_status
 #'
 #' @param path_files directory where transcriptions and audio is stored
 #' @param subDirs if the directory contains subdirs value should be TRUE
@@ -10,7 +10,7 @@
 #'
 #' @examples
 #'
-corpus_Transcription_status <- function(path_files, subDirs=FALSE, summarize= TRUE){
+corpus_transcription_status <- function(path_files, subDirs=FALSE, summarize= TRUE){
   exb_files <- list.files(path_files, pattern = "\\.exb",full.names = TRUE, recursive = subDirs)
   audio_files <- list.files(path = path_files, pattern= "\\.wav|\\.mp3|\\.ogg", recursive = subDirs, full.names = TRUE)
   referenced_audio <- character()
@@ -68,5 +68,6 @@ corpus_Transcription_status <- function(path_files, subDirs=FALSE, summarize= TR
     return(CorpInfo)
   }
 }
+ExmaraldaR::corpus_transcription_status()
 
 
