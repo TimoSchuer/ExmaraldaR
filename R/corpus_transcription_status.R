@@ -1,11 +1,12 @@
 ##TODO works only for wav; implement more file types
+
 #' corpus_transcription_status
 #'
-#' @param path_files directory where transcriptions and audio is stored
-#' @param subDirs if the directory contains subdirs value should be TRUE
-#' @param summarize logical; wheter the whole list of audio files and transcription should be returned or just a summary
+#' @param path_files Directory of corpus, audios and transcriptions must be stored here
+#' @param subDirs TRUE if Corpus is stored in subdirectories
+#' @param summarize If TRUE summary (list) is given back, otherwise list of all files and transcriptions
 #'
-#' @return data.frame of audio files and transcription or list of important measures (summary= TRUE)
+#' @return data.frame or list
 #' @export
 #'
 #' @examples
@@ -68,6 +69,6 @@ corpus_transcription_status <- function(path_files, subDirs=FALSE, summarize= TR
     return(CorpInfo)
   }
 }
-ExmaraldaR::corpus_transcription_status()
+
 
 
