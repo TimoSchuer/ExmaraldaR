@@ -47,7 +47,17 @@ read_exb_file <- function(path, readAnn=TRUE,annotation= c("linear", "multilayer
           for (n in 1:nrow(MultiEventAnn)) {
             a <- which(events_sorted[,'Start']==MultiEventAnn[n, 'Start'])
             b <- which(events_sorted[,'End']==MultiEventAnn[n, 'End'])
+            if (length(a)==0){
+              exb[b,colnames(MultiEventAnn)[ncol(MultiEventAnn)]] <- MultiEventAnn[n, ncol(MultiEventAnn)]
+              print(exb[b,])
+              print("This event has an annotation that is not properly aligned. The annotation was assigned to closest match. Please check annotation." )
+            }else if(length(b)==0){
+              exb[a,colnames(MultiEventAnn)[ncol(MultiEventAnn)]] <- MultiEventAnn[n, ncol(MultiEventAnn)]
+              print(exb[a,])
+              print("This event has an annotation that is not properly aligned. The annotation was assigned to closest match. Please check annotation." )
+            }else{
             exb[seq(a:b),colnames(MultiEventAnn)[ncol(MultiEventAnn)]] <- MultiEventAnn[n, ncol(MultiEventAnn)]
+            }
           }
         }
 

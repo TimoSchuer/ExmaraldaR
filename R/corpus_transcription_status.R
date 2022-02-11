@@ -21,7 +21,7 @@ corpus_transcription_status <- function(path_files, subDirs=FALSE, summarize= TR
     timeline <- xml2::xml_attrs(xml2::xml_children(xml2::xml_child(xml2::xml_child(file, 2), 1)))
     withCallingHandlers( timeline <-  do.call(rbind, timeline), warning =  function(w) if(grepl("number of columns of result is not a multiple of vector length", w, fixed= TRUE)) invokeRestart( "muffleWarning" ))
     timeline <- timeline |>  as.data.frame()
-    used_tli <- xml_find_all(file, "//event") |> xml_attrs()
+    used_tli <- xml2::xml_find_all(file, "//event") |> xml2::xml_attrs()
     withCallingHandlers( used_tli <-  do.call(rbind, used_tli), warning =  function(w) if(grepl("number of columns of result is not a multiple of vector length", w, fixed= TRUE)) invokeRestart( "muffleWarning" ))
     used_tli <- used_tli |> as.character() |> unique()
     timeline <- timeline[which(timeline$id %in% used_tli),]
