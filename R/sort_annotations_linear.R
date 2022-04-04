@@ -36,21 +36,30 @@ sort_anntotations_linear <- function(exb){
     return(exb)
   }else{
     #check if there are more than one linear annotation ending with ";" in one event, if so split them up
+    SplitAnn <- character()
+    IpNumber <- character()
+    Start <- integer()
+    End <- integer()
     for (k in 1:nrow(exb)) {
       if(is.na(exb[k,"Annotation"])== FALSE & stringr::str_detect(exb[k,"Annotation"], ";[\\d\\s]")==TRUE){
-        SplitAnn <- character(0)
-        SplitAnn <- unlist(stringr::str_split(exb[k,"Annotation"],";"))
-        SplitAnn <- stringr::str_trim(SplitAnn[SplitAnn != ""])
-        SplitAnn[1] <- stringr::str_remove(SplitAnn[1],";")
-        exb[k,"Annotation"] <- SplitAnn[1]
-        l <- 2
-        for (l in 2:length(SplitAnn)) {
-          exb[seq(k+1,nrow(exb)+1),] <- exb[seq(k,nrow(exb)),]
-          exb[k+1,] <- exb[k,]
-          exb[k,"Annotation"] <- SplitAnn[l]
-        }
+        SplitAnn_help <- character(0)
+        IpNumber_help <- character()
+        Start_help <- integer()
+        End_help <- integer()
+        SplitAnn_help <- unlist(stringr::str_split(exb[k,"Annotation"],";"))
+        SplitAnn_help <- stringr::str_trim(SplitAnn_help[SplitAnn_help != ""])
+        IpNumber_help[1:length(SplitAnn_help)] <- exb[k,"IpNumber"]
+        Start_help[1:length(SplitAnn_help)] <- exb[k, "Start_time"]
+        End_help[1:length(SplitAnn_help)] <- exb[k, "End_time"]
+        SplitAnn <- append(SplitAnn,SplitAnn_help)
+        IpNumber <- append(IpNumber,IpNumber_help)
+        Start <- append(Start, Start_help)
+        End <- append(End, End_help)
       }
+
     }
+    AnnSplitted <- data.frame(IpNumber= IpNumber, Start_time= Start, End_time= End, Annotation= SplitAnn)
+    exb <- exb %>% dplyr::select(-c("Annotation")) %>% dplyr::left_join(AnnSplitted)
     # variableNames <- unlist(xml2::xml_attrs(xml2::xml_children(tagSet)))
     # variableNames <- stringr::str_remove_all(variableNames, " ")
     # get highest number of Variables to set up data frame
