@@ -46,6 +46,7 @@ sort_anntotations_linear <- function(exb){
         IpNumber_help <- character()
         Start_help <- integer()
         End_help <- integer()
+        #exb[k,"Annotation"] <- NA
         SplitAnn_help <- unlist(stringr::str_split(exb[k,"Annotation"],";"))
         SplitAnn_help <- stringr::str_trim(SplitAnn_help[SplitAnn_help != ""])
         IpNumber_help[1:length(SplitAnn_help)] <- exb[k,"IpNumber"]
@@ -55,11 +56,16 @@ sort_anntotations_linear <- function(exb){
         IpNumber <- append(IpNumber,IpNumber_help)
         Start <- append(Start, Start_help)
         End <- append(End, End_help)
+      }else if(!is.na(exb[k,"Annotation"])){
+        SplitAnn <- append(SplitAnn,exb[k,"Annotation"])
+        IpNumber <- append(IpNumber,exb[k,"IpNumber"])
+        Start <- append(Start, exb[k,"Start_time"])
+        End <- append(End, exb[k,"End_time"])
       }
 
     }
     AnnSplitted <- data.frame(IpNumber= IpNumber, Start_time= Start, End_time= End, Annotation= SplitAnn)
-    exb <- exb %>% dplyr::select(-c("Annotation")) %>% dplyr::left_join(AnnSplitted)
+    exb <- exb %>%dplyr::select(-c("Annotation")) %>%  dplyr::left_join(AnnSplitted, by=c("IpNumber","Start_time","End_time"))
     # variableNames <- unlist(xml2::xml_attrs(xml2::xml_children(tagSet)))
     # variableNames <- stringr::str_remove_all(variableNames, " ")
     # get highest number of Variables to set up data frame
