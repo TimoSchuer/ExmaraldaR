@@ -47,7 +47,8 @@ In the following I will consider some features of the work process that lead to 
 
 ```{r eval=FALSE}
 path <- system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mustWork = TRUE)
-read_exb_file(path, readAnn = TRUE, annotation= "linear", addMetaData = TRUE)
+
+read_exb_file(path, readAnn = FALSE, annotation= "linear", addMetaData = TRUE)
 ```
 
 ```{r echo=FALSE, results='asis', warning=FALSE}

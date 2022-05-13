@@ -23,12 +23,10 @@ Imports:
     shinydashboard,
     DT,
     Matrix,
-    cluster,
     devtools,
     tidyselect,
     tidytext,
     ggplot2,
-    igraph,
     purrr
 Suggests: 
     testthat,
