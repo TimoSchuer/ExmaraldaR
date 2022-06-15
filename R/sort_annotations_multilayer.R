@@ -23,7 +23,7 @@ sort_annotations_multilayer <- function(file, AnnotationTiers,events_sorted){
   exb <-  suppressWarnings(dplyr::left_join(events_sorted, AnnTier, by=c("Speaker", "Start", "End")))
   MultiEventAnn <- dplyr::anti_join( AnnTier,events_sorted, by=c("Speaker", "Start", "End")) # check for annotations for more than 1 event
   if(nrow(MultiEventAnn)!=0){
-    exb <- events_sorted
+    #exb <- events_sorted
     for (n in 1:nrow(MultiEventAnn)) {
       a <- which(events_sorted[,'Start']==MultiEventAnn[n, 'Start'])
       b <- which(events_sorted[,'End']==MultiEventAnn[n, 'End'])

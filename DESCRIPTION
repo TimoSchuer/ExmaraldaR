@@ -16,7 +16,6 @@ Imports:
     xml2,
     stringr,
     dplyr,
-    dummies,
     magrittr,
     httr,
     shiny,
