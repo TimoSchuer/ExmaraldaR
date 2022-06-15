@@ -9,9 +9,6 @@ read_events_xml(file, filename)
 \arguments{
 \item{filename}{}
 }
-\value{
-
-}
 \description{
 Title
 }

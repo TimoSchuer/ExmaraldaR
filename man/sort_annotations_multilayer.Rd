@@ -13,9 +13,6 @@ sort_annotations_multilayer(file, AnnotationTiers, events_sorted)
 
 \item{events_sorted}{data.frame returned by sort_events()}
 }
-\value{
-
-}
 \description{
 Reads and sorts annotations in multilayer format
 }

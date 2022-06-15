@@ -25,9 +25,6 @@ write_back_dir(
 
 \item{suffix}{suffix to be added to the new files, default is "_new"}
 }
-\value{
-
-}
 \description{
 write_back_dir
 Writes back edited annotations to original files

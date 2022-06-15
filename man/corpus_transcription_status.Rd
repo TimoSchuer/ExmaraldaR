@@ -7,14 +7,15 @@
 corpus_transcription_status(path_files, subDirs = FALSE, summarize = TRUE)
 }
 \arguments{
-\item{summarize}{}
+\item{path_files}{Directory of corpus, audios and transcriptions must be stored here}
+
+\item{subDirs}{TRUE if Corpus is stored in subdirectories}
+
+\item{summarize}{If TRUE summary (list) is given back, otherwise list of all files and transcriptions}
 }
 \value{
-
+data.frame or list
 }
 \description{
 corpus_transcription_status
-}
-\examples{
-
 }

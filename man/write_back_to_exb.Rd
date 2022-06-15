@@ -10,7 +10,8 @@ write_back_to_exb(
   sep = ",",
   PathExb,
   PathNewFile = dirname(PathExb),
-  suffix = "_new"
+  suffix = "_new",
+  annotation = c("linear", "multilayer")
 )
 }
 \arguments{
@@ -23,9 +24,6 @@ write_back_to_exb(
 \item{PathNewFile}{Directory where the new file is saved}
 
 \item{suffix}{suffix to be added to the new files, default is "_new"}
-}
-\value{
-
 }
 \description{
 Write_back_to Exb

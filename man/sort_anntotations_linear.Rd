@@ -9,9 +9,6 @@ sort_anntotations_linear(exb)
 \arguments{
 \item{exb}{data.frame containing sorted events and raw linear annotations}
 }
-\value{
-
-}
 \description{
 Title
 }

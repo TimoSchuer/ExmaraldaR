@@ -18,9 +18,6 @@ read_exb_sciebo(
 \arguments{
 \item{addDescription}{logical value wheter description tiers should be inclouded}
 }
-\value{
-
-}
 \description{
 Title
 }

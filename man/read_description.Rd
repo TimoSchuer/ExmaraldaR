@@ -9,12 +9,6 @@ read_description(file, timeline)
 \arguments{
 \item{timeline}{}
 }
-\value{
-
-}
 \description{
 Title
-}
-\examples{
-
 }
