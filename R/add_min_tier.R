@@ -49,7 +49,7 @@ add_MinimalTier <- function(file){
     NumTier <- xml2::xml_find_all(content, "/basic-transcription/basic-body[1]/tier") %>%
       xml2::xml_length() %>%
       length() #Anzahl der Spuren auslesen
-    displName <- stringr::str_extract(TierAttr[["display-name"]], "^[A-Za-z]+[^ ]") # Anzeigename auslesen
+    displName <- stringr::str_extract(TierAttr[["display-name"]], ".*\\[") %>% stringr::str_remove("\\[") %>% stringr::str_trim() # Anzeigename auslesen
 
     # Transkriptionsspur hinzufügen -------------------------------------------
     nodeTier <- NumTier+1
@@ -63,7 +63,6 @@ add_MinimalTier <- function(file){
       xml2::xml_set_attr(xml2::xml_child(xml2::xml_child(xml2::xml_child(content, 2), nodeTier), n), "start", start[n])
       xml2::xml_set_attr(xml2::xml_child(xml2::xml_child(xml2::xml_child(content, 2), nodeTier), n), "end", end[n])
       xml2::xml_set_text(xml2::xml_child(xml2::xml_child(xml2::xml_child(content, 2), nodeTier), n), text[n])
-      n <- n+1
     }
 
   }
