@@ -13,7 +13,7 @@ add_MinimalTier <- function(file){
   # Datei einlesen ----------------------------------------------------------
   content <- xml2::read_xml(file)
   transcriptions <- xml2::xml_find_all(content, "/basic-transcription/basic-body[1]/tier[@type='t' and @display-name != 'P [v]']") # findet alle Transkriptionszeilen; da ich immer eine Pausenzeile (benannt mit P) einfüge, wird diese ausgeschlossn
-
+  i <- 1
   # Spurbearbeitung ---------------------------------------------------------
   for(tier in transcriptions){
     events <- xml2::xml_children(tier)
@@ -53,7 +53,7 @@ add_MinimalTier <- function(file){
 
     # Transkriptionsspur hinzufügen -------------------------------------------
     nodeTier <- NumTier+1
-    xml2::xml_add_sibling(xml2::xml_child(xml2::xml_child(content, 2), nodeTier), "tier", id = stringr::str_glue("TIE",NumTier), speaker = TierAttr["speaker"], category ="min",type ="t")
+    xml2::xml_add_sibling(xml2::xml_child(xml2::xml_child(content, 2), nodeTier), "tier", id = stringr::str_glue("TIE",NumTier+i), speaker = stringr::str_glue(TierAttr["speaker"], "_min"), category ="min",type ="t")
     nodeTier <- nodeTier +1
     xml2::xml_set_attr(xml2::xml_child(xml2::xml_child(content, 2), nodeTier), "display-name", stringr::str_glue(displName," [min]"))
 

@@ -39,7 +39,7 @@ write_back_to_exb <- function(exb,sep=",", PathExb, PathNewFile = dirname(PathEx
     ##rebuild tags
     #get colnumbers of annotation
     AnnCol <- which(names(exb)=="End_time")+1
-    Annotated <- exb %>% filter(if_any(c(names(exb[AnnCol:ncol(exb)])),~!is.na(.x)))
+    Annotated <- exb %>% dplyr::filter(dplyr::if_any(c(names(exb[AnnCol:ncol(exb)])),~!is.na(.x)))
     s <- 0
     # for(r in 1:ncol(Annotated[,AnnCol:ncol(Annotated)])){
     #   Annotated <- Annotated %>% filter(!is.na(Annotated[,AnnCol+s]))%>% mutate(Annotated[,AnnCol+s]=stringr::str_glue(r,":",names(Annotated[,AnnCol+s]),":",Annotated[,AnnCol+s]))
