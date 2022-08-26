@@ -14,11 +14,11 @@
 #' events_sorted <- add_IpNumber(events_sorted)
 #' sort_annotations_multilayer(file, AnnotationTiers= xml2::xml_find_all(file,".//tier[@type='a']"), events_sorted)
 sort_annotations_multilayer <- function(file, AnnotationTiers,events_sorted){
-  AnnText <- xml2::xml_text( xml2::xml_children(AnnotationTiers[1]))
+  AnnText <- xml2::xml_text( xml2::xml_find_all(AnnotationTiers[1], ".//event"))
   time <-  xml2::xml_attrs(xml2::xml_children(AnnotationTiers[[1]]))
   time <- data.frame(matrix(unlist(time), ncol = max(lengths(time)), byrow = TRUE))
   Speaker <-  xml2::xml_attr(AnnotationTiers[[1]], "speaker")
-  AnnTier <- data.frame(Speaker= Speaker, Start= time[,1], End= time[,2],AnnText= AnnText)
+  AnnTier <- data.frame(Speaker= paste(Speaker), Start= time[,1], End= time[,2],AnnText= AnnText)
   AnnTier <- `colnames<-`(AnnTier, c("Speaker","Start","End",xml2::xml_attr(AnnotationTiers[1], "display-name")))
   exb <-  suppressWarnings(dplyr::left_join(events_sorted, AnnTier, by=c("Speaker", "Start", "End")))
   MultiEventAnn <- dplyr::anti_join( AnnTier,events_sorted, by=c("Speaker", "Start", "End")) # check for annotations for more than 1 event
