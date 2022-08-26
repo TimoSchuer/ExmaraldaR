@@ -35,7 +35,7 @@ sort_annotations_multilayer <- function(file, AnnotationTiers,events_sorted){
       AnnText <-xml2::xml_text( xml2::xml_find_all(AnnotationTiers[k], ".//event"))
       AnnText[AnnText==""] <- NA #replace empty events with NA
       if(length(AnnText)>0){#control for empty annotation tiers
-        time <-  xml2::xml_attrs(xml2::xml_find_all(AnnotationTiers[[l]],".//event"))
+        time <-  xml2::xml_attrs(xml2::xml_find_all(AnnotationTiers[[k]],".//event"))
         time <- data.frame(matrix(unlist(time), ncol = max(lengths(time)), byrow = TRUE))
         Speaker <-  xml2::xml_attr(AnnotationTiers[[k]], "speaker")
         AnnTier <- data.frame(Speaker= Speaker, Start= time[,1], End= time[,2],AnnText= AnnText)
