@@ -7,10 +7,9 @@
 #' @param addIPNumber logical, if there should be an nummeration of intonation phrases
 #' @param IPEndSign character, spezifies characters that indicate the end of a intonation unit
 #' @importFrom rlang :=
-#' @return
+#' @return data.frame
 #' @export
-#'
-#' @examples
+
 read_exb_file <- function(path, readAnn=TRUE,addDescription= FALSE, addMetaData= FALSE, addIPNumber=TRUE,IPEndSign= c("|",".",";",",",",","?","=","-")){
   if(stringr::str_ends(path, "\\.exb")== FALSE){
     return("File is not an .exb file")

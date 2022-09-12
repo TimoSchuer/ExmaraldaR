@@ -1,3 +1,15 @@
+#' Title
+#'
+#' @param pathDir path of directory with .exb files
+#' @param readAnn logical, if annotation tiers should be read
+#' @param addDescription logical, if description tiers should be read NOT YET POSSIBLE
+#' @param addMetaData logical, if information from speaker table should be read
+#' @param addIPNumber logical, if there should be an nummeration of intonation phrases
+#' @param IPEndSign character, spezifies characters that indicate the end of a intonation unit
+#' @importFrom rlang :=
+#'
+#' @return data.frame
+#' @export
 read_exb_dir <- function(pathDir, readAnn=TRUE,addDescription= FALSE, addMetaData= FALSE, addIPNumber=TRUE,IPEndSign= c("|",".",";",",",",","?","=","-")){
   files <- list.files(pathDir,".\\.exb", full.names = TRUE)
   exb <- read_exb_file(files[1],readAnn,addDescription, addMetaData=FALSE, addIPNumber, IPEndSign)

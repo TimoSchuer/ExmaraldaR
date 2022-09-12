@@ -8,7 +8,7 @@
 #' @param PathNewFiles Default is the original Directory, can be changend
 #' @param suffix suffix to be added to the new files, default is "_new"
 #'
-#' @return
+#' @return NULL
 #' @export
 #'
 write_back_dir <- function(exb,sep=",", PathExbDir, PathNewFiles = PathExbDir, suffix="_new"){
@@ -24,6 +24,6 @@ write_back_dir <- function(exb,sep=",", PathExbDir, PathNewFiles = PathExbDir, s
     ann <- dplyr::filter(annotations, File==files[k])
     PathFile <- stringr::str_glue(PathExbDir,"\\",stringr::str_trim(files[k]),".exb")
     PathNewFile <- PathNewFiles
-    write_back_to_exb(ann, PathExb = PathFile,PathNewFile = PathNewFile )
+    write_back_to_exb(ann, PathExb = PathFile,PathNewFile = PathNewFile, suffix = suffix )
   }
 }

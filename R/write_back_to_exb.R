@@ -7,7 +7,7 @@
 #' @param PathNewFile Directory where the new file is saved
 #' @param suffix suffix to be added to the new files, default is "_new"
 #'
-#' @return
+#' @return NULL
 #' @export
 
 write_back_to_exb <-
