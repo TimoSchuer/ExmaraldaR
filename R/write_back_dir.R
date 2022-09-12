@@ -17,7 +17,7 @@ write_back_dir <- function(exb,sep=",", PathExbDir, PathNewFiles = PathExbDir, s
   if(is.data.frame(exb)){
     annotations <- exb
   }else{
-    annotations <- read.delim(exb, header = TRUE,sep=sep, row.names = 1, check.names = FALSE, stringsAsFactors = FALSE)
+    annotations <- utills::read.delim(exb, header = TRUE,sep=sep, row.names = 1, check.names = FALSE, stringsAsFactors = FALSE)
   }
   files <- unique(annotations$File)
   for (k in 1:length(files)) {
