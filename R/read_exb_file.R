@@ -1,92 +1,100 @@
-#' read_exb_file()
-#'
-#' Function that reads an exb transcription file
-#'
-#' @param path Path of an exb transcription file
-#' @param addMetaData Logical Value, wheter Metadata should be read from the speakertable
-#' @param sortMetaData Logical value, wheter metadata should be sorted directly after the speaker name or at the end
-#' @param readAnn Logical Value, whetaer annotation tiers should be read and sorted
-#' @param annotation "linear" or multilayer. See vignette for further information
-#' @param addDescription logical value wheter description tiers should be inclouded
-#'
-#' @return Returns a data frame that contains the transcription and the annotations
-#' @export
-#'
-#' @examples
-#' path <- system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mustWork = TRUE) # for a linear annotation
-#' example_linear <- read_exb_file(path, readAnn = TRUE, annotation= "linear", addMetaData = TRUE)
-#' path <- system.file("extdata", "Example_multi.exb", package = "ExmaraldaR", mustWork = TRUE) # for a multilayer annotation
-#' example_multi <- read_exb_file(path, readAnn = TRUE, annotation= "multilayer", addMetaData = TRUE)
-#'
-read_exb_file <- function(path, readAnn=TRUE,annotation= c("linear", "multilayer"),addDescription= FALSE, addMetaData= FALSE,sortMetaData=TRUE){
-  if(check_exb(path)){
+read_exb_file <- function(path, readAnn=TRUE,addDescription= FALSE, addMetaData= FALSE, addIPNumber=TRUE,IPEndSign= c("|",".",";",",",",","?","=","-")){
+  if(stringr::str_ends(path, "\\.exb")== FALSE){
+    return("File is not an .exb file")
+  }else{
     file <- xml2::read_xml(path, encoding="UTF-8")
-    timeline <- read_timeline(file)
-    events <- read_events(file, path)
-    #events[,5] <- stringr::str_trim(events[,5])
-    events$Text <- stringr::str_replace(events$Text,"\\| ","\\|")
-    events_sorted <- sort_events(events, timeline)
-    events_sorted <- dplyr::left_join(events_sorted,timeline, by=c("Start" = "id")) %>% dplyr::rename(Start_time = time) #Add absolute timepoints for start
-    events_sorted <- dplyr::left_join(events_sorted,timeline, by=c("End" = "id")) %>% dplyr::rename(End_time = time) #Add absolute timepoints for start
-    events_sorted <- add_IpNumber(events_sorted)
-    if(addDescription == TRUE &
-       length(xml2::xml_find_all(file, "/basic-transcription/basic-body[1]/tier[@type='d']")) != 0  ){
-      descriptions <- read_description(file, timeline)
-      ##check for annotations over more than one tier
-      #MultiAnn <- dplyr::anti_join( descriptions,events_sorted, by= c("Start", "End", "Start_time", "End_time"))
-      #MultiAnn<- MultiAnn[which((MultiAnn$Start %in% events_sorted$Start)|(MultiAnn$End %in% events_sorted$End)),]
-      events_sorted <- dplyr::full_join(events_sorted, descriptions, by= c("Start", "End", "Start_time", "End_time"), suffix= c("", "_yy")) %>% dplyr::select(!dplyr::ends_with("_yy")) %>%dplyr::filter_all(dplyr::any_vars(!is.na(.))) %>%  dplyr::mutate_at(dplyr::vars(Start_time,End_time), as.numeric) %>% dplyr::arrange(Start_time)
-      }
-    AnnotationTiers <- xml2::xml_find_all(file,".//tier[@type='a']") #findet alle Annotationsspuren
-    if(readAnn==TRUE & length(AnnotationTiers) !=0){
-      if(annotation=="linear"){
-        annotations <- read_annotations_linear(file)
-        exb <- dplyr::left_join(events_sorted, annotations,by = c("Speaker", "Start", "End"))
-        MultiEventAnn <- dplyr::anti_join( annotations,events_sorted, by=c("Speaker", "Start", "End")) # check for annotations for more than 1 event
-        if(nrow(MultiEventAnn)!=0){
-          for (n in 1:nrow(MultiEventAnn)) {
-            a <- which(events_sorted[,'Start']==MultiEventAnn[n, 'Start'])
-            b <- which(events_sorted[,'End']==MultiEventAnn[n, 'End'])
-            if (length(a)==0){
-              exb[b,colnames(MultiEventAnn)[ncol(MultiEventAnn)]] <- MultiEventAnn[n, ncol(MultiEventAnn)]
-              print(exb[b,])
-              print("This event has an annotation that is not properly aligned. The annotation was assigned to closest match. Please check annotation." )
-            }else if(length(b)==0){
-              exb[a,colnames(MultiEventAnn)[ncol(MultiEventAnn)]] <- MultiEventAnn[n, ncol(MultiEventAnn)]
-              print(exb[a,])
-              print("This event has an annotation that is not properly aligned. The annotation was assigned to closest match. Please check annotation." )
-            }else{
-            exb[seq(a:b),colnames(MultiEventAnn)[ncol(MultiEventAnn)]] <- MultiEventAnn[n, ncol(MultiEventAnn)]
-            }
-          }
+    timeline <- xml2::xml_attrs(xml2::xml_children(xml2::xml_child(xml2::xml_child(file, 2), 1))) %>% dplyr::bind_rows()
+    events <- read_events(file, path) %>%  #read events
+      left_join(., timeline[,1:2], by= c("Start" ="id")) %>% rename(Start_time= time)%>% mutate(Start_time=as.double(Start_time)) %>%  #allocate absoulute times to time stamps
+      left_join(., timeline[,1:2], by= c("End" ="id")) %>% rename(End_time= time) %>% mutate(End_time= as.double(End_time)) %>%
+      .[,c("File","Speaker", "TierID",  "Start","End", "Start_time", "End_time","Name","Text")] # nice and tidy order
+    events <- sort_events(events, addIPNumber= addIPNumber, IPEndSign= IPEndSign)
+    if(readAnn==TRUE & length(xml2::xml_find_all(file,".//tier[@type='a']"))!=0){
+      AnnotationTiers <- xml2::xml_find_all(file,".//tier[@type='a']") #findet alle Annotationsspuren
+      annotations <- data.frame()
+      for (n in 1:length(AnnotationTiers)) {
+        ann_help <- data.frame()
+        ##TODO: nur event children Berücksichtigendas
+        if(AnnotationTiers[n] %>% xml2::xml_children() %>% length()==0|AnnotationTiers[n] %>% xml2::xml_children() %>% xml2::xml_attrs() %>% dplyr::bind_rows() %>% names() %>% length()==0){
+          next
+        }else if(!"speaker" %in% names(xml2::xml_attrs(AnnotationTiers[n])[[1]])){ ##check for annTiers without speaker
+          ann_help <- AnnotationTiers[n] %>% xml2::xml_children() %>% xml2::xml_attrs() %>% dplyr::bind_rows()%>% dplyr::rename(Start= start, End= end) %>%
+            mutate(Annotation=AnnotationTiers[n]  %>% xml2::xml_children() %>% xml2::xml_text()) %>%
+            dplyr::mutate(Speaker= NA) %>%
+            dplyr::mutate(TierID= xml2::xml_attrs(AnnotationTiers[n])[[1]][['id']]) %>%
+            dplyr::mutate(Name=xml2::xml_attrs(AnnotationTiers[n])[[1]][['display-name']])
+        }else{
+          ann_help <- AnnotationTiers[n] %>% xml2::xml_children() %>% xml2::xml_attrs() %>% dplyr::bind_rows()%>% dplyr::rename(Start= start, End= end) %>%
+            mutate(Annotation = AnnotationTiers[n]  %>% xml2::xml_children() %>% xml2::xml_text()) %>%
+            dplyr::mutate(Speaker= xml2::xml_attrs(AnnotationTiers[n])[[1]][["speaker"]]) %>%
+            dplyr::mutate(TierID= xml2::xml_attrs(AnnotationTiers[n])[[1]][['id']]) %>%
+            dplyr::mutate(Name=xml2::xml_attrs(AnnotationTiers[n])[[1]][['display-name']])
+          annotations <- dplyr::bind_rows(annotations, ann_help)
         }
-
-        exb <- sort_anntotations_linear(exb)
-      }else if(annotation=="multilayer"){
-        exb <- sort_annotations_multilayer(file, AnnotationTiers, events_sorted)
       }
+      if(nrow(annotations)==0){
+        exb <- events
+        return(exb)
+      }
+      annotations <- annotations%>% pivot_wider(names_from = Name, values_from = Annotation, names_repair = "universal") %>% select(!TierID) %>% filter(!is.na(Start))
+      ##join annnotations that are alligned by Start,End and Speaker
+      #check if annotations are per spekaer or not speaker assigned
+      if(length(intersect(unique(events$Speaker), unique(annotations$Speaker)))==0){##keine Sprecher gleich
+        exb <- left_join(events, annotations, by=c("Start", "End")) %>% select(-Speaker.y)
+      }else if(setequal(unique(events$Speaker), unique(annotations$Speaker))|length(setdiff(unique(annotations$Speaker), unique(events$Speaker)))==0){ ##alle Sprecher gleich oder alle Sprecher der Annotationsspuren in Transkripionsspuren
+         exb <- left_join(events, annotations, by=c("Start", "End","Speaker"))
+      }else{##teils teils
+        ##Speaker that have a annotation tier but not a transcription tier
+        diff <- setdiff(unique(annotations$Speaker), unique(events$Speaker))
+        exb <- annotations %>%  filter(Speaker %in% diff) %>% select(-Speaker) %>% left_join(events, ., by=c("Start", "End")) #assign them by time
+        if ("Speaker.y" %in% names(exb)){ # some cosmetics
+          exb <- exb%>% select(-Speaker.y)
+        }
+        exb2 <- annotations %>%  filter(!Speaker %in% diff)  %>% left_join(events, ., by=c("Start", "End","Speaker")) # assinge them by time and speaker
+        exb <- bind_rows(exb,exb2) %>% arrange(EventID)
+      }
+
+
+      ##check for annotations that are left out
+      if(nrow(anti_join(annotations,events, by=c("Start", "End")))!=0){
+        ##Möglichkeiten: ID vergeben und dann mergen oder nested tibble
+        ##ID VERGEBEN:
+        ##ToDO: ID vor Annotation setzen statt ID Spalte
+        ##Idee: mutate across !Start,End;Speaker & !is.na; str_glue(ID,inhalt)
+        ## ABER SUCHE DANN IRGENDWIE kompliziert...besser ID-Spalte pro Annotation?
+       multiAnn <-  anti_join(annotations,events, by=c("Start", "End")) #%>% mutate(AnnID= seq(1:nrow(.)))
+     #  exb <-exb %>%  mutate(AnnID=NA)
+       annCols <- multiAnn %>% select(where(~!all(is.na(.)))) %>%  names() %>% intersect(names(exb)) %>% .[which(!stringr::str_detect(.,"Speaker|Start|End"))]
+       multiAnn_help <- data.frame()
+       for (n in 1:length(annCols)) {
+        varname <- str_glue(annCols[n],"_ID")
+        multiAnn_help2 <- data.frame()
+        multiAnn_help2 <- multiAnn  %>%  filter(.,!is.na(.data[[annCols[n]]])) %>% mutate("{varname}":=seq(1:nrow(.)), .after= {annCols[n]})
+        multiAnn_help <- bind_rows(multiAnn_help, multiAnn_help2)
+       }
+       multiAnn <- multiAnn_help
+       remove(multiAnn_help,multiAnn_help2)
+       for (k in 1:nrow(multiAnn)) {
+         annCols <- multiAnn[k,] %>% select(!where(is.na)) %>% select(-c(Start, End, Speaker)) %>%  names()
+         a <- which(exb$Start==as.character( multiAnn[k,"Start"])) %>% max()
+         b <- which(exb$End==as.character(multiAnn[k,"End"])) %>% max()
+         exb[a:b,annCols] <- multiAnn[k,annCols]
+       }
+      }
+
+
     }else{
-      exb <- events_sorted
+      exb <- events
     }
-
-    if(addMetaData==TRUE){
-      MetaData <- read_metadata(file)
-      exb2 <- dplyr::left_join(exb, MetaData, by= "Speaker")
-      if(sortMetaData==TRUE){
-        n <- ncol(exb2)-ncol(exb)
-        k <- ncol(exb2)
-        l <- k-n
-        m <- l+1
-        exb <- exb2[,c(1:6,m:k,7:l)]
-      }else{
-        exb <- exb2
-      }
-    }
-    #add Event ID
-    eventID <- seq(1:nrow(exb))
-    exb <- dplyr::bind_cols(IpNumber=exb[,1],EventID= eventID, exb[,c(2:ncol(exb))])
-    return(as.data.frame(exb))
-  } else {
-    stop("File has to be an EXMARaLDA basis-transcription (.exb)")
   }
+  ##clean doubled lines and coerce annotations ##TODO: Verhalten beobachen
+  exb <-  exb %>% group_by(EventID) %>% summarise(across(everything(), ~first(na.omit(.x)))) %>% ungroup %>% arrange(IPNumber)
+  if(addMetaData==TRUE){
+    metaData <- read_metadata(file)
+    exb <- left_join(exb,metaData, by="Speaker") %>% select(1:Name, names(metaData),Text:last_col())
+  }
+  #add EventID
+  exb <- exb %>% dplyr::mutate(EventID= seq(1:nrow(exb))) %>% as.data.frame()
+  return(exb)
 }
+
