@@ -76,7 +76,7 @@ read_exb_file <- function(path, readAnn=TRUE,addDescription= FALSE, addMetaData=
         ## ABER SUCHE DANN IRGENDWIE kompliziert...besser ID-Spalte pro Annotation?
        multiAnn <-  dplyr::anti_join(annotations,events, by=c("Start", "End")) #%>% mutate(AnnID= seq(1:nrow(.)))
      #  exb <-exb %>%  mutate(AnnID=NA)
-       annCols <- multiAnn %>% dplyr::select(tidyselect::where(~!all(is.na(.)))) %>%  names() %>% dplyr::intersect(names(exb)) %>% .[which(!stringr::str_detect(.,"Speaker|Start|End"))]
+       annCols <- multiAnn %>% dplyr::select(where(~!all(is.na(.)))) %>%  names() %>% dplyr::intersect(names(exb)) %>% .[which(!stringr::str_detect(.,"Speaker|Start|End"))]
        multiAnn_help <- data.frame()
        for (n in 1:length(annCols)) {
         varname <- stringr::str_glue(annCols[n],"_ID")
