@@ -8,7 +8,7 @@
 #' @param PathNewFiles Default is the original Directory, can be changend
 #' @param suffix suffix to be added to the new files, default is "_new"
 #'
-#' @return
+#' @return NULL
 #' @export
 #'
 write_back_dir <- function(exb,sep=",", PathExbDir, PathNewFiles = PathExbDir, suffix="_new"){
@@ -17,13 +17,13 @@ write_back_dir <- function(exb,sep=",", PathExbDir, PathNewFiles = PathExbDir, s
   if(is.data.frame(exb)){
     annotations <- exb
   }else{
-    annotations <- read.delim(exb, header = TRUE,sep=sep, row.names = 1, check.names = FALSE, stringsAsFactors = FALSE)
+    annotations <- utills::read.delim(exb, header = TRUE,sep=sep, row.names = 1, check.names = FALSE, stringsAsFactors = FALSE)
   }
   files <- unique(annotations$File)
   for (k in 1:length(files)) {
     ann <- dplyr::filter(annotations, File==files[k])
     PathFile <- stringr::str_glue(PathExbDir,"\\",stringr::str_trim(files[k]),".exb")
     PathNewFile <- PathNewFiles
-    write_back_to_exb(ann, PathExb = PathFile,PathNewFile = PathNewFile )
+    write_back_to_exb(ann, PathExb = PathFile,PathNewFile = PathNewFile, suffix = suffix )
   }
 }

@@ -1,38 +1,33 @@
-#' Read entire directory of exb files annotated with the same annotation specification
+#' Title
 #'
-#' @param pathDir path of the directory
-#'@param addMetaData Logical Value, wheter Metadata should be read from the speakertable
-#'@param readAnn Logical Value, whetaer annotation tiers should be read and sorted
-#'@param annotation "linear" or multilayer. See vignette for further information
-#'@param addDescription logical value wheter description tiers should be inclouded
-#' @return returns dataframe that contains all events, an IP number and formatted annotations
+#' @param pathDir path of directory with .exb files
+#' @param readAnn logical, if annotation tiers should be read
+#' @param addDescription logical, if description tiers should be read NOT YET POSSIBLE
+#' @param addMetaData logical, if information from speaker table should be read
+#' @param addIPNumber logical, if there should be an nummeration of intonation phrases
+#' @param IPEndSign character, spezifies characters that indicate the end of a intonation unit
+#' @importFrom rlang :=
+#'
+#' @return data.frame
 #' @export
-#'
-#' @examples
-#' path <- system.file("extdata\\read_dir", package = "ExmaraldaR", mustWork = TRUE)
-#' read_exb_dir(path, addMetaData = TRUE, readAnn = TRUE, annotation = "linear")
-read_exb_dir <- function(pathDir, addMetaData= FALSE, readAnn=TRUE,annotation= c("linear", "multilayer"),addDescription= FALSE){
-  files <- list.files(pathDir,".\\.exb")
-  addMetaDataDir <- addMetaData
-  readAnnDir <- readAnn
-  AnnotationDir <- annotation
-  addDescriptionDir <- addDescription
-  exb <- read_exb_file(path= unlist(stringr::str_c(pathDir,"\\",files[1])),annotation= AnnotationDir, addDescription= addDescriptionDir, addMetaData=addMetaDataDir, readAnn= readAnnDir , sortMetaData=FALSE)
-  k <- 2
+read_exb_dir <- function(pathDir, readAnn=TRUE,addDescription= FALSE, addMetaData= FALSE, addIPNumber=TRUE,IPEndSign= c("|",".",";",",",",","?","=","-")){
+  files <- list.files(pathDir,".\\.exb", full.names = TRUE)
+  exb <- read_exb_file(files[1],readAnn,addDescription, addMetaData=FALSE, addIPNumber, IPEndSign)
   for (k in 2:length(files)) {
-    help <- read_exb_file(path= unlist(stringr::str_c(pathDir,"\\",files[k])), addMetaData=addMetaDataDir, readAnn= readAnnDir, sortMetaData=FALSE, annotation= AnnotationDir)
+    help <- read_exb_file(path=,files[k],readAnn,addDescription, addMetaData=FALSE, addIPNumber, IPEndSign)
     exb <- dplyr::bind_rows(exb,help)
   }
-  if(addMetaDataDir==TRUE){
-    startMetaData <- which(colnames(exb)=="sex")
-    k <- ncol(exb)
-    l <- startMetaData-1
-    n <- k-startMetaData
+  if(addMetaData==TRUE){
+    exb2 <- data.frame()
+    for (i in 1:length(files)){
+      metaData <- read_metadata(files[i] %>% xml2::read_xml()) %>%  dplyr::mutate(File= stringr::str_remove(basename(files[i]), "\\.exb"))
+      exb_help <- exb %>% dplyr::filter(File== stringr::str_remove(basename(files[i]), "\\.exb")) %>%  dplyr::left_join(metaData, by=c("Speaker", "File"),suffix=c("","_y") )
+      exb2 <- dplyr::bind_rows(exb2,exb_help)
+    }
+    #metaCols <-
+    exb <- exb2 %>% dplyr::select(1:Name, dplyr::setdiff(names(exb2), names(exb)),Text:dplyr::last_col())
 
-    exb <- exb[,c(1:6,startMetaData:k,7:l)]
   }
-  exb <- dplyr::mutate(exb, IPId=paste(File, IpNumber, sep= "_"))
-  exb <- dplyr::mutate(exb, EventID=paste(File, EventID, sep= "_"))
-  exb <- dplyr::bind_cols(IPId=exb$IPId, exb[,1:ncol(exb)-1])
+  exb <- dplyr::mutate(exb, IPId=paste(File, IPNumber, sep= "_")) %>%  dplyr::mutate(exb, EventID=paste(File, EventID, sep= "_")) %>% dplyr::select(IPId,1:dplyr::last_col(offset = 1))
   return(exb)
 }

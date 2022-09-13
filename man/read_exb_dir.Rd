@@ -2,34 +2,33 @@
 % Please edit documentation in R/read_exb_dir.R
 \name{read_exb_dir}
 \alias{read_exb_dir}
-\title{Read entire directory of exb files annotated with the same annotation specification}
+\title{Title}
 \usage{
 read_exb_dir(
   pathDir,
-  addMetaData = FALSE,
   readAnn = TRUE,
-  annotation = c("linear", "multilayer"),
-  addDescription = FALSE
+  addDescription = FALSE,
+  addMetaData = FALSE,
+  addIPNumber = TRUE,
+  IPEndSign = c("|", ".", ";", ",", ",", "?", "=", "-")
 )
 }
 \arguments{
-\item{pathDir}{path of the directory}
+\item{pathDir}{path of directory with .exb files}
 
-\item{addMetaData}{Logical Value, wheter Metadata should be read from the speakertable}
+\item{readAnn}{logical, if annotation tiers should be read}
 
-\item{readAnn}{Logical Value, whetaer annotation tiers should be read and sorted}
+\item{addDescription}{logical, if description tiers should be read NOT YET POSSIBLE}
 
-\item{annotation}{"linear" or multilayer. See vignette for further information}
+\item{addMetaData}{logical, if information from speaker table should be read}
 
-\item{addDescription}{logical value wheter description tiers should be inclouded}
+\item{addIPNumber}{logical, if there should be an nummeration of intonation phrases}
+
+\item{IPEndSign}{character, spezifies characters that indicate the end of a intonation unit}
 }
 \value{
-returns dataframe that contains all events, an IP number and formatted annotations
+data.frame
 }
 \description{
-Read entire directory of exb files annotated with the same annotation specification
-}
-\examples{
-path <- system.file("extdata\\\\read_dir", package = "ExmaraldaR", mustWork = TRUE)
-read_exb_dir(path, addMetaData = TRUE, readAnn = TRUE, annotation = "linear")
+Title
 }

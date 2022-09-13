@@ -2,40 +2,33 @@
 % Please edit documentation in R/read_exb_file.R
 \name{read_exb_file}
 \alias{read_exb_file}
-\title{read_exb_file()}
+\title{Title}
 \usage{
 read_exb_file(
   path,
   readAnn = TRUE,
-  annotation = c("linear", "multilayer"),
   addDescription = FALSE,
   addMetaData = FALSE,
-  sortMetaData = TRUE
+  addIPNumber = TRUE,
+  IPEndSign = c("|", ".", ";", ",", ",", "?", "=", "-")
 )
 }
 \arguments{
-\item{path}{Path of an exb transcription file}
+\item{path}{path of .exb file}
 
-\item{readAnn}{Logical Value, whetaer annotation tiers should be read and sorted}
+\item{readAnn}{logical, if annotation tiers should be read}
 
-\item{annotation}{"linear" or multilayer. See vignette for further information}
+\item{addDescription}{logical, if description tiers should be read NOT YET POSSIBLE}
 
-\item{addDescription}{logical value wheter description tiers should be inclouded}
+\item{addMetaData}{logical, if information from speaker table should be read}
 
-\item{addMetaData}{Logical Value, wheter Metadata should be read from the speakertable}
+\item{addIPNumber}{logical, if there should be an nummeration of intonation phrases}
 
-\item{sortMetaData}{Logical value, wheter metadata should be sorted directly after the speaker name or at the end}
+\item{IPEndSign}{character, spezifies characters that indicate the end of a intonation unit}
 }
 \value{
-Returns a data frame that contains the transcription and the annotations
+data.frame
 }
 \description{
-Function that reads an exb transcription file
-}
-\examples{
-path <- system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mustWork = TRUE) # for a linear annotation
-example_linear <- read_exb_file(path, readAnn = TRUE, annotation= "linear", addMetaData = TRUE)
-path <- system.file("extdata", "Example_multi.exb", package = "ExmaraldaR", mustWork = TRUE) # for a multilayer annotation
-example_multi <- read_exb_file(path, readAnn = TRUE, annotation= "multilayer", addMetaData = TRUE)
-
+Title
 }

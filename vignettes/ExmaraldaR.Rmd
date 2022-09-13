@@ -15,11 +15,11 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup, include=FALSE}
-library(devtools)
-devtools::install_github("TimoSchuer/ExmaraldaR", force = TRUE)
-
-library(ExmaraldaR)
-library(knitr)
+# library(devtools)
+# devtools::install_github("TimoSchuer/ExmaraldaR", force = TRUE)
+# 
+# library(ExmaraldaR)
+# #library(knitr)
 
 ```
 
@@ -47,15 +47,15 @@ EXMARaLDA is a software package developed and maintained by Thomas Schmidt. Besi
 In the following I will consider some features of the work process that lead to a well-formed R- object. For that I will go backwards, showing you the output of example files and then the parameter in the Partitur Editor leading to this specific output.
 
 ```{r eval=FALSE}
-path <- system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mustWork = TRUE)
-
-read_exb_file(path, readAnn = FALSE, annotation= "linear", addMetaData = TRUE)
+# path <- system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mustWork = TRUE)
+# 
+# read_exb_file(path, readAnn = FALSE, annotation= "linear", addMetaData = TRUE)
 ```
 
 ```{r echo=FALSE, results='asis', warning=FALSE}
-path <- system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mustWork = TRUE)
-example <- read_exb_file(path, readAnn = TRUE, annotation= "linear", addMetaData = TRUE)
-kable(example)
+# path <- system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mustWork = TRUE)
+# example <- read_exb_file(path, readAnn = TRUE, annotation= "linear", addMetaData = TRUE)
+# kable(example)
 ```
 
 This is the table from a an annotated exb. file using a linear annotation putting several information in just one tag (for more information see further below). So let's have a look at the different columns and the information they contain.
@@ -109,8 +109,8 @@ In the next step we will look at the options in the speakertable that lead to th
 With the (probably incorrect) term linear annotation I mean a format in which more than one piece of information is coded in one tag. This is useful for some tasks, especially in variable centered analysis, where more than one variable can occur in a transcription unit. I adopted this approach from Lanwer 2015 and his analysis of cooccurrence of phonological variants. Therefore it contains first the variable coded, then the variant and some contextual features. Of course it can also be used to code non-variable centered analysis. Formally every piece of information to be coded is structured as follows: ONGOING NUMBER OF CATEGORY:CATEGORY:SPECIFICATION . The first part is an ongoing number that is assigned to every category. This has to be consistent, because it is essential for sorting the category in the right column. The second part is the name of the category. This will also be the name of the column. The third part contains the specification of the category. The categories are separated by '\_' and the tag ends with ';', so that a tag could look like this: *1:Category1:Spec1_2:Category2: Spec2_5:Category5:Spec5;* .A tag coding a variable with context information would look like this: *1:VARIABLE:VARIABLENAME_2:VARIANT:VARIANTSPECIFICATION_3:CONTEXT1:SPECIFICATION;* A major improvement comparing to copying an EXACT result to an EXCEL file is that if a category is not specified there is no need to annotate it. The code will automatically sort it into the right column via the number. I highly recommend to use a self-defined (S.O.) annotation tag set (LINK EINFÜGEN).
 
 ```{r, eval= FALSE}
-path <- system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mustWork = TRUE)
-read_exb_file(path, readAnn = TRUE, annotation= "linear", addMetaData = TRUE)
+# path <- system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mustWork = TRUE)
+# read_exb_file(path, readAnn = TRUE, annotation= "linear", addMetaData = TRUE)
 
 ```
 
@@ -121,8 +121,8 @@ read_exb_file(path, readAnn = TRUE, annotation= "linear", addMetaData = TRUE)
 The probably more common annotation is a multi-layer annotation. This means that every annotation category has its own tier. This has some advantages but one major drawback is that the partitur editor can get very slow having many tiers and long recordings. On the other hand the annotation process is much faster and the revision process much easier. The annotation tiers in the example are speaker-related. This is not necessary as annotation tiers can also be without a speaker assignment. It has no influence on the output.
 
 ```{r, eval= FALSE}
-path <- system.file("extdata", "Example_multi.exb", package = "ExmaraldaR", mustWork = TRUE)
-read_exb_file(path, readAnn = TRUE, annotation= "multilayer", addMetaData = TRUE)
+# path <- system.file("extdata", "Example_multi.exb", package = "ExmaraldaR", mustWork = TRUE)
+# read_exb_file(path, readAnn = TRUE, annotation= "multilayer", addMetaData = TRUE)
 ```
 
 ## Importing a directory
@@ -130,8 +130,8 @@ read_exb_file(path, readAnn = TRUE, annotation= "multilayer", addMetaData = TRUE
 The given examples only import one file at a time. Often the data of interest is stored in different transcriptions. Therefore it is often useful to import them in once step and have the results in a single data.frame. This is possible with the function read_exb_dir(). For now it is only possible to import files with the same annotation style (multilayer **or** linear).
 
 ```{r, eval= FALSE}
-path <- system.file("extdata\\read_dir", package = "ExmaraldaR", mustWork = TRUE)
-read_exb_dir(path, addMetaData = TRUE, readAnn = TRUE, annotation = "linear")
+# path <- system.file("extdata\\read_dir", package = "ExmaraldaR", mustWork = TRUE)
+# read_exb_dir(path, addMetaData = TRUE, readAnn = TRUE, annotation = "linear")
 ```
 
 ## Write changes back to .exb files
@@ -139,17 +139,17 @@ read_exb_dir(path, addMetaData = TRUE, readAnn = TRUE, annotation = "linear")
 Sometimes it can be useful to fix errors or merge or divide an annotation category because the analysis indicates that this could be useful. Of course it is possible to change it directly in the original file but this can be very inconvenient. A more direct way is to change it in the R data.frame or in an exported csv or EXCEL file. If done so it can be useful to write it back into an .exb file in order to keep the data consistent and keep the benefits of having annotation and audio aligned. There are two functions for achieving this: write_back_dir() writes back an entire directory of exb files. As input a data.frame or csv file created by read_exb_dir() is needed. write_back_to_exb() does the same for a single file needing a data.frame or csv-file created by read_exb_file().
 
 ```{r, eval= FALSE}
-path <- system.file("extdata\\read_dir", package = "ExmaraldaR", mustWork = TRUE)
-exb <- read_exb_dir(path, addMetaData = TRUE, readAnn = TRUE, annotation = "linear")
-write_back_dir(exb, PathExbDir = path, PathNewFiles = path, suffix = "_new")
+# path <- system.file("extdata\\read_dir", package = "ExmaraldaR", mustWork = TRUE)
+# exb <- read_exb_dir(path, addMetaData = TRUE, readAnn = TRUE, annotation = "linear")
+# write_back_dir(exb, PathExbDir = path, PathNewFiles = path, suffix = "_new")
 ```
 
 The same is possible for a single file.
 
 ```{r, eval= FALSE}
-path <- system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mustWork = TRUE)
-read_exb_file(path, readAnn = TRUE, annotation= "linear", addMetaData = TRUE)
-write_back_to_exb(exb, PathExb = path, PathNewFile = path)
+# path <- system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mustWork = TRUE)
+# read_exb_file(path, readAnn = TRUE, annotation= "linear", addMetaData = TRUE)
+# write_back_to_exb(exb, PathExb = path, PathNewFile = path)
 ```
 
 ## **Add minimal tier to basic transcript (GAT2)**
@@ -157,21 +157,19 @@ write_back_to_exb(exb, PathExb = path, PathNewFile = path)
 It can be useful for searchability of the transcript to remove focus accents and other transcription conventions of the basic transcript. For this purpose the function add_MinimalTier adds a minimal tier to a transcribed file. The new file can be found in the origin folder and has the suffix "\_min".
 
 ```{r, eval= FALSE}
-path <- system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mustWork = TRUE)
-add_MinimalTier(path)
+# path <- system.file("extdata", "Example_linear.exb", package = "ExmaraldaR", mustWork = TRUE)
+# add_MinimalTier(path)
 ```
-
-![](C:/Users/Admin/AppData/Local/RStudio/tmp/paste-8C2285FD.png)
 
 ## Merge files
 
 It can be useful to merge files. E.g. if you distribute snippets to students. merge_exb_file() coalesces several files. This does the same as Transcription \> Merge transcriptions just with multiple files at a time. Therefore you provide a list of file e.g. via rChoiceDialogs::rchoose.files()
 
 ```{r, eval= FALSE}
-files <- rChoiceDialogs::rchoose.files()
-mergedFile <- merge_exb_files(files)
-dir <- dirname(files[1]) # choose directory of the imported files
-filename <- "merged_file.exb" # filename
-path <- paste(dir, filename, sep= "/")
-xml2::write_xml(mergedFile, path)
+# files <- rChoiceDialogs::rchoose.files()
+# mergedFile <- merge_exb_files(files)
+# dir <- dirname(files[1]) # choose directory of the imported files
+# filename <- "merged_file.exb" # filename
+# path <- paste(dir, filename, sep= "/")
+# xml2::write_xml(mergedFile, path)
 ```

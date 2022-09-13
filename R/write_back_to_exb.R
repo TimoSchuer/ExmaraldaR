@@ -7,53 +7,72 @@
 #' @param PathNewFile Directory where the new file is saved
 #' @param suffix suffix to be added to the new files, default is "_new"
 #'
-#' @return
+#' @return NULL
 #' @export
 
-write_back_to_exb <- function(exb,sep=",", PathExb, PathNewFile = dirname(PathExb), suffix="_new", annotation= c("linear","multilayer")){
+write_back_to_exb <-
+  function(exb,
+           sep = ",",
+           PathExb,
+           PathNewFile = dirname(PathExb),
+           suffix = "_new") {
     file <- xml2::read_xml(PathExb) #Read transcription
-    if(is.data.frame(exb)){
+    if (is.data.frame(exb)) {
       annotations <- exb
-    }else{
-      annotations <- read.delim(exb, header = TRUE,sep=sep, row.names = 1, check.names = FALSE, stringsAsFactors = FALSE)
+    } else{
+      annotations <-
+        utils::read.delim(
+          exb,
+          header = TRUE,
+          sep = sep,
+          row.names = 1,
+          check.names = FALSE,
+          stringsAsFactors = FALSE
+        )
     }
-  if(annotation != "multilayer" | annotation!= "linear"){
-    return(print("annotation must be either multilayer, linear or undefined"))
-  }
-  ##write back transcription tiers
-  # just possible if events are the same
+    ##write back transcription tiers
+    # just possible if events are the same
     for (i in 1:nrow(exb)) {
-      xml_set_text(xml_find_all(file,paste0("/basic-transcription/basic-body/tier[@id=\'",stringr::str_trim(exb[i,"TierID"]),"\']/event[@start=\'",stringr::str_trim(exb[i,"Start"]),"\']")),as.character(exb[i,"Text"]))
+      xml2::xml_set_text(xml2::xml_find_all(
+        file,
+        paste0(
+          "/basic-transcription/basic-body/tier[@id=\'",
+          stringr::str_trim(exb[i, "TierID"]),
+          "\']/event[@start=\'",
+          stringr::str_trim(exb[i, "Start"]),
+          "\']"
+        )
+      ), as.character(exb[i, "Text"]))
     }
-  if(annotation=="multilayer"){
-
-      ##write back annotations
+    ##write back annotations
     #only works if name of tiers still are columnames
-    for(k in  names(exb)[names(exb) %in% xml_attr(xml2::xml_find_all(file,".//tier[@type='a']"), "display-name")]){
+    for (k in  names(exb)[names(exb) %in% xml2::xml_attr(xml2::xml_find_all(file, ".//tier[@type='a']"),
+                                                   "display-name")]) {
       ann <- exb %>% dplyr::filter(!is.na(.data[[k]]))
       for (p in 1:nrow(ann)) {
-        xml_set_text(xml_find_all(file,paste0("/basic-transcription/basic-body/tier[@display-name=\'",stringr::str_trim(k),"\']/event[@start=\'",stringr::str_trim(ann[p,"Start"]),"\']")),as.character(ann[p,k]))
+        xml2::xml_set_text(xml2::xml_find_all(
+          file,
+          paste0(
+            "/basic-transcription/basic-body/tier[@display-name=\'",
+            stringr::str_trim(k),
+            "\']/event[@start=\'",
+            stringr::str_trim(ann[p, "Start"]),
+            "\']"
+          )
+        ), as.character(ann[p, k]))
       }
     }
-  }else if(annotation=="linear"){
-    ##rebuild tags
-    #get colnumbers of annotation
-    AnnCol <- which(names(exb)=="End_time")+1
-    Annotated <- exb %>% dplyr::filter(dplyr::if_any(c(names(exb[AnnCol:ncol(exb)])),~!is.na(.x)))
-    s <- 0
-    # for(r in 1:ncol(Annotated[,AnnCol:ncol(Annotated)])){
-    #   Annotated <- Annotated %>% filter(!is.na(Annotated[,AnnCol+s]))%>% mutate(Annotated[,AnnCol+s]=stringr::str_glue(r,":",names(Annotated[,AnnCol+s]),":",Annotated[,AnnCol+s]))
-    # }
 
-    for (t in 1:nrow(Annotated)) {
-
-
-    }
+    fileName <- stringr::str_remove(basename(PathExb), "\\.exb")
+    PathNewFile <-
+      stringr::str_glue(PathNewFile,
+                        "\\",
+                        stringr::str_trim(fileName),
+                        suffix,
+                        ".exb")
+    xml2::write_xml(file, PathNewFile)
   }
-      fileName <- stringr::str_remove(basename(PathExb), "\\.exb")
-      PathNewFile <- stringr::str_glue(PathNewFile,"\\",stringr::str_trim(fileName),suffix,".exb")
-      xml2::write_xml(file, PathNewFile)
-}
+
 
 
 # write_back_to_exb <- function(exb,sep=",", PathExb, PathNewFile = dirname(PathExb), suffix="_new"){
@@ -117,5 +136,3 @@ write_back_to_exb <- function(exb,sep=",", PathExb, PathNewFile = dirname(PathEx
 #   PathNewFile <- stringr::str_glue(PathNewFile,"\\",stringr::str_trim(fileName),suffix,".exb")
 #   xml2::write_xml(file, PathNewFile)
 # }
-
-

@@ -10,8 +10,7 @@ write_back_to_exb(
   sep = ",",
   PathExb,
   PathNewFile = dirname(PathExb),
-  suffix = "_new",
-  annotation = c("linear", "multilayer")
+  suffix = "_new"
 )
 }
 \arguments{
