@@ -35,6 +35,7 @@ read_exb_file <- function(path, readAnn=TRUE,addDescription= FALSE, addMetaData=
             dplyr::mutate(Speaker= NA) %>%
             dplyr::mutate(TierID= xml2::xml_attrs(AnnotationTiers[n])[[1]][['id']]) %>%
             dplyr::mutate(Name=xml2::xml_attrs(AnnotationTiers[n])[[1]][['display-name']])
+          annotations <- dplyr::bind_rows(annotations, ann_help)
         }else{
           ann_help <- AnnotationTiers[n] %>% xml2::xml_children() %>% xml2::xml_attrs() %>% dplyr::bind_rows()%>% dplyr::rename(Start= start, End= end) %>%
             dplyr::mutate(Annotation = AnnotationTiers[n]  %>% xml2::xml_children() %>% xml2::xml_text()) %>%
