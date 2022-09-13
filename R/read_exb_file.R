@@ -47,7 +47,7 @@ read_exb_file <- function(path, readAnn=TRUE,addDescription= FALSE, addMetaData=
       }
       if(nrow(annotations)==0){
         exb <- events
-        return(exb)
+        #return(exb)
       }
       annotations <- annotations%>% tidyr::pivot_wider(names_from = Name, values_from = Annotation, names_repair = "universal") %>% dplyr::select(!TierID) %>% dplyr::filter(!is.na(Start))
       ##join annnotations that are alligned by Start,End and Speaker
