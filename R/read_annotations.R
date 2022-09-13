@@ -66,7 +66,7 @@ read_annotations <- function(file,events){
     for (k in 1:nrow(multiAnn)) {
       annCols <- multiAnn[k,] %>% dplyr::select(!where(is.na)) %>% dplyr::select(-c(Start, End, Speaker)) %>%  names()
       if(length(which(exb$Start==as.character( multiAnn[k,"Start"])))==0| length(which(exb$End==as.character(multiAnn[k,"End"])))==0){
-        print("The following description event is assigned to a speaker but has no element in the corresponding transcription file:")
+        print("The following annotation event is assigned to a speaker but has no element in the corresponding transcription file:")
         print(multiAnn[k,])
         return(NULL)
       }
