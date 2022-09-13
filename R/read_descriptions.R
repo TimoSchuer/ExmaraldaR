@@ -74,4 +74,5 @@ read_descriptions <- function(file,exb){
       exb[a:b,desCols] <- multiDes[k,desCols]
     }
   }
+  return(exb)
 }
