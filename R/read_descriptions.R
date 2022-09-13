@@ -1,4 +1,4 @@
-read_description <- function(file,exb){
+read_descriptions <- function(file,exb){
   DescriptionTiers <- xml2::xml_find_all(file,".//tier[@type='d']") #findet alle Annotationsspuren
   descriptions <- data.frame()
   for (n in 1:length(DescriptionTiers)) {
