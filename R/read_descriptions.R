@@ -51,7 +51,7 @@ read_descriptions <- function(file,exb){
     ## ABER SUCHE DANN IRGENDWIE kompliziert...besser ID-Spalte pro Annotation?
     multiDes <-  dplyr::anti_join(descriptions,exb, by=c("Start", "End")) #%>% mutate(AnnID= seq(1:nrow(.)))
     #  exb <-exb %>%  mutate(AnnID=NA)
-    desCols <- multiDes %>% dplyr::select(where(~!all(is.na(.)))) %>%  names() %>% dplyr::intersect(names(exb)) %>% .[which(!stringr::str_detect(.,"Speaker|Start|End"))]
+    desCols <- multiDes %>% dplyr::select(tidyselect:::where(~!all(is.na(.)))) %>%  names() %>% dplyr::intersect(names(exb)) %>% .[which(!stringr::str_detect(.,"Speaker|Start|End"))]
     multiDes_help <- data.frame()
     for (n in 1:length(desCols)) {
       varname <- stringr::str_glue(desCols[n],"_ID")
@@ -62,7 +62,7 @@ read_descriptions <- function(file,exb){
     multiDes <- multiDes_help
     remove(multiDes_help,multiDes_help2)
     for (k in 1:nrow(multiDes)) {
-      desCols <- multiDes[k,] %>% dplyr::select(!where(is.na)) %>% dplyr::select(-c(Start, End, Speaker)) %>%  names()
+      desCols <- multiDes[k,] %>% dplyr::select(!tidyselect:::where(is.na)) %>% dplyr::select(-c(Start, End, Speaker)) %>%  names()
       if(length(which(exb$Start==as.character( multiDes[k,"Start"])))==0| length(which(exb$End==as.character(multiDes[k,"End"])))==0){
         print("The following description event is assigned to a speaker but has no element in the corresponding transcription file:")
         print(multiDes[k,])

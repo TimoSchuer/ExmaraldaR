@@ -1,7 +1,7 @@
 #' Helper function reads events
 #'
-#' @param file
-#' @param path
+#' @param file xml object
+#' @param path path of file
 #'
 
 read_events <- function(file, path){

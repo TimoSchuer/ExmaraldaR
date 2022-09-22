@@ -4,7 +4,7 @@ sort_events <- function(events, IPEndSign= c("|",".",";",",",",","?","=","-"),ad
     return(events)
   }
   #build regex
-  sort <- events %>% dplyr::group_by(TierID) %>% dplyr::arrange(Start_time)
+  sort <- events %>% dplyr::group_by(TierID) %>% dplyr::arrange(Start_time, .by_group = TRUE)
   ends <-stringr::str_which(sort$Text, paste0("[",paste(IPEndSign, collapse = ""),"]\\s*\\Z", collapse = ""), negate = FALSE) %>% sapply(function(x) x+1)
   ends <- ends[-which(ends>nrow(events))]
   sort[ends,"IPStart"] <- TRUE

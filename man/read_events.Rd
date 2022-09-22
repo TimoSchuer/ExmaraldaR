@@ -7,7 +7,9 @@
 read_events(file, path)
 }
 \arguments{
-\item{path}{}
+\item{file}{xml object}
+
+\item{path}{path of file}
 }
 \description{
 Helper function reads events

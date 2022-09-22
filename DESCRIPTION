@@ -20,7 +20,8 @@ Imports:
     devtools,
     tidyselect,
     tidyr,
-    rlang
+    rlang,
+    utils
 Suggests: 
     testthat,
     knitr,
