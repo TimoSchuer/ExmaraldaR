@@ -1,3 +1,12 @@
+#' Title
+#'
+#' @param file xml object
+#' @param events returned from read_events
+#'
+#' @return data.frame
+#' @export
+#'
+#' @examples
 read_annotations <- function(file,events){
   AnnotationTiers <- xml2::xml_find_all(file,".//tier[@type='a']") #findet alle Annotationsspuren
   annotations <- data.frame()
