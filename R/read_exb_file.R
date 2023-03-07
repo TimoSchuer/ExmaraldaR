@@ -20,11 +20,35 @@ read_exb_file <- function(path, readAnn=TRUE,addDescription= FALSE, addMetaData=
       dplyr::left_join(., timeline[,1:2], by= c("Start" ="id"), suffix= c("",".y") ) %>% dplyr::rename(Start_time= time)%>% dplyr::mutate(Start_time=as.double(Start_time)) %>%  #allocate absoulute times to time stamps
       dplyr::left_join(., timeline[,1:2], by= c("End" ="id"), suffix= c("",".y") ) %>% dplyr::rename(End_time= time) %>% dplyr::mutate(End_time= as.double(End_time)) %>%
       .[,c("File","Speaker", "TierID",  "Start","End", "Start_time", "End_time","Name","Text")] # nice and tidy order
-    events <-ExmaraldaR:::sort_events(events, addIPNumber= addIPNumber, IPEndSign= IPEndSign)
+
+    events <- ExmaraldaR:::sort_events(events, addIPNumber= addIPNumber, IPEndSign= IPEndSign)
     if(readAnn==TRUE & length(xml2::xml_find_all(file,".//tier[@type='a']"))!=0){
-      exb <- ExmaraldaR:::read_annotations(file,events)
-      if(is.null(exb)){
-        return(NULL)
+      AnnotationTiers <- xml2::xml_find_all(file,".//tier[@type='a']") #findet alle Annotationsspuren
+      annotations <- data.frame()
+      for (n in 1:length(AnnotationTiers)) {
+        ann_help <- data.frame()
+        ##TODO: nur event children Berücksichtigendas
+        if(AnnotationTiers[n] %>% xml2::xml_children() %>% length()==0|AnnotationTiers[n] %>% xml2::xml_children() %>% xml2::xml_attrs() %>% dplyr::bind_rows() %>% names() %>% length()==0){
+          next
+        }else if(!"speaker" %in% names(xml2::xml_attrs(AnnotationTiers[n])[[1]])){ ##check for annTiers without speaker
+          ann_help <- AnnotationTiers[n] %>% xml2::xml_children() %>% xml2::xml_attrs() %>% dplyr::bind_rows()%>% dplyr::rename(Start= start, End= end) %>%
+            dplyr::mutate(Annotation=AnnotationTiers[n]  %>% xml2::xml_children() %>% xml2::xml_text()) %>%
+            dplyr::mutate(Speaker= NA) %>%
+            dplyr::mutate(TierID= xml2::xml_attrs(AnnotationTiers[n])[[1]][['id']]) %>%
+            dplyr::mutate(Name=xml2::xml_attrs(AnnotationTiers[n])[[1]][['display-name']])
+          annotations <- dplyr::bind_rows(annotations, ann_help)
+        }else{
+          ann_help <- AnnotationTiers[n] %>% xml2::xml_children() %>% xml2::xml_attrs() %>% dplyr::bind_rows()%>% dplyr::rename(Start= start, End= end) %>%
+            dplyr::mutate(Annotation = AnnotationTiers[n]  %>% xml2::xml_children() %>% xml2::xml_text()) %>%
+            dplyr::mutate(Speaker= xml2::xml_attrs(AnnotationTiers[n])[[1]][["speaker"]]) %>%
+            dplyr::mutate(TierID= xml2::xml_attrs(AnnotationTiers[n])[[1]][['id']]) %>%
+            dplyr::mutate(Name=xml2::xml_attrs(AnnotationTiers[n])[[1]][['display-name']])
+          annotations <- dplyr::bind_rows(annotations, ann_help)
+        }
+      }
+      if(nrow(annotations)==0){
+        exb <- events
+        #return(exb)
       }
     }else{
       exb <- events
