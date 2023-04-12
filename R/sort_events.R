@@ -1,6 +1,6 @@
 sort_events <- function(events, IPEndSign= c("|",".",";",",",",","?","=","-"),addIPNumber=TRUE){
   if(addIPNumber==FALSE){
-    events <- events %>% dplyr::arrange(Start_time) %>% dplyr::mutate(EventID= paste(File,seq(1:nrow(.))))
+    events <- events %>% dplyr::arrange(Start_time) %>% dplyr::mutate(EventID= paste(File,seq(1:nrow(.)))) # nolint
     return(events)
   }
   #build regex
