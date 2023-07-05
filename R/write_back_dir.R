@@ -11,7 +11,7 @@
 #' @return NULL
 #' @export
 #'
-write_back_dir <- function(exb,sep=",", PathExbDir, PathNewFiles = PathExbDir, suffix="_new"){
+write_back_dir <- function(exb,sep=",", PathExbDir, PathNewFiles = PathExbDir, suffix="_new", verbose=TRUE, transcription_text="Text"){
 
 # Check if exb is object or csv file, save in annotations -----------------
   if(is.data.frame(exb)){
@@ -19,11 +19,16 @@ write_back_dir <- function(exb,sep=",", PathExbDir, PathNewFiles = PathExbDir, s
   }else{
     annotations <- utills::read.delim(exb, header = TRUE,sep=sep, row.names = 1, check.names = FALSE, stringsAsFactors = FALSE)
   }
-  files <- unique(annotations$File)
+  files <- annotations %>% pull(File) %>% unique() %>% as.character()
+  perc <- 0
   for (k in 1:length(files)) {
     ann <- dplyr::filter(annotations, File==files[k])
     PathFile <- stringr::str_glue(PathExbDir,"\\",stringr::str_trim(files[k]),".exb") # nolint: object_name_linter, line_length_linter.
     PathNewFile <- PathNewFiles
-    write_back_to_exb(ann, PathExb = PathFile,PathNewFile = PathNewFile, suffix = suffix ) # nolint
+    write_back_to_exb(ann, PathExb = PathFile,PathNewFile = PathNewFile, suffix = suffix, annotation_colums = annotation_colums, transcription_text = transcription_text )
+    if(verbose==TRUE){
+      perc <- perc + round(nrow(ann)/nrow(annotations)*100,2)
+      print(paste0(Sys.time()," ", k,"/", length(files)," ", files[k],"...done...",perc,"%", sep=""))
+    }
   }
 }
