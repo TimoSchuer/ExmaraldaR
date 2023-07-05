@@ -109,7 +109,7 @@ read_exb_file <- function(path, readAnn=TRUE,addDescription= FALSE, addMetaData=
   #add EventID
   exb <- exb %>% dplyr::mutate(EventID= seq(1:nrow(exb))) %>% as.data.frame()
   if(addIPNumber==TRUE){
-    exb <- exb %>% dplyr::group_by(IPId) %>% dplyr::arrange(Start_time, .by_group = TRUE)
+    exb <- exb %>% dplyr::group_by(IPNumber) %>% dplyr::arrange(Start_time, .by_group = TRUE)
   }else{
     exb <- exb %>% dplyr::arrange(Start_time)
   }
