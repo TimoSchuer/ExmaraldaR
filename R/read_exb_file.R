@@ -46,7 +46,12 @@ read_exb_file <- function(path, readAnn=TRUE,addDescription= FALSE, addMetaData=
         }
       }
       if(nrow(annotations)==0){
-        exb <- events
+        exb <- events%>% dplyr::ungroup() %>%  dplyr::mutate(EventID= seq(1:nrow(.))) %>% as.data.frame()
+        if(addIPNumber==TRUE){
+          exb <- exb %>% dplyr::group_by(IPNumber) %>% dplyr::arrange(Start_time, .by_group = TRUE) %>% dplyr::ungroup()
+        }else{
+          exb <- exb %>% dplyr::arrange(Start_time)
+        }
         return(exb)
       }
       annotations <- annotations%>% tidyr::pivot_wider(names_from = Name, values_from = Annotation, names_repair = "universal") %>% dplyr::select(!TierID) %>% dplyr::filter(!is.na(Start))

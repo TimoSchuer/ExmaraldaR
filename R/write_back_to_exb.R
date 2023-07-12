@@ -107,9 +107,9 @@ write_back_to_exb <-
       tierNumbers <- xml2::xml_find_all(file,"//tier") %>% xml2::xml_attr("id") %>% stringr::str_extract("\\d+") %>% as.numeric() %>% max(na.rm = TRUE) +1
       tierId <-  paste0("TIE",tierNumbers, collapse = "")
       if(assignSpeakersAnnotation==FALSE) {
-         xml_child(file, 2) %>%
+         xml2::xml_child(file, 2) %>%
            xml2::xml_add_child("tier") %>%
-           xml_set_attrs(c("id"=tierId, "type"="a", "category"=ann))
+           xml2::xml_set_attrs(c("id"=tierId, "type"="a", "category"=ann))
          AnnTier <- exb %>% filter(!is.na(.data[[ann]]))
          purrr::walk2(AnnTier$Start_new,AnnTier$End_new, .f = \(x,y)  {xml2::xml_add_child(xml2::xml_find_all(file,paste0("//tier[@id=","'",tierId,"']")), "event", .copy=FALSE) %>%
              xml2::xml_set_attrs(c("start"=x, "end"=y))})
