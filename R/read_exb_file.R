@@ -93,7 +93,7 @@ read_exb_file <- function(path, readAnn=TRUE,addDescription= FALSE, addMetaData=
        multiAnn <- multiAnn_help
        remove(multiAnn_help,multiAnn_help2)
        for (k in 1:nrow(multiAnn)) {
-         annCols <- multiAnn[k,] %>% dplyr::select(!where(is.na)) %>% dplyr::select(-c(Start, End, Speaker)) %>%  names()
+         annCols <- multiAnn[k,] %>% dplyr::select(!where(is.na)) %>% dplyr::select(-c(Start, End)) %>%  names()
          a <- which(exb$Start==as.character( multiAnn[k,"Start"])) %>% max()
          b <- which(exb$End==as.character(multiAnn[k,"End"])) %>% max()
          exb[a:b,annCols] <- multiAnn[k,annCols]
