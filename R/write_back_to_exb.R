@@ -6,7 +6,11 @@
 #' @param PathExb Path of the ExbFile
 #' @param PathNewFile Directory where the new file is saved
 #' @param suffix suffix to be added to the new files, default is "_new"
-#'
+#' @param transcription_text specify column with transcription text description
+#' @param annotation_colums specify names of annotaion columns
+#' @param overwrite_annotations if true old annotaitons will be deleted, AT THE MOMENT ONLY WORKS IF TRUE
+#' @param assignSpeakerAnnotation if TRUE one annotation tier per category per speaker will be added, AT THME MOMENT ONLY WORKS IF FALSE
+
 #' @return NULL
 #' @export
 

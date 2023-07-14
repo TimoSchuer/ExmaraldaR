@@ -3,14 +3,19 @@
 \name{write_back_to_exb}
 \alias{write_back_to_exb}
 \title{Write_back_to Exb
-writes back changes in annotations to an exb}
+writes back changes in annotations to an exb
+WARNING: All annotation tiers that are not present in the dataframe will be removed in the new file. New files are no problem. Not present description tiers may cause errors.}
 \usage{
 write_back_to_exb(
   exb,
   sep = ",",
   PathExb,
   PathNewFile = dirname(PathExb),
-  suffix = "_new"
+  suffix = "_new",
+  transcription_text = "Text",
+  annotation_colums,
+  overwrite_annotations = TRUE,
+  assignSpeakersAnnotation = FALSE
 )
 }
 \arguments{
@@ -23,8 +28,17 @@ write_back_to_exb(
 \item{PathNewFile}{Directory where the new file is saved}
 
 \item{suffix}{suffix to be added to the new files, default is "_new"}
+
+\item{transcription_text}{specify column with transcription text description}
+
+\item{annotation_colums}{specify names of annotaion columns}
+
+\item{overwrite_annotations}{if true old annotaitons will be deleted, AT THE MOMENT ONLY WORKS IF TRUE}
+
+\item{assignSpeakerAnnotation}{if TRUE one annotation tier per category per speaker will be added, AT THME MOMENT ONLY WORKS IF FALSE}
 }
 \description{
 Write_back_to Exb
 writes back changes in annotations to an exb
+WARNING: All annotation tiers that are not present in the dataframe will be removed in the new file. New files are no problem. Not present description tiers may cause errors.
 }

@@ -11,7 +11,12 @@ write_back_dir(
   sep = ",",
   PathExbDir,
   PathNewFiles = PathExbDir,
-  suffix = "_new"
+  suffix = "_new",
+  verbose = TRUE,
+  transcription_text = "Text",
+  annotation_colums = NA,
+  overwrite_annotations = TRUE,
+  assignSpeakersAnnotation = FALSE
 )
 }
 \arguments{
@@ -24,6 +29,16 @@ write_back_dir(
 \item{PathNewFiles}{Default is the original Directory, can be changend}
 
 \item{suffix}{suffix to be added to the new files, default is "_new"}
+
+\item{verbose}{logical, if TRUE, status will be shown}
+
+\item{transcription_text}{specify column with transcription text}
+
+\item{annotation_colums}{specify names of annotaion columns}
+
+\item{overwrite_annotations}{if true old annotaitons will be deleted, AT THE MOMENT ONLY WORKS IF TRUE}
+
+\item{assignSpeakerAnnotation}{if TRUE one annotation tier per category per speaker will be added, AT THME MOMENT ONLY WORKS IF FALSE}
 }
 \description{
 write_back_dir

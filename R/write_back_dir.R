@@ -7,11 +7,25 @@
 #' @param PathExbDir Path of the original files. Attention: the files must have the same names as in the "File" collumn
 #' @param PathNewFiles Default is the original Directory, can be changend
 #' @param suffix suffix to be added to the new files, default is "_new"
+#' @param verbose logical, if TRUE, status will be shown
+#' @param transcription_text specify column with transcription text
+#' @param annotation_colums specify names of annotaion columns
+#' @param overwrite_annotations if true old annotaitons will be deleted, AT THE MOMENT ONLY WORKS IF TRUE
+#' @param assignSpeakerAnnotation if TRUE one annotation tier per category per speaker will be added, AT THME MOMENT ONLY WORKS IF FALSE
 #'
 #' @return NULL
 #' @export
 #'
-write_back_dir <- function(exb,sep=",", PathExbDir, PathNewFiles = PathExbDir, suffix="_new", verbose=TRUE, transcription_text="Text"){
+write_back_dir <- function(exb,
+                           sep=",",
+                           PathExbDir,
+                           PathNewFiles = PathExbDir,
+                           suffix="_new",
+                           verbose=TRUE,
+                           transcription_text="Text",
+                           annotation_colums=NA,
+                           overwrite_annotations=TRUE,
+                           assignSpeakersAnnotation=FALSE){
 
 # Check if exb is object or csv file, save in annotations -----------------
   if(is.data.frame(exb)){
