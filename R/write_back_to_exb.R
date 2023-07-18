@@ -124,7 +124,7 @@ write_back_to_exb <-
 
     fileName <- stringr::str_remove(basename(PathExb), "\\.exb")
     PathNewFile <-      stringr::str_glue(PathNewFile,
-                        "\\",
+                        "/",
                         stringr::str_trim(fileName),
                         suffix,
                         ".exb")
