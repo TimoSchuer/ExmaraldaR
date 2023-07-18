@@ -37,7 +37,7 @@ write_back_dir <- function(exb,
   perc <- 0
   for (k in 1:length(files)) {
     ann <- dplyr::filter(annotations, File==files[k])
-    PathFile <- stringr::str_glue(PathExbDir,"\\",stringr::str_trim(files[k]),".exb") # nolint: object_name_linter, line_length_linter.
+    PathFile <- stringr::str_glue(PathExbDir,"/",stringr::str_trim(files[k]),".exb") # nolint: object_name_linter, line_length_linter.
     PathNewFile <- PathNewFiles
     write_back_to_exb(ann, PathExb = PathFile,PathNewFile = PathNewFile, suffix = suffix, annotation_colums = annotation_colums, transcription_text = transcription_text )
     if(verbose==TRUE){
