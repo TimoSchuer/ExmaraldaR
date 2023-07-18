@@ -106,7 +106,7 @@ write_back_to_exb <-
     }
     #extraxt Tier numbers to assign unique Tier numbers
     #tierNumbers <- xml2::xml_find_all(file,"//tier") %>% xml2::xml_attr("id") %>% stringr::str_extract("\\d+")
-    if(!is.na(annotation_colums)){
+    if(!any(is.na(annotation_colums))){
       for(ann in annotation_colums){
         tierNumbers <- xml2::xml_find_all(file,"//tier") %>% xml2::xml_attr("id") %>% stringr::str_extract("\\d+") %>% as.numeric() %>% max(na.rm = TRUE) +1
         tierId <-  paste0("TIE",tierNumbers, collapse = "")
