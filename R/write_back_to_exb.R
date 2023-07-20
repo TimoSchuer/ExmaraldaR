@@ -40,17 +40,18 @@ write_back_to_exb <-
     }
     ##create new timeline
     #check if all tiers are in dataframe
-    if(file %>% xml2::xml_find_all("//tier[@type='t']") %>% xml2::xml_attr("id") %>% setdiff(exb$TierID %>% unique()) %>% length()!= 0){
-      tIDs <- c()
-      for (l in file %>% xml_find_all("//tier[@type='t']") %>% xml2::xml_attr("id") %>% setdiff(exb$TierID %>% unique())) {
-       tIDs <-  file %>% xml2::xml_find_all(paste0("//tier[@id='",l,"']", sep="")) %>% xml2::xml_children() %>% xml2::xml_attr("start") %>% c(tIDs,.)
-       tIDs <-  file %>% xml2::xml_find_all(paste0("//tier[@id='",l,"']", sep="")) %>% xml2::xml_children() %>% xml2::xml_attr("end") %>% c(tIDs,.) %>% unique()
-      }
-      #d <- file %>% xml2::xml_find_all("//common-timeline") %>% xml_children() %>% xml_attr("id") %>% length()
-    timeline_old <- data.frame(row.names = seq(1:xml2::xml_find_all(file,"//common-timeline") %>% xml_children() %>% xml_attr("id") %>% length())) %>%
-      mutate(id= file %>% xml2::xml_find_all("//common-timeline") %>% xml_children() %>% xml_attr("id")) %>%
-      mutate(time=file %>% xml2::xml_find_all("//common-timeline") %>% xml_children() %>% xml_attr("time") %>% as.double())
-    timeline_old$time <- timeline_old$time %>% as.numeric() %>% round(6)
+    timeline_old <- data.frame(row.names = seq(from=1,to=xml2::xml_find_all(file,"//common-timeline") %>%
+                                                 xml2::xml_children() %>%
+                                                 xml2::xml_attr("id") %>%
+                                                 length())) %>%
+      mutate(id= file %>% xml2::xml_find_all("//common-timeline") %>%
+               xml2::xml_children() %>%
+               xml2::xml_attr("id")) %>%
+      mutate(time=file %>% xml2::xml_find_all("//common-timeline") %>%
+               xml2::xml_children() %>%
+               xml2::xml_attr("time") %>%
+               as.double() %>%
+               round(6))
     timeline_new <- c(exb$Start_time,exb$End_time) %>%
       round(6) %>%
       unique() %>%
@@ -61,23 +62,56 @@ write_back_to_exb <-
       dplyr::anti_join(timeline_old, by="time") %>%
       mutate(id=stringr::str_extract(timeline_old$id,"\\d+") %>% as.numeric() %>% max()+ row_number()) %>%
       mutate(id= paste("T", id, sep=""))
-    timeline <- bind_rows(timeline_old, timeline_new) %>% arrange(time) %>%
-      mutate(id_new= paste0("T",dplyr::row_number()-1))
-      exb <- exb %>% mutate(Start_time= round(Start_time,6)) %>%  left_join(timeline[,2:3], by= c("Start_time"="time")) %>% rename(Start_new=id_new)
-      exb <- exb %>% mutate(End_time = round(End_time,6)) %>% left_join(timeline[,2:3], by= c("End_time"="time")) %>% rename(End_new= id_new)
-      file %>% xml2::xml_find_all("//common-timeline") %>% xml2::xml_children() %>% xml2::xml_remove(free = TRUE)
-      purrr::walk2(timeline$time,timeline$id, .f = \(x,y)  {xml2::xml_add_child(xml2::xml_find_all(file,"//common-timeline"), "tli", .copy = FALSE) %>% xml2::xml_set_attrs(c("id"=y, "time"=x))})
-      purrr::walk2(timeline$id,timeline$id_new, .f=\(x,y) {xml_find_all(file,paste("//event[@start='",x,"']", sep="")) %>% xml_set_attr("start", y)})
-      purrr::walk2(timeline$id,timeline$id_new, .f=\(x,y) {xml_find_all(file,paste("//event[@end='",x,"']", sep="")) %>% xml_set_attr("end", y)})
-    }else{
-      timeline <- c(exb$Start_time,exb$End_time) %>% round(6) %>% unique() %>% as.double() %>% data.frame(time=.)%>% arrange(time) %>% distinct() %>% mutate(id=paste("T",row_number(), sep=""))
-    #assign new stime stamps
-      exb <- exb %>% mutate(Start_time= round(Start_time,6)) %>%  left_join(timeline, by= c("Start_time"="time")) %>% rename(Start_new=id)
-      exb <- exb %>% mutate(End_time = round(End_time,6)) %>% left_join(timeline, by= c("End_time"="time")) %>% rename(End_new= id)
-       file %>% xml2::xml_find_all("//common-timeline") %>% xml2::xml_children() %>% xml2::xml_remove(free = TRUE)
-
-      purrr::walk2(timeline$time,timeline$id, .f = \(x,y)  {xml2::xml_add_child(xml2::xml_find_all(file,"//common-timeline"), "tli", .copy = FALSE) %>% xml2::xml_set_attrs(c("id"=y, "time"=x))})
+    if(nrow(timeline_new!=0)){
+      exb <- exb %>%
+        dplyr::left_join(bind_rows(timeline_old,timeline_new), by= c("Start_time"="time")) %>%
+        rename(Start_new=id)
+      exb <- exb %>%
+        dplyr::left_join(bind_rows(timeline_old,timeline_new), by= c("End_time"="time")) %>%
+        rename(End_new=id)
+      purrr::walk2(timeline_new$time,timeline_new$id, .f = \(x,y)  {xml2::xml_add_child(xml2::xml_find_all(file,"//common-timeline"), "tli", .copy = FALSE) %>%
+          xml2::xml_set_attrs(c("id"=y, "time"=x,"tyoe"="intp"))})
     }
+
+
+    # if(file %>% xml2::xml_find_all("//tier[@type='t']") %>% xml2::xml_attr("id") %>% setdiff(exb$TierID %>% unique()) %>% length()!= 0){
+    #   tIDs <- c()
+    #   for (l in file %>% xml_find_all("//tier[@type='t']") %>% xml2::xml_attr("id") %>% setdiff(exb$TierID %>% unique())) {
+    #    tIDs <-  file %>% xml2::xml_find_all(paste0("//tier[@id='",l,"']", sep="")) %>% xml2::xml_children() %>% xml2::xml_attr("start") %>% c(tIDs,.)
+    #    tIDs <-  file %>% xml2::xml_find_all(paste0("//tier[@id='",l,"']", sep="")) %>% xml2::xml_children() %>% xml2::xml_attr("end") %>% c(tIDs,.) %>% unique()
+    #   }
+    #   #d <- file %>% xml2::xml_find_all("//common-timeline") %>% xml_children() %>% xml_attr("id") %>% length()
+    # timeline_old <- data.frame(row.names = seq(1:xml2::xml_find_all(file,"//common-timeline") %>% xml_children() %>% xml_attr("id") %>% length())) %>%
+    #   mutate(id= file %>% xml2::xml_find_all("//common-timeline") %>% xml_children() %>% xml_attr("id")) %>%
+    #   mutate(time=file %>% xml2::xml_find_all("//common-timeline") %>% xml_children() %>% xml_attr("time") %>% as.double())
+    # timeline_old$time <- timeline_old$time %>% as.numeric() %>% round(6)
+    # timeline_new <- c(exb$Start_time,exb$End_time) %>%
+    #   round(6) %>%
+    #   unique() %>%
+    #   as.double() %>%
+    #   data.frame(time=.)%>%
+    #   arrange(time) %>%
+    #   distinct() %>%
+    #   dplyr::anti_join(timeline_old, by="time") %>%
+    #   mutate(id=stringr::str_extract(timeline_old$id,"\\d+") %>% as.numeric() %>% max()+ row_number()) %>%
+    #   mutate(id= paste("T", id, sep=""))
+    # timeline <- bind_rows(timeline_old, timeline_new) %>% arrange(time) %>%
+    #   mutate(id_new= paste0("T",dplyr::row_number()-1))
+    #   exb <- exb %>% mutate(Start_time= round(Start_time,6)) %>%  left_join(timeline[,2:3], by= c("Start_time"="time")) %>% rename(Start_new=id_new)
+    #   exb <- exb %>% mutate(End_time = round(End_time,6)) %>% left_join(timeline[,2:3], by= c("End_time"="time")) %>% rename(End_new= id_new)
+    #   file %>% xml2::xml_find_all("//common-timeline") %>% xml2::xml_children() %>% xml2::xml_remove(free = TRUE)
+    #   purrr::walk2(timeline$time,timeline$id, .f = \(x,y)  {xml2::xml_add_child(xml2::xml_find_all(file,"//common-timeline"), "tli", .copy = FALSE) %>% xml2::xml_set_attrs(c("id"=y, "time"=x))})
+    #   purrr::walk2(time line$id,timeline$id_new, .f=\(x,y) {xml_find_all(file,paste("//event[@start='",x,"']", sep="")) %>% xml_set_attr("start", y)})
+    #   purrr::walk2(timeline$id,timeline$id_new, .f=\(x,y) {xml_find_all(file,paste("//event[@end='",x,"']", sep="")) %>% xml_set_attr("end", y)})
+    # }else{
+    #   timeline <- c(exb$Start_time,exb$End_time) %>% round(6) %>% unique() %>% as.double() %>% data.frame(time=.)%>% arrange(time) %>% distinct() %>% mutate(id=paste("T",row_number(), sep=""))
+    # #assign new stime stamps
+    #   exb <- exb %>% mutate(Start_time= round(Start_time,6)) %>%  left_join(timeline, by= c("Start_time"="time")) %>% rename(Start_new=id)
+    #   exb <- exb %>% mutate(End_time = round(End_time,6)) %>% left_join(timeline, by= c("End_time"="time")) %>% rename(End_new= id)
+    #    file %>% xml2::xml_find_all("//common-timeline") %>% xml2::xml_children() %>% xml2::xml_remove(free = TRUE)
+    #
+    #   purrr::walk2(timeline$time,timeline$id, .f = \(x,y)  {xml2::xml_add_child(xml2::xml_find_all(file,"//common-timeline"), "tli", .copy = FALSE) %>% xml2::xml_set_attrs(c("id"=y, "time"=x))})
+    # }
     ##write back transcription tiers
     ##all transcription tiers not present in the dataset will be removed TODO: Lösung finden
 
@@ -118,6 +152,18 @@ write_back_to_exb <-
           purrr::walk2(AnnTier$Start_new,AnnTier$End_new, .f = \(x,y)  {xml2::xml_add_child(xml2::xml_find_all(file,paste0("//tier[@id=","'",tierId,"']")), "event", .copy=FALSE) %>%
                xml2::xml_set_attrs(c("start"=x, "end"=y))})
           xml2::xml_find_all(file,paste0("//tier[@id=","'",tierId,"']")) %>% xml2::xml_children() %>% xml2::xml_set_text(AnnTier %>% pull({{ann}})) #%>% xml_set_attrs(c("start"= tier$Start_new, "end"=tier$End_new))
+        }else if(assignSpeakersAnnotation==TRUE){
+          annCat <- exb %>% filter(!is.na(.data[[ann]]))
+         for (sp in unique(annCat$Name)) {
+           AnnTier <- annCat %>% filter(Name==sp)
+           xml2::xml_child(file, 2) %>%
+             xml2::xml_add_child("tier") %>%
+             xml2::xml_set_attrs(c("id"=tierId, "type"="a", "category"=ann, "speaker"=sp))
+           purrr::walk2(AnnTier$Start_new,AnnTier$End_new, .f = \(x,y)  {xml2::xml_add_child(xml2::xml_find_all(file,paste0("//tier[@id=","'",tierId,"']")), "event", .copy=FALSE) %>%
+               xml2::xml_set_attrs(c("start"=x, "end"=y))})
+           xml2::xml_find_all(file,paste0("//tier[@id=","'",tierId,"']")) %>% xml2::xml_children() %>% xml2::xml_set_text(AnnTier %>% pull({{ann}})) #%>% xml_set_attrs(c("start"= tier$Start_new, "end"=tier$End_new))
+
+         }
        }
       }
     }
