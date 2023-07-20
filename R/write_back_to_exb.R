@@ -70,7 +70,7 @@ write_back_to_exb <-
         dplyr::left_join(bind_rows(timeline_old,timeline_new), by= c("End_time"="time")) %>%
         rename(End_new=id)
       purrr::walk2(timeline_new$time,timeline_new$id, .f = \(x,y)  {xml2::xml_add_child(xml2::xml_find_all(file,"//common-timeline"), "tli", .copy = FALSE) %>%
-          xml2::xml_set_attrs(c("id"=y, "time"=x,"tyoe"="intp"))})
+          xml2::xml_set_attrs(c("id"=y, "time"=x,"type"="intp"))})
     }
 
 
