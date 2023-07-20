@@ -52,7 +52,7 @@ read_exb_file <- function(path, readAnn=TRUE,addDescription= FALSE, addMetaData=
         }else{
           exb <- exb %>% dplyr::arrange(Start_time)
         }
-        return(exb)
+        return(exb%>% mutate(IPId=paste(File,IPNumber,sep = "_"))%>%  dplyr::mutate(exb, EventID=paste(File, EventID, sep= "_")) %>% dplyr::select(IPId,1:dplyr::last_col(offset = 1)))
       }
       annotations <- annotations%>% tidyr::pivot_wider(names_from = Name, values_from = Annotation, names_repair = "universal") %>% dplyr::select(!TierID) %>% dplyr::filter(!is.na(Start))
       ##join annnotations that are alligned by Start,End and Speaker
@@ -118,6 +118,6 @@ read_exb_file <- function(path, readAnn=TRUE,addDescription= FALSE, addMetaData=
   }else{
     exb <- exb %>% dplyr::arrange(Start_time)
   }
-  return(exb)
+  return(exb%>% mutate(IPId=paste(File,IPNumber,sep = "_"))%>%  dplyr::mutate(exb, EventID=paste(File, EventID, sep= "_")) %>% dplyr::select(IPId,1:dplyr::last_col(offset = 1)))
 }
 
