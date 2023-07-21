@@ -51,7 +51,10 @@ write_back_to_exb <-
                xml2::xml_children() %>%
                xml2::xml_attr("time") %>%
                as.double() %>%
-               round(6))
+               round(6)) %>%
+      mutate(type=file %>% xml2::xml_find_all("//common-timeline") %>%
+               xml2::xml_children() %>%
+               xml2::xml_attr("type") )
     timeline_new <- c(exb$Start_time,exb$End_time) %>%
       round(6) %>%
       unique() %>%
@@ -61,7 +64,10 @@ write_back_to_exb <-
       distinct() %>%
       dplyr::anti_join(timeline_old, by="time") %>%
       mutate(id=stringr::str_extract(timeline_old$id,"\\d+") %>% as.numeric() %>% max()+ row_number()) %>%
-      mutate(id= paste("T", id, sep=""))
+      mutate(id= paste("T", id, sep="")) %>%
+      dplyr::mutate(type="intp")
+    timeline <- dplyr::bind_rows(timeline_old, timeline_new) %>% dplyr::arrange(time)
+
     if(nrow(timeline_new!=0)){
       exb <- exb %>%
         dplyr::left_join(bind_rows(timeline_old,timeline_new), by= c("Start_time"="time")) %>%
@@ -69,8 +75,16 @@ write_back_to_exb <-
       exb <- exb %>%
         dplyr::left_join(bind_rows(timeline_old,timeline_new), by= c("End_time"="time")) %>%
         rename(End_new=id)
-      purrr::walk2(timeline_new$time,timeline_new$id, .f = \(x,y)  {xml2::xml_add_child(xml2::xml_find_all(file,"//common-timeline"), "tli", .copy = FALSE) %>%
-          xml2::xml_set_attrs(c("id"=y, "time"=x,"type"="intp"))})
+      file %>% xml2::xml_find_all("//common-timeline") %>% xml2::xml_children() %>% xml2::xml_remove(free = TRUE)
+      purrr::pwalk(list(x=timeline$time,y=timeline$id,z=timeline$type),
+                   .f = \(x,y,z)  {if(!is.na(z)){
+                     xml2::xml_add_child(xml2::xml_find_all(file,"//common-timeline"), "tli", .copy = FALSE) %>%
+          xml2::xml_set_attrs(c("id"=y, "time"=x,"type"="intp"))
+                     }else{
+                       xml2::xml_add_child(xml2::xml_find_all(file,"//common-timeline"), "tli", .copy = FALSE) %>%
+                         xml2::xml_set_attrs(c("id"=y, "time"=x))
+                     }
+                     })
     }
 
 
