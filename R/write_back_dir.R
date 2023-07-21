@@ -39,7 +39,13 @@ write_back_dir <- function(exb,
     ann <- dplyr::filter(annotations, File==files[k])
     PathFile <- stringr::str_glue(PathExbDir,"/",stringr::str_trim(files[k]),".exb") # nolint: object_name_linter, line_length_linter.
     PathNewFile <- PathNewFiles
-    write_back_to_exb(ann, PathExb = PathFile,PathNewFile = PathNewFile, suffix = suffix, annotation_colums = annotation_colums, transcription_text = transcription_text )
+    write_back_to_exb(ann, PathExb = PathFile,
+                      PathNewFile = PathNewFile,
+                      suffix = suffix,
+                      annotation_colums = annotation_colums,
+                      transcription_text = transcription_text,
+                      assignSpeakersAnnotation = assignSpeakersAnnotation,
+                      overwrite_annotations = overwrite_annotations )
     if(verbose==TRUE){
       perc <- perc + round(nrow(ann)/nrow(annotations)*100,2)
       print(paste0(Sys.time()," ", k,"/", length(files)," ", files[k],"...done...",perc,"%", sep=""))
