@@ -158,27 +158,31 @@ write_back_to_exb <-
       for(ann in annotation_colums){
         tierNumbers <- xml2::xml_find_all(file,"//tier") %>% xml2::xml_attr("id") %>% stringr::str_extract("\\d+") %>% as.numeric() %>% max(na.rm = TRUE) +1
         tierId <-  paste0("TIE",tierNumbers, collapse = "")
-        if(assignSpeakersAnnotation==FALSE) {
-          xml2::xml_child(file, 2) %>%
-            xml2::xml_add_child("tier") %>%
-            xml2::xml_set_attrs(c("id"=tierId, "type"="a", "category"=ann))
-          AnnTier <- exb %>% filter(!is.na(.data[[ann]])) %>% select(Start_new,End_new, {{ann}}) %>% dplyr::distinct()
-          purrr::walk2(AnnTier$Start_new,AnnTier$End_new, .f = \(x,y)  {xml2::xml_add_child(xml2::xml_find_all(file,paste0("//tier[@id=","'",tierId,"']")), "event", .copy=FALSE) %>%
-               xml2::xml_set_attrs(c("start"=x, "end"=y))})
-          xml2::xml_find_all(file,paste0("//tier[@id=","'",tierId,"']")) %>% xml2::xml_children() %>% xml2::xml_set_text(AnnTier %>% pull({{ann}})) #%>% xml_set_attrs(c("start"= tier$Start_new, "end"=tier$End_new))
-        }else if(assignSpeakersAnnotation==TRUE){
-          annCat <- exb %>% filter(!is.na(.data[[ann]]))
-         for (sp in unique(annCat$Name)) {
-           AnnTier <- annCat %>% filter(Name==sp)
+        if(ann %in% names(exb)){
+          if(assignSpeakersAnnotation==FALSE) {
            xml2::xml_child(file, 2) %>%
              xml2::xml_add_child("tier") %>%
-             xml2::xml_set_attrs(c("id"=tierId, "type"="a", "category"=ann, "display-name"=sp %>% stringr::str_remove("\\[.*\\]") %>% paste0("[",ann,"]",sep=""), "speaker"=unique(AnnTier$Speaker)))
+              xml2::xml_set_attrs(c("id"=tierId, "type"="a", "category"=ann))
+            AnnTier <- exb %>% filter(!is.na(.data[[ann]])) %>% select(Start_new,End_new, {{ann}}) %>% dplyr::distinct()
            purrr::walk2(AnnTier$Start_new,AnnTier$End_new, .f = \(x,y)  {xml2::xml_add_child(xml2::xml_find_all(file,paste0("//tier[@id=","'",tierId,"']")), "event", .copy=FALSE) %>%
-               xml2::xml_set_attrs(c("start"=x, "end"=y))})
+                 xml2::xml_set_attrs(c("start"=x, "end"=y))})
            xml2::xml_find_all(file,paste0("//tier[@id=","'",tierId,"']")) %>% xml2::xml_children() %>% xml2::xml_set_text(AnnTier %>% pull({{ann}})) #%>% xml_set_attrs(c("start"= tier$Start_new, "end"=tier$End_new))
-
+          }else if(assignSpeakersAnnotation==TRUE){
+            annCat <- exb %>% filter(!is.na(.data[[ann]]))
+            for (sp in unique(annCat$Name)) {
+               AnnTier <- annCat %>% filter(Name==sp)
+               xml2::xml_child(file, 2) %>%
+                xml2::xml_add_child("tier") %>%
+                 xml2::xml_set_attrs(c("id"=tierId, "type"="a", "category"=ann, "display-name"=sp %>% stringr::str_remove("\\[.*\\]") %>% paste0("[",ann,"]",sep=""), "speaker"=unique(AnnTier$Speaker)))
+              purrr::walk2(AnnTier$Start_new,AnnTier$End_new, .f = \(x,y)  {xml2::xml_add_child(xml2::xml_find_all(file,paste0("//tier[@id=","'",tierId,"']")), "event", .copy=FALSE) %>%
+                xml2::xml_set_attrs(c("start"=x, "end"=y))})
+            xml2::xml_find_all(file,paste0("//tier[@id=","'",tierId,"']")) %>%
+              xml2::xml_children() %>%
+              xml2::xml_set_text(AnnTier %>%
+                                   pull({{ann}})) #%>% xml_set_attrs(c("start"= tier$Start_new, "end"=tier$End_new))
          }
-       }
+          }
+        }
       }
     }
 
