@@ -127,7 +127,7 @@ write_back_to_exb <-
             tierNumbers <- xml2::xml_find_all(file,"//tier") %>% xml2::xml_attr("id") %>% stringr::str_extract("\\d+") %>% as.numeric() %>% max(na.rm = TRUE) +1
             tierId <-  paste0("TIE",tierNumbers, collapse = "")
             AnnTier <- exb %>% filter(!is.na(.data[[ann]])) %>% select(Start_new,End_new, {{ann}}) %>% dplyr::distinct()
-            tier <- paste(paste('<tier id="',tierId,'" ', 'type="a"','category="',ann,'"',">"),AnnTier %>% mutate(Event=paste0('<event start="',Start_new,'" end="',End_new,'">',.data[[ann]],'</event>' )) %>% pull(Event) %>% paste0(collapse = ""),"</tier>") %>% as.character() %>% read_xml(tier)
+            tier <- paste(paste('<tier id="',tierId,'" ', 'type="a"','category="',ann,'"',">"),AnnTier %>% mutate(Event=paste0('<event start="',Start_new,'" end="',End_new,'">',.data[[ann]],'</event>' )) %>% pull(Event) %>% paste0(collapse = ""),"</tier>") %>% as.character() %>% xml2::read_xml(tier)
             xml2::xml_child(file, 2) %>%
               xml2::xml_add_child(tier)
             remove(tier)
