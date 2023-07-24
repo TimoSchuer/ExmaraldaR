@@ -145,7 +145,7 @@ write_back_to_exb <-
                    paste0(collapse = ""),
                  "</tier>") %>%
                  as.character() %>%
-                 read_xml(tier)
+                 xml2::read_xml(tier)
                xml2::xml_child(file, 2) %>%
                   xml2::xml_add_child(tier)
                remove(tier)
