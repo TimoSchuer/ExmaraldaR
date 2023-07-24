@@ -156,10 +156,10 @@ write_back_to_exb <-
     #tierNumbers <- xml2::xml_find_all(file,"//tier") %>% xml2::xml_attr("id") %>% stringr::str_extract("\\d+")
     if(!any(is.na(annotation_colums))){
       for(ann in annotation_colums){
-        tierNumbers <- xml2::xml_find_all(file,"//tier") %>% xml2::xml_attr("id") %>% stringr::str_extract("\\d+") %>% as.numeric() %>% max(na.rm = TRUE) +1
-        tierId <-  paste0("TIE",tierNumbers, collapse = "")
         if(ann %in% names(exb)){
           if(assignSpeakersAnnotation==FALSE) {
+            tierNumbers <- xml2::xml_find_all(file,"//tier") %>% xml2::xml_attr("id") %>% stringr::str_extract("\\d+") %>% as.numeric() %>% max(na.rm = TRUE) +1
+            tierId <-  paste0("TIE",tierNumbers, collapse = "")
            xml2::xml_child(file, 2) %>%
              xml2::xml_add_child("tier") %>%
               xml2::xml_set_attrs(c("id"=tierId, "type"="a", "category"=ann))
@@ -170,6 +170,8 @@ write_back_to_exb <-
           }else if(assignSpeakersAnnotation==TRUE){
             annCat <- exb %>% filter(!is.na(.data[[ann]]))
             for (sp in unique(annCat$Name)) {
+              tierNumbers <- xml2::xml_find_all(file,"//tier") %>% xml2::xml_attr("id") %>% stringr::str_extract("\\d+") %>% as.numeric() %>% max(na.rm = TRUE) +1
+              tierId <-  paste0("TIE",tierNumbers, collapse = "")
                AnnTier <- annCat %>% filter(Name==sp)
                xml2::xml_child(file, 2) %>%
                 xml2::xml_add_child("tier") %>%
