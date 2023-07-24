@@ -76,7 +76,7 @@ write_back_to_exb <-
         rename(End_new=id)
 
       common_timeline <- timeline %>%
-        mutate(tli=if_else(is.na(type),
+        dplyr::mutate(tli=if_else(is.na(type),
                            paste0('<tli id="',id,'" time="',time,'"/>',sep=""),
                            paste0('<tli id="',id,'" time="',time,'" type="intp"/>', sep = ""))) %>%
         pull(tli) %>%
@@ -98,12 +98,12 @@ write_back_to_exb <-
         TierAttrs <- paste0(TierAttrs, collapse = " ")
 
         tier <- TranscriptionTier %>%
-          mutate(Event=paste0('<event start="',Start_new,'" end="',End_new,'">',.data[[transcription_text]],'</event>' )) %>%
+          dplyr::mutate(Event=paste0('<event start="',Start_new,'" end="',End_new,'">',.data[[transcription_text]],'</event>' )) %>%
           pull(Event) %>% paste0(collapse = "") %>%
           as.character() %>%
           paste0(paste0('<tier ',TierAttrs,'>', collapse = " "),
                  .,"</tier>", collapse = " ")%>%
-          read_xml()
+          xml2::read_xml()
         xml2::xml_find_all(file,paste0("//tier[@id=","'",t,"']"))  %>% xml2::xml_remove(free = TRUE)
         xml2::xml_child(file, 2) %>%
           xml2::xml_add_child(tier)
