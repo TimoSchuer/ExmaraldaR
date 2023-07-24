@@ -26,10 +26,9 @@ write_back_to_exb <-
            assignSpeakersAnnotation=FALSE) {
     file <- xml2::read_xml(PathExb) #Read transcription
     if (is.data.frame(exb)) {
-      annotations <- exb
+      exb <- exb
     } else{
-      annotations <-
-        utils::read.delim(
+      exb <-utils::read.delim(
           exb,
           header = TRUE,
           sep = sep,
@@ -75,69 +74,40 @@ write_back_to_exb <-
       exb <- exb %>%
         dplyr::left_join(bind_rows(timeline_old,timeline_new), by= c("End_time"="time")) %>%
         rename(End_new=id)
-      file %>% xml2::xml_find_all("//common-timeline") %>% xml2::xml_children() %>% xml2::xml_remove(free = TRUE)
-      purrr::pwalk(list(x=timeline$time,y=timeline$id,z=timeline$type),
-                   .f = \(x,y,z)  {if(!is.na(z)){
-                     xml2::xml_add_child(xml2::xml_find_all(file,"//common-timeline"), "tli", .copy = FALSE) %>%
-          xml2::xml_set_attrs(c("id"=y, "time"=x,"type"="intp"))
-                     }else{
-                       xml2::xml_add_child(xml2::xml_find_all(file,"//common-timeline"), "tli", .copy = FALSE) %>%
-                         xml2::xml_set_attrs(c("id"=y, "time"=x))
-                     }
-                     })
+
+      common_timeline <- timeline %>%
+        mutate(tli=if_else(is.na(type),
+                           paste0('<tli id="',id,'" time="',time,'"/>',sep=""),
+                           paste0('<tli id="',id,'" time="',time,'" type="intp"/>', sep = ""))) %>%
+        pull(tli) %>%
+        as.character() %>%
+        paste0(collapse = "") %>%
+        paste0("<common-timeline>",.,"</common-timeline>", collapse = "") %>%
+        xml2::read_xml()
+      file %>% xml2::xml_find_all("//common-timeline") %>% xml2::xml_replace(common_timeline)
     }
 
-
-    # if(file %>% xml2::xml_find_all("//tier[@type='t']") %>% xml2::xml_attr("id") %>% setdiff(exb$TierID %>% unique()) %>% length()!= 0){
-    #   tIDs <- c()
-    #   for (l in file %>% xml_find_all("//tier[@type='t']") %>% xml2::xml_attr("id") %>% setdiff(exb$TierID %>% unique())) {
-    #    tIDs <-  file %>% xml2::xml_find_all(paste0("//tier[@id='",l,"']", sep="")) %>% xml2::xml_children() %>% xml2::xml_attr("start") %>% c(tIDs,.)
-    #    tIDs <-  file %>% xml2::xml_find_all(paste0("//tier[@id='",l,"']", sep="")) %>% xml2::xml_children() %>% xml2::xml_attr("end") %>% c(tIDs,.) %>% unique()
-    #   }
-    #   #d <- file %>% xml2::xml_find_all("//common-timeline") %>% xml_children() %>% xml_attr("id") %>% length()
-    # timeline_old <- data.frame(row.names = seq(1:xml2::xml_find_all(file,"//common-timeline") %>% xml_children() %>% xml_attr("id") %>% length())) %>%
-    #   mutate(id= file %>% xml2::xml_find_all("//common-timeline") %>% xml_children() %>% xml_attr("id")) %>%
-    #   mutate(time=file %>% xml2::xml_find_all("//common-timeline") %>% xml_children() %>% xml_attr("time") %>% as.double())
-    # timeline_old$time <- timeline_old$time %>% as.numeric() %>% round(6)
-    # timeline_new <- c(exb$Start_time,exb$End_time) %>%
-    #   round(6) %>%
-    #   unique() %>%
-    #   as.double() %>%
-    #   data.frame(time=.)%>%
-    #   arrange(time) %>%
-    #   distinct() %>%
-    #   dplyr::anti_join(timeline_old, by="time") %>%
-    #   mutate(id=stringr::str_extract(timeline_old$id,"\\d+") %>% as.numeric() %>% max()+ row_number()) %>%
-    #   mutate(id= paste("T", id, sep=""))
-    # timeline <- bind_rows(timeline_old, timeline_new) %>% arrange(time) %>%
-    #   mutate(id_new= paste0("T",dplyr::row_number()-1))
-    #   exb <- exb %>% mutate(Start_time= round(Start_time,6)) %>%  left_join(timeline[,2:3], by= c("Start_time"="time")) %>% rename(Start_new=id_new)
-    #   exb <- exb %>% mutate(End_time = round(End_time,6)) %>% left_join(timeline[,2:3], by= c("End_time"="time")) %>% rename(End_new= id_new)
-    #   file %>% xml2::xml_find_all("//common-timeline") %>% xml2::xml_children() %>% xml2::xml_remove(free = TRUE)
-    #   purrr::walk2(timeline$time,timeline$id, .f = \(x,y)  {xml2::xml_add_child(xml2::xml_find_all(file,"//common-timeline"), "tli", .copy = FALSE) %>% xml2::xml_set_attrs(c("id"=y, "time"=x))})
-    #   purrr::walk2(time line$id,timeline$id_new, .f=\(x,y) {xml_find_all(file,paste("//event[@start='",x,"']", sep="")) %>% xml_set_attr("start", y)})
-    #   purrr::walk2(timeline$id,timeline$id_new, .f=\(x,y) {xml_find_all(file,paste("//event[@end='",x,"']", sep="")) %>% xml_set_attr("end", y)})
-    # }else{
-    #   timeline <- c(exb$Start_time,exb$End_time) %>% round(6) %>% unique() %>% as.double() %>% data.frame(time=.)%>% arrange(time) %>% distinct() %>% mutate(id=paste("T",row_number(), sep=""))
-    # #assign new stime stamps
-    #   exb <- exb %>% mutate(Start_time= round(Start_time,6)) %>%  left_join(timeline, by= c("Start_time"="time")) %>% rename(Start_new=id)
-    #   exb <- exb %>% mutate(End_time = round(End_time,6)) %>% left_join(timeline, by= c("End_time"="time")) %>% rename(End_new= id)
-    #    file %>% xml2::xml_find_all("//common-timeline") %>% xml2::xml_children() %>% xml2::xml_remove(free = TRUE)
-    #
-    #   purrr::walk2(timeline$time,timeline$id, .f = \(x,y)  {xml2::xml_add_child(xml2::xml_find_all(file,"//common-timeline"), "tli", .copy = FALSE) %>% xml2::xml_set_attrs(c("id"=y, "time"=x))})
-    # }
-    ##write back transcription tiers
-    ##all transcription tiers not present in the dataset will be removed TODO: Lösung finden
-
     for (t in unique(exb$TierID)) {
-      tier <- exb %>% filter(TierID==t)
+      TranscriptionTier <- exb %>% filter(TierID==t)
       if(length(xml2::xml_find_all(file,paste0("//tier[@id=","'",t,"']")))!=0){
-        xml2::xml_find_all(file,paste0("//tier[@id=","'",t,"']")) %>% xml2::xml_children() %>% xml2::xml_remove(free = TRUE)
+        attrs <- xml2::xml_find_all(file,paste0("//tier[@id=","'",t,"']")) %>% xml2::xml_attrs()
+        TierAttrs <- c()
+        for (k in 1:length(names(attrs[[1]]))) {
+         TierAttrs <- c(TierAttrs, paste0(names(attrs[[1]])[k],'="',attrs[[1]][[k]],'"'))
+        }
+        TierAttrs <- paste0(TierAttrs, collapse = " ")
 
-        purrr::walk2(tier$Start_new,tier$End_new, .f = \(x,y)  {xml2::xml_add_child(xml2::xml_find_all(file,paste0("//tier[@id=","'",t,"']")), "event", .copy=FALSE) %>%
-            xml2::xml_set_attrs(c("start"=x, "end"=y))})
-
-        xml2::xml_find_all(file,paste0("//tier[@id=","'",t,"']")) %>% xml2::xml_children() %>% xml2::xml_set_text(tier %>% pull({{transcription_text}})) #%>% xml_set_attrs(c("start"= tier$Start_new, "end"=tier$End_new))
+        tier <- TranscriptionTier %>%
+          mutate(Event=paste0('<event start="',Start_new,'" end="',End_new,'">',.data[[transcription_text]],'</event>' )) %>%
+          pull(Event) %>% paste0(collapse = "") %>%
+          as.character() %>%
+          paste0(paste0('<tier ',TierAttrs,'>', collapse = " "),
+                 .,"</tier>", collapse = " ")%>%
+          read_xml()
+        xml2::xml_find_all(file,paste0("//tier[@id=","'",t,"']"))  %>% xml2::xml_remove(free = TRUE)
+        xml2::xml_child(file, 2) %>%
+          xml2::xml_add_child(tier)
+        remove(tier)
         }
     }
 
@@ -146,43 +116,40 @@ write_back_to_exb <-
 
 
     ##write annotations back
-    #annotation_colums <- exb %>% select(14:18) %>% names()
-
 
     if(overwrite_annotations==TRUE){
       xml2::xml_find_all(file,"//tier[@type='a']") %>% xml2::xml_remove(free = TRUE)
     }
-    #extraxt Tier numbers to assign unique Tier numbers
-    #tierNumbers <- xml2::xml_find_all(file,"//tier") %>% xml2::xml_attr("id") %>% stringr::str_extract("\\d+")
     if(!any(is.na(annotation_colums))){
       for(ann in annotation_colums){
         if(ann %in% names(exb)){
           if(assignSpeakersAnnotation==FALSE) {
             tierNumbers <- xml2::xml_find_all(file,"//tier") %>% xml2::xml_attr("id") %>% stringr::str_extract("\\d+") %>% as.numeric() %>% max(na.rm = TRUE) +1
             tierId <-  paste0("TIE",tierNumbers, collapse = "")
-           xml2::xml_child(file, 2) %>%
-             xml2::xml_add_child("tier") %>%
-              xml2::xml_set_attrs(c("id"=tierId, "type"="a", "category"=ann))
             AnnTier <- exb %>% filter(!is.na(.data[[ann]])) %>% select(Start_new,End_new, {{ann}}) %>% dplyr::distinct()
-           purrr::walk2(AnnTier$Start_new,AnnTier$End_new, .f = \(x,y)  {xml2::xml_add_child(xml2::xml_find_all(file,paste0("//tier[@id=","'",tierId,"']")), "event", .copy=FALSE) %>%
-                 xml2::xml_set_attrs(c("start"=x, "end"=y))})
-           xml2::xml_find_all(file,paste0("//tier[@id=","'",tierId,"']")) %>% xml2::xml_children() %>% xml2::xml_set_text(AnnTier %>% pull({{ann}})) #%>% xml_set_attrs(c("start"= tier$Start_new, "end"=tier$End_new))
+            tier <- paste(paste('<tier id="',tierId,'" ', 'type="a"','category="',ann,'"',">"),AnnTier %>% mutate(Event=paste0('<event start="',Start_new,'" end="',End_new,'">',.data[[ann]],'</event>' )) %>% pull(Event) %>% paste0(collapse = ""),"</tier>") %>% as.character() %>% read_xml(tier)
+            xml2::xml_child(file, 2) %>%
+              xml2::xml_add_child(tier)
+            remove(tier)
           }else if(assignSpeakersAnnotation==TRUE){
             annCat <- exb %>% filter(!is.na(.data[[ann]]))
             for (sp in unique(annCat$Name)) {
               tierNumbers <- xml2::xml_find_all(file,"//tier") %>% xml2::xml_attr("id") %>% stringr::str_extract("\\d+") %>% as.numeric() %>% max(na.rm = TRUE) +1
               tierId <-  paste0("TIE",tierNumbers, collapse = "")
                AnnTier <- annCat %>% filter(Name==sp)
+               tier <- paste(
+                 paste('<tier id="',tierId,'" ', 'type="a"','category="',ann,'"','display-name="',sp %>% stringr::str_remove("\\[.*\\]") %>% paste0("[",ann,"]",sep=""),'" speaker="',unique(AnnTier$Speaker),'"',">"),
+                 AnnTier %>%
+                   mutate(Event=paste0('<event start="',Start_new,'" end="',End_new,'">',.data[[ann]],'</event>' )) %>%
+                   pull(Event) %>%
+                   paste0(collapse = ""),
+                 "</tier>") %>%
+                 as.character() %>%
+                 read_xml(tier)
                xml2::xml_child(file, 2) %>%
-                xml2::xml_add_child("tier") %>%
-                 xml2::xml_set_attrs(c("id"=tierId, "type"="a", "category"=ann, "display-name"=sp %>% stringr::str_remove("\\[.*\\]") %>% paste0("[",ann,"]",sep=""), "speaker"=unique(AnnTier$Speaker)))
-              purrr::walk2(AnnTier$Start_new,AnnTier$End_new, .f = \(x,y)  {xml2::xml_add_child(xml2::xml_find_all(file,paste0("//tier[@id=","'",tierId,"']")), "event", .copy=FALSE) %>%
-                xml2::xml_set_attrs(c("start"=x, "end"=y))})
-            xml2::xml_find_all(file,paste0("//tier[@id=","'",tierId,"']")) %>%
-              xml2::xml_children() %>%
-              xml2::xml_set_text(AnnTier %>%
-                                   pull({{ann}})) #%>% xml_set_attrs(c("start"= tier$Start_new, "end"=tier$End_new))
-         }
+                  xml2::xml_add_child(tier)
+               remove(tier)
+                    }
           }
         }
       }
