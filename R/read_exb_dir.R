@@ -10,12 +10,18 @@
 #'
 #' @return data.frame
 #' @export
-read_exb_dir <- function(pathDir, readAnn=TRUE,addDescription= FALSE, addMetaData= FALSE, addIPNumber=TRUE,IPEndSign= c("|",".",";",",",",","?","=","-")){
+read_exb_dir <- function(pathDir, readAnn=TRUE,addDescription= FALSE, addMetaData= FALSE, addIPNumber=TRUE,IPEndSign= c("|",".",";",",",",","?","=","-"), verbose=TRUE){
   files <- list.files(pathDir,".\\.exb", full.names = TRUE)
   exb <- read_exb_file(files[1],readAnn,addDescription, addMetaData=FALSE, addIPNumber, IPEndSign)
+  if (verbose==TRUE){
+    print("1/",length(files),"...",dirname(files[1],"...done"))
+  }
   for (k in 2:length(files)) {
     help <- read_exb_file(path=,files[k],readAnn,addDescription, addMetaData=FALSE, addIPNumber, IPEndSign)
     exb <- dplyr::bind_rows(exb,help)
+    if (verbose==TRUE){
+      print(k,"/",length(files),"...",dirname(files[k],"...done"))
+    }
   }
   if(addMetaData==TRUE){
     exb2 <- data.frame()
