@@ -58,9 +58,9 @@ read_exb_file <- function(path, readAnn=TRUE,addDescription= FALSE, addMetaData=
       ##join annnotations that are alligned by Start,End and Speaker
       #check if annotations are per spekaer or not speaker assigned
       if(length(dplyr::intersect(unique(events$Speaker), unique(annotations$Speaker)))==0){##keine Sprecher gleich
-        exb <- dplyr::left_join(events, annotations, by=c("Start", "End"), suffix= c("",".y") ) %>% dplyr::select(-Speaker.y)
+        exb <- dplyr::left_join(events, annotations, by=c("Start", "End"),multiple="first", suffix= c("",".y") ) %>% dplyr::select(-Speaker.y)
       }else if(dplyr::setequal(unique(events$Speaker), unique(annotations$Speaker))|length(dplyr::setdiff(unique(annotations$Speaker), unique(events$Speaker)))==0){ ##alle Sprecher gleich oder alle Sprecher der Annotationsspuren in Transkripionsspuren
-         exb <- dplyr::left_join(events, annotations, by=c("Start", "End","Speaker"), suffix= c("",".y"))
+         exb <- dplyr::left_join(events, annotations, by=c("Start", "End","Speaker"), suffix= c("",".y"),multiple="first")
       }else{##teils teils
         ##Speaker that have a annotation tier but not a transcription tier
         diff <- dplyr::setdiff(unique(annotations$Speaker), unique(events$Speaker))
@@ -68,7 +68,7 @@ read_exb_file <- function(path, readAnn=TRUE,addDescription= FALSE, addMetaData=
         if ("Speaker.y" %in% names(exb)){ # some cosmetics
           exb <- exb%>% dplyr::select(-Speaker.y)
         }
-        exb2 <- annotations %>%  dplyr::filter(!Speaker %in% diff)  %>% dplyr::left_join(events, ., by=c("Start", "End","Speaker"), suffix= c("",".y") ) # assinge them by time and speaker
+        exb2 <- annotations %>%  dplyr::filter(!Speaker %in% diff)  %>% dplyr::left_join(events, ., by=c("Start", "End","Speaker"),multiple="first", suffix= c("",".y") ) # assinge them by time and speaker
         exb <- dplyr::bind_rows(exb,exb2) %>% dplyr::arrange(EventID)
       }
 
