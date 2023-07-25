@@ -85,6 +85,13 @@ write_back_to_exb <-
         paste0("<common-timeline>",.,"</common-timeline>", collapse = "") %>%
         xml2::read_xml()
       file %>% xml2::xml_find_all("//common-timeline") %>% xml2::xml_replace(common_timeline)
+    }else{
+      exb <- exb %>%
+        dplyr::left_join(bind_rows(timeline_old,timeline_new), by= c("Start_time"="time")) %>%
+        rename(Start_new=id)
+      exb <- exb %>%
+        dplyr::left_join(bind_rows(timeline_old,timeline_new), by= c("End_time"="time")) %>%
+        rename(End_new=id)
     }
 
     for (t in unique(exb$TierID)) {
