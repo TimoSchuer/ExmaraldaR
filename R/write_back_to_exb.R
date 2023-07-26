@@ -145,7 +145,10 @@ write_back_to_exb <-
               tierId <-  paste0("TIE",tierNumbers, collapse = "")
                AnnTier <- annCat %>% filter(Name==sp)
                tier <- paste(
-             paste('<tier id="',tierId,'" ', 'type="a"','category="',paste(ann,"_",stringr::str_extract(sp,"\\[.*\\]")),'"','display-name="',sp %>% stringr::str_remove("\\[.*\\]") %>% paste0("[",paste(ann,"_",stringr::str_extract(sp,"\\[.*\\]")),"]",sep=""),'" speaker="',unique(AnnTier$Speaker),'"',">"),
+             paste('<tier id="',tierId,'" ', 'type="a"','category="',
+                   paste(ann,"_",stringr::str_extract(sp,"\\[.*\\]")),'"','display-name="',sp %>% stringr::str_remove("\\[.*\\]") %>%
+                     paste0("[",paste(ann,"_",stringr::str_extract(sp,"\\[.*\\]")),"]",sep=""),
+                   '" speaker="',unique(AnnTier$Speaker),'"',">"),
                  AnnTier %>%
                    mutate(Event=paste0('<event start="',Start_new,'" end="',End_new,'">',.data[[ann]],'</event>' )) %>%
                    pull(Event) %>%
