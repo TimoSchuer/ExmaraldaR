@@ -10,21 +10,27 @@
 #' @return data.frame
 #' @export
 
-read_exb_file <- function(path, readAnn=TRUE,addDescription= FALSE, addMetaData= FALSE, addIPNumber=TRUE,IPEndSign= c("|",".",";",",",",","?","=","-")){
+read_exb_file <- function(path,
+                          readAnn=TRUE,
+                          addDescription= FALSE,
+                          addMetaData= FALSE,
+                          addIPNumber=TRUE,
+                          IPEndSign= c("|",".",";",",",",","?","=","-")){
   if(stringr::str_ends(path, "\\.exb")== FALSE){
     return("File is not an .exb file")
   }else{
     file <- xml2::read_xml(path, encoding="UTF-8")
-    timeline <- xml2::xml_attrs(xml2::xml_children(xml2::xml_child(xml2::xml_child(file, 2), 1))) %>% dplyr::bind_rows()
+    timeline <- xml2::xml_attrs(xml2::xml_children(xml2::xml_child(xml2::xml_child(file, 2), 1))) %>%
+      dplyr::bind_rows()
     events <- ExmaraldaR:::read_events(file, path) %>%  #read events
       dplyr::left_join(., timeline[,1:2], by= c("Start" ="id"), suffix= c("",".y") ) %>% dplyr::rename(Start_time= time)%>% dplyr::mutate(Start_time=as.double(Start_time)) %>%  #allocate absoulute times to time stamps
       dplyr::left_join(., timeline[,1:2], by= c("End" ="id"), suffix= c("",".y") ) %>% dplyr::rename(End_time= time) %>% dplyr::mutate(End_time= as.double(End_time)) %>%
-      .[,c("File","Speaker", "TierID",  "Start","End", "Start_time", "End_time","Name","Text")] # nice and tidy order
+      .[,c("File","Speaker", "TierID","TierCategory",  "Start","End", "Start_time", "End_time","Name","Text")] # nice and tidy order
     events <- ExmaraldaR:::sort_events(events, addIPNumber= addIPNumber, IPEndSign= IPEndSign)
     if(readAnn==TRUE & length(xml2::xml_find_all(file,".//tier[@type='a']"))!=0){
       AnnotationTiers <- xml2::xml_find_all(file,".//tier[@type='a']") #findet alle Annotationsspuren
       annotations <- data.frame()
-      for (n in 1:length(AnnotationTiers)) {
+    for (n in 1:length(AnnotationTiers)) {
         ann_help <- data.frame()
         ##TODO: nur event children Berücksichtigendas
         if(AnnotationTiers[n] %>% xml2::xml_children() %>% length()==0|AnnotationTiers[n] %>% xml2::xml_children() %>% xml2::xml_attrs() %>% dplyr::bind_rows() %>% names() %>% length()==0){
@@ -54,9 +60,33 @@ read_exb_file <- function(path, readAnn=TRUE,addDescription= FALSE, addMetaData=
         }
         return(exb%>% mutate(IPId=paste(File,IPNumber,sep = "_"))%>%  dplyr::mutate(exb, EventID=paste(File, EventID, sep= "_")) %>% dplyr::select(IPId,1:dplyr::last_col(offset = 1)))
       }
+      if(events %>% dplyr::group_by(Speaker,TierCategory) %>%
+         dplyr::count() %>%
+         dplyr::ungroup() %>%
+         dplyr::group_by(Speaker) %>%
+         dplyr::count()%>%
+         dplyr::filter(n>1) %>%
+         length()>1){#check if multiple transcription tiers per speaker, that make allignment of annotations difficult;
+        #if yes: return dataframes for transcription and annotations so that user can manually allign them
+        print("There are multiple transcription tiers per Speaker, which might cause problems when alligning annotations. Return list with Dataframe for annotation and events to manually allign them.")
+        if(addMetaData==TRUE){
+          metaData <- read_metadata(file)
+          exb <- dplyr::left_join(events,metaData, by="Speaker", suffix= c("",".y") ) %>% dplyr::select(1:Name, names(metaData),Text:tidyselect::last_col())
+        }
+        #add EventID
+        if(addIPNumber==TRUE){
+          exb <- events %>% dplyr::group_by(IPNumber) %>% dplyr::arrange(Start_time, .by_group = TRUE) %>% dplyr::ungroup()
+        }else{
+          exb <- events %>% dplyr::arrange(Start_time)
+        }
+        exb <- exb %>% dplyr::mutate(IPId=paste(File,IPNumber,sep = "_"), .before=1 ) %>% as.data.frame()
+        exb <- list(transcription=exb,annotation=annotations)
+        return(exb)
+      }
       annotations <- annotations%>% tidyr::pivot_wider(names_from = Name, values_from = Annotation, names_repair = "universal") %>% dplyr::select(!TierID) %>% dplyr::filter(!is.na(Start))
       ##join annnotations that are alligned by Start,End and Speaker
       #check if annotations are per spekaer or not speaker assigned
+
       if(length(dplyr::intersect(unique(events$Speaker), unique(annotations$Speaker)))==0){##keine Sprecher gleich
         exb <- dplyr::left_join(events, annotations, by=c("Start", "End"),multiple="first", suffix= c("",".y") ) %>% dplyr::select(-Speaker.y)
       }else if(dplyr::setequal(unique(events$Speaker), unique(annotations$Speaker))|length(dplyr::setdiff(unique(annotations$Speaker), unique(events$Speaker)))==0){ ##alle Sprecher gleich oder alle Sprecher der Annotationsspuren in Transkripionsspuren
@@ -118,6 +148,6 @@ read_exb_file <- function(path, readAnn=TRUE,addDescription= FALSE, addMetaData=
   }else{
     exb <- exb %>% dplyr::arrange(Start_time)
   }
-  return(exb%>% mutate(IPId=paste(File,IPNumber,sep = "_"))%>%  dplyr::mutate(exb, EventID=paste(File, EventID, sep= "_")) %>% dplyr::select(IPId,1:dplyr::last_col(offset = 1)))
+  return(exb%>% dplyr::mutate(IPId=paste(File,IPNumber,sep = "_"))%>%  dplyr::mutate(exb, EventID=paste(File, EventID, sep= "_")) %>% dplyr::select(IPId,1:dplyr::last_col(offset = 1)))
 }
 

@@ -20,7 +20,7 @@ sort_events <- function(events, IPEndSign= c("|",".",";",",",",","?","=","-"),ad
     dplyr::mutate(IPNumber = rle(TierIPNo)$lengths %>% {rep.int(seq_len(length(.)),.)} %>%
     formatC(width = 5, format = "d", flag = "0")) %>%
     dplyr::mutate(EventID= paste(File,seq_len(nrow(.)))) %>%
-    dplyr::select(IPNumber,EventID, File, Speaker, TierID, Start,End, Start_time,End_time,Name, Text) %>%
+    dplyr::select(IPNumber,EventID, File, Speaker, TierID,TierCategory, Start,End, Start_time,End_time,Name, Text) %>%
     dplyr::group_by(IPNumber) %>%
     dplyr::arrange(Start_time)
   return(events)

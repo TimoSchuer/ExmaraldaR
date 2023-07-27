@@ -5,13 +5,15 @@ read_events <- function(file, path){
     events_help <- data.frame()
     events_help <- transcriptions[n] %>% xml2::xml_children() %>% xml2::xml_attrs() %>% dplyr::bind_rows()
     events_help[,"Text"] <-  transcriptions[n] %>% xml2::xml_children() %>% xml2::xml_text()
+    attrs <- transcriptions[n] %>% xml2::xml_attrs() %>% as.data.frame() %>% dplyr::mutate(rownames=rownames(.)) %>% tidyr::pivot_wider(names_from = rownames, values_from = 1)
     events_help <- events_help %>% dplyr::mutate(File= stringr::str_remove(basename(path), "\\.exb")) %>%
-      dplyr::mutate(Speaker= xml2::xml_attrs(transcriptions[n])[[1]][["speaker"]]) %>%
-      dplyr::mutate(TierID= xml2::xml_attrs(transcriptions[n])[[1]][['id']]) %>%
-      dplyr::mutate(Name=xml2::xml_attrs(transcriptions[n])[[1]][['display-name']])
+      dplyr::mutate(Speaker= dplyr::if_else("speaker" %in% names(attrs), attrs$speaker,NA_character_)) %>%
+      dplyr::mutate(TierID= dplyr::if_else("id" %in% names(attrs), attrs$id,NA_character_)) %>%
+      dplyr::mutate(Name= dplyr::if_else("display-name" %in% names(attrs), attrs$`display-name`,NA_character_)) %>%
+      dplyr::mutate(TierCategory= dplyr::if_else("category" %in% names(attrs), attrs$category,NA_character_))
     events <- dplyr::bind_rows(events, events_help)
   }
 
-  events <-events %>% dplyr::rename(Start= start, End= end) %>% .[,c("File", "Speaker", "TierID", "Name", "Start", "End","Text")]
+  events <-events %>% dplyr::rename(Start= start, End= end) %>% .[,c("File", "Speaker", "TierID","TierCategory", "Name", "Start", "End","Text")]
   return(events)
 }
