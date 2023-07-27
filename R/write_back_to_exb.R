@@ -145,7 +145,7 @@ write_back_to_exb <-
               tierId <-  paste0("TIE",tierNumbers, collapse = "")
                AnnTier <- annCat %>% filter(Name==sp)
                tier <- paste(
-             paste('<tier id="',tierId,'" ',
+             paste0('<tier id="',tierId,'" ',
                    'type="a"',
                    'category="',paste(ann,"_",stringr::str_extract(sp,"\\[.*\\]") %>% stringr::str_remove_all("\\[|\\]")),'"',
                    'display-name="',sp %>% stringr::str_remove("\\[.*\\]") %>%
@@ -155,9 +155,9 @@ write_back_to_exb <-
                    mutate(Event=paste0('<event start="',Start_new,'" end="',End_new,'">',.data[[ann]],'</event>' )) %>%
                    pull(Event) %>%
                    paste0(collapse = ""),
-                 "</tier>") %>%
+                 "</tier>", collapse = "") %>%
                  as.character() %>%
-                 xml2::read_xml(tier)
+                 xml2::read_xml()
                xml2::xml_child(file, 2) %>%
                   xml2::xml_add_child(tier)
                remove(tier)
