@@ -21,11 +21,11 @@ read_exb_dir <- function(pathDir,
   list_exb <- list()
   IsList <- rep(FALSE,length(files))
   exb <- read_exb_file(files[1],readAnn,addDescription, addMetaData=FALSE, addIPNumber, IPEndSign)
-  list_exb <- append(list_exb,list(exb))
   if(is.list(exb)){
     IsList[1] <- TRUE
     exb[[2]] <-  exb[[2]] %>% dplyr::mutate(File=basename(files[1]) %>% stringr::str_remove("\\.exb"))
   }
+  list_exb <- append(list_exb,list(exb))
   if (verbose==TRUE){
     print(paste(Sys.time()," 1/ ",length(files),"...",basename(files[1]),"...done"))
   }
