@@ -83,7 +83,9 @@ read_exb_file <- function(path,
         exb <- list(transcription=exb,annotation=annotations)
         return(exb)
       }
-      annotations <- annotations%>% tidyr::pivot_wider(names_from = Name, values_from = Annotation, names_repair = "universal") %>% dplyr::select(!TierID) %>% dplyr::filter(!is.na(Start))
+      annotations <- annotations%>%
+        tidyr::pivot_wider(names_from = Name, values_from = Annotation, names_repair = "universal") %>%
+        dplyr::select(!TierID) %>% dplyr::filter(!is.na(Start))
       ##join annnotations that are alligned by Start,End and Speaker
       #check if annotations are per spekaer or not speaker assigned
 
