@@ -20,7 +20,7 @@ read_exb_dir <- function(pathDir, readAnn=TRUE,addDescription= FALSE, addMetaDat
     help <- read_exb_file(path=,files[k],readAnn,addDescription, addMetaData=FALSE, addIPNumber, IPEndSign)
     exb <- dplyr::bind_rows(exb,help)
     if (verbose==TRUE){
-      print(paste(k,"/ ",length(files),"...",basename(files[k]),"...done"))
+      print(paste(Sys.time," ", k,"/ ",length(files),"...",basename(files[k]),"...done"))
     }
   }
   if(addMetaData==TRUE){
