@@ -10,20 +10,40 @@
 #'
 #' @return data.frame
 #' @export
-read_exb_dir <- function(pathDir, readAnn=TRUE,addDescription= FALSE, addMetaData= FALSE, addIPNumber=TRUE,IPEndSign= c("|",".",";",",",",","?","=","-"), verbose=TRUE){
+read_exb_dir <- function(pathDir,
+                         readAnn=TRUE,
+                         addDescription= FALSE,
+                         addMetaData= FALSE,
+                         addIPNumber=TRUE,
+                         IPEndSign= c("|",".",";",",",",","?","=","-"),
+                         verbose=TRUE){
   files <- list.files(pathDir,".\\.exb", full.names = TRUE)
+  list_exb <- list()
+  IsList <- rep(FALSE,length(files))
   exb <- read_exb_file(files[1],readAnn,addDescription, addMetaData=FALSE, addIPNumber, IPEndSign)
+  list_exb <- append(list_exb,list(exb))
+  if(is.list(exb)){
+    IsList[1] <- TRUE
+  }
   if (verbose==TRUE){
-    print(paste("1/ ",length(files),"...",basename(files[1]),"...done"))
+    print(paste(Sys.time()," 1/ ",length(files),"...",basename(files[1]),"...done"))
   }
   for (k in 2:length(files)) {
     help <- read_exb_file(path=,files[k],readAnn,addDescription, addMetaData=FALSE, addIPNumber, IPEndSign)
-    exb <- dplyr::bind_rows(exb,help)
+    if(is.list(help)){
+    list_exb <- append(list_exb,list(help))
+    IsList[k] <- TRUE
+    }else{
+      list_exb <- append(list_exb,help)
+    }
+    #exb <- dplyr::bind_rows(exb,help)
+
     if (verbose==TRUE){
-      print(paste(Sys.time," ", k,"/ ",length(files),"...",basename(files[k]),"...done"))
+      print(paste(Sys.time()," ", k,"/ ",length(files),"...",basename(files[k]),"...done"))
     }
   }
-  if(addMetaData==TRUE){
+
+  if(addMetaData==TRUE & !any(IsList)){
     exb2 <- data.frame()
     for (i in 1:length(files)){
       metaData <- read_metadata(files[i] %>% xml2::read_xml()) %>%  dplyr::mutate(File= stringr::str_remove(basename(files[i]), "\\.exb"))
@@ -33,6 +53,10 @@ read_exb_dir <- function(pathDir, readAnn=TRUE,addDescription= FALSE, addMetaDat
     #metaCols <-
     exb <- exb2 %>% dplyr::select(1:Name, dplyr::setdiff(names(exb2), names(exb)),Text:dplyr::last_col())
 
+  }
+  if(any(IsList)){
+    print("Adding MetaData not possible as there are problems with assigning annotations.")
+    print("Returns list with annotations and transcriptions per file, where annotations could not be allignend. Else alligned data.frame.")
   }
  # exb <- dplyr::mutate(exb, IPId=paste(File, IPNumber, sep= "_")) %>%  dplyr::mutate(exb, EventID=paste(File, EventID, sep= "_")) %>% dplyr::select(IPId,1:dplyr::last_col(offset = 1))
   return(exb)

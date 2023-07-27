@@ -148,6 +148,6 @@ read_exb_file <- function(path,
   }else{
     exb <- exb %>% dplyr::arrange(Start_time)
   }
-  return(exb%>% dplyr::mutate(IPId=paste(File,IPNumber,sep = "_"))%>%  dplyr::mutate(exb, EventID=paste(File, EventID, sep= "_")) %>% dplyr::select(IPId,1:dplyr::last_col(offset = 1)))
+  return(exb%>% dplyr::mutate(IPId=paste(File,IPNumber,sep = "_"))%>%  dplyr::mutate( EventID=paste(File, EventID, sep= "_")) %>% dplyr::select(IPId,1:dplyr::last_col(offset = 1)))
 }
 
