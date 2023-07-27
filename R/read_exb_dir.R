@@ -42,7 +42,16 @@ read_exb_dir <- function(pathDir,
       print(paste(Sys.time()," ", k,"/ ",length(files),"...",basename(files[k]),"...done"))
     }
   }
-
+  if(any(IsList)){
+    print("Adding MetaData not possible as there are problems with assigning annotations.")
+    print("Returns list with annotations and transcriptions per file, where annotations could not be allignend. Else alligned data.frame.")
+    return(list_exb)
+  }else{
+    exb <- data.frame()
+    for (n in 1:length(list_exb)) {
+      exb <- dplyr::bind_rows(exb,list_exb[[1]])
+    }
+  }
   if(addMetaData==TRUE & !any(IsList)){
     exb2 <- data.frame()
     for (i in 1:length(files)){
@@ -54,10 +63,8 @@ read_exb_dir <- function(pathDir,
     exb <- exb2 %>% dplyr::select(1:Name, dplyr::setdiff(names(exb2), names(exb)),Text:dplyr::last_col())
 
   }
-  if(any(IsList)){
-    print("Adding MetaData not possible as there are problems with assigning annotations.")
-    print("Returns list with annotations and transcriptions per file, where annotations could not be allignend. Else alligned data.frame.")
-  }
+
+
  # exb <- dplyr::mutate(exb, IPId=paste(File, IPNumber, sep= "_")) %>%  dplyr::mutate(exb, EventID=paste(File, EventID, sep= "_")) %>% dplyr::select(IPId,1:dplyr::last_col(offset = 1))
   return(exb)
 }
