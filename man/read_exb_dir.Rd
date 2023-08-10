@@ -10,7 +10,8 @@ read_exb_dir(
   addDescription = FALSE,
   addMetaData = FALSE,
   addIPNumber = TRUE,
-  IPEndSign = c("|", ".", ";", ",", ",", "?", "=", "-")
+  IPEndSign = c("|", ".", ";", ",", ",", "?", "=", "-"),
+  verbose = TRUE
 )
 }
 \arguments{

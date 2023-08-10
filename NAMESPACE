@@ -3,6 +3,7 @@
 export("%>%")
 export(read_exb_dir)
 export(read_exb_file)
+export(read_metadata)
 export(write_back_dir)
 export(write_back_to_exb)
 importFrom(magrittr,"%>%")

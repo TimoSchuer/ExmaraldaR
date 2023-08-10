@@ -1,15 +1,15 @@
 read_metadata <- function(path){
   file <- xml2::read_xml(path) #read file;
-  SpeakerTable <- file %>% xml2::xml_child(1) %>% xml_child(2)
+  SpeakerTable <- file %>% xml2::xml_child(1) %>% xml2::xml_child(2)
   metaData <- data.frame()
   for (Speaker in SpeakerTable %>% xml2::xml_children()) {
     name <- "Speaker"
-    value <- Speaker %>% xml_attr("id")
+    value <- Speaker %>% xml2::xml_attr("id")
 
     for (attribut in Speaker %>% xml2::xml_children()) {
       if(xml2::xml_has_attr(attribut,"value")){
         name <- c(name,xml2::xml_name(attribut))
-        value <- c(value,xml_attr(attribut,"value"))
+        value <- c(value,xml2::xml_attr(attribut,"value"))
       }else if(attribut %>% xml2::xml_children() %>% length()!=0){
         name <- c(name,attribut %>% xml2::xml_children() %>% xml_attr("attribute-name"))
         value <- c(value,attribut %>% xml2::xml_children() %>% xml_text())
