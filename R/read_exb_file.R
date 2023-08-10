@@ -70,7 +70,7 @@ read_exb_file <- function(path,
         #if yes: return dataframes for transcription and annotations so that user can manually allign them
         print("There are multiple transcription tiers per Speaker, which might cause problems when alligning annotations. Return list with Dataframe for annotation and events to manually allign them.")
         if(addMetaData==TRUE){
-          metaData <- read_metadata(file)
+          metaData <- read_metadata(path)
           exb <- dplyr::left_join(events,metaData, by="Speaker", suffix= c("",".y") ) %>% dplyr::select(1:Name, names(metaData),Text:tidyselect::last_col())
         }
         #add EventID

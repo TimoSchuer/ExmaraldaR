@@ -57,7 +57,7 @@ read_exb_dir <- function(pathDir,
   if(addMetaData==TRUE & !any(IsList)){
     exb2 <- data.frame()
     for (i in 1:length(files)){
-      metaData <- read_metadata(files[i] %>% xml2::read_xml()) %>%  dplyr::mutate(File= stringr::str_remove(basename(files[i]), "\\.exb"))
+      metaData <- read_metadata(files[i])
       exb_help <- exb %>% dplyr::filter(File== stringr::str_remove(basename(files[i]), "\\.exb")) %>%  dplyr::left_join(metaData, by=c("Speaker", "File"),suffix=c("","_y") )
       exb2 <- dplyr::bind_rows(exb2,exb_help)
     }
