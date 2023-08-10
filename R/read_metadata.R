@@ -19,8 +19,8 @@ read_metadata <- function(path){
         name <- c(name,xml2::xml_name(attribut))
         value <- c(value,xml2::xml_attr(attribut,"value"))
       }else if(attribut %>% xml2::xml_children() %>% length()!=0){
-        name <- c(name,attribut %>% xml2::xml_children() %>% xml_attr("attribute-name"))
-        value <- c(value,attribut %>% xml2::xml_children() %>% xml_text())
+        name <- c(name,attribut %>% xml2::xml_children() %>% xml2::xml_attr("attribute-name"))
+        value <- c(value,attribut %>% xml2::xml_children() %>% xml2::xml_text())
       }else{
         name <- c(name, xml2::xml_name(attribut))
         value <- c(value,xml2::xml_text(attribut))
