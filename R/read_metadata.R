@@ -1,3 +1,11 @@
+#' Reads Speaker information from exb file
+#'
+#' @param path
+#'
+#' @return data.frame
+#' @export
+#'
+#' @examples
 read_metadata <- function(path){
   file <- xml2::read_xml(path) #read file;
   SpeakerTable <- file %>% xml2::xml_child(1) %>% xml2::xml_child(2)
