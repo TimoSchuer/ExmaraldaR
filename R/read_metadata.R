@@ -29,7 +29,7 @@ read_metadata <- function(path){
     }
     metaData <- data.frame(name,value) %>% tidyr::pivot_wider(names_from = name, values_from = value) %>% dplyr::bind_rows(metaData,.)
   }
-  metaData <- metaData %>% mutate(File=path %>% basename() %>% stringr::str_remove("\\.exb"), .before = 1)
+  metaData <- metaData %>% dplyr::mutate(File=path %>% basename() %>% stringr::str_remove("\\.exb"), .before = 1)
   return(metaData)
 }
 #   # Set up dataframe --------------------------------------------------------
