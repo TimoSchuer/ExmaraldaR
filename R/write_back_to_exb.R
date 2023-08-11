@@ -146,8 +146,8 @@ write_back_to_exb <-
                AnnTier <- annCat %>% filter(Name==sp)
                tier <- paste(
              paste0('<tier id="',tierId,'" ',
-                   'type="a"',
-                   'category="',paste(ann,"_",stringr::str_extract(sp,"\\[.*\\]") %>% stringr::str_remove_all("\\[|\\]")),'"',
+                   'type="a" ',
+                   'category="',paste(ann,"_",stringr::str_extract(sp,"\\[.*\\]") %>% stringr::str_remove_all("\\[|\\]")),'" ',
                    'display-name="',sp %>% stringr::str_remove("\\[.*\\]") %>%
                      paste0("[",paste(ann,"_",stringr::str_extract(sp,"\\[.*\\]")%>% stringr::str_remove_all("\\[|\\]")),"]",sep=""),
                    '" speaker="',unique(AnnTier$Speaker),'"',">"),
