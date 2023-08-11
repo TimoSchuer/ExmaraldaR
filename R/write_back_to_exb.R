@@ -152,7 +152,7 @@ write_back_to_exb <-
                      paste0("[",paste(ann,"_",stringr::str_extract(sp,"\\[.*\\]")%>% stringr::str_remove_all("\\[|\\]"),sep=""),"]",sep=""),
                    '" speaker="',unique(AnnTier$Speaker),'"',">"),
                  AnnTier %>%
-                   mutate(Event=paste0('<event start="',Start_new,'" end="',End_new,'">',.data[[ann]],'</event>' )) %>%
+                   mutate(Event=paste0('<event start="',Start_new,'" end="',End_new,'">',.data[[ann]] %>% str_remove_all("[&<>]"),'</event>' )) %>%
                    pull(Event) %>%
                    paste0(collapse = ""),
                  "</tier>", collapse = "") %>%
