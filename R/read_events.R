@@ -31,7 +31,7 @@ read_events <- function(file, path, addPaths=FALSE){
     events <- events %>%
       dplyr::mutate(pathFile=path, .after=File) %>%
       dplyr::mutate(pathAudio=xml2::xml_find_all(file,"//referenced-file") %>%
-                      xml2::xml_attr("url") %>% c(), .after=pathFile)
+                      xml2::xml_attr("url") %>% stringr::str_flatten(), .after=pathFile)
   }
   return(events)
 }
