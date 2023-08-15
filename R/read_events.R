@@ -1,4 +1,4 @@
-read_events <- function(file, path){
+read_events <- function(file, path, addPaths=FALSE){
   transcriptions <- xml2::xml_find_all(file, "/basic-transcription/basic-body[1]/tier[@type='t']") # findet alle Transkriptionszeilen; da ich immer eine Pausenzeile (benannt mit P) einfüge, wird diese ausgeschlossn
   events <- data.frame()
   for (n in 1:length(transcriptions)) {
@@ -15,5 +15,8 @@ read_events <- function(file, path){
   }
 
   events <-events %>% dplyr::rename(Start= start, End= end) %>% .[,c("File", "Speaker", "TierID","TierCategory", "Name", "Start", "End","Text")]
+  if(addPaths=TRUE){
+    events <- events %>% dplyr::mutate(pathFile=path, .after=File) %>% dplyr::mutate(pathAudio=xml2::xml_find_all(file,"//referenced-file") %>% xml2::xml_attr("url") %>% c(), .after=pathFile)
+  }
   return(events)
 }

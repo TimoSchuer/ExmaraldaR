@@ -15,14 +15,15 @@ read_exb_file <- function(path,
                           addDescription= FALSE,
                           addMetaData= FALSE,
                           addIPNumber=TRUE,
-                          IPEndSign= c("|",".",";",",",",","?","=","-")){
+                          IPEndSign= c("|",".",";",",",",","?","=","-"),
+                          addPaths=FALSE){
   if(stringr::str_ends(path, "\\.exb")== FALSE){
     return("File is not an .exb file")
   }else{
     file <- xml2::read_xml(path, encoding="UTF-8")
     timeline <- xml2::xml_attrs(xml2::xml_children(xml2::xml_child(xml2::xml_child(file, 2), 1))) %>%
       dplyr::bind_rows()
-    events <- ExmaraldaR:::read_events(file, path) %>%  #read events
+    events <- ExmaraldaR:::read_events(file, path, addPaths) %>%  #read events
       dplyr::left_join(., timeline[,1:2], by= c("Start" ="id"), suffix= c("",".y") ) %>% dplyr::rename(Start_time= time)%>% dplyr::mutate(Start_time=as.double(Start_time)) %>%  #allocate absoulute times to time stamps
       dplyr::left_join(., timeline[,1:2], by= c("End" ="id"), suffix= c("",".y") ) %>% dplyr::rename(End_time= time) %>% dplyr::mutate(End_time= as.double(End_time)) %>%
       .[,c("File","Speaker", "TierID","TierCategory",  "Start","End", "Start_time", "End_time","Name","Text")] # nice and tidy order
