@@ -10,7 +10,8 @@ read_exb_file(
   addDescription = FALSE,
   addMetaData = FALSE,
   addIPNumber = TRUE,
-  IPEndSign = c("|", ".", ";", ",", ",", "?", "=", "-")
+  IPEndSign = c("|", ".", ";", ",", ",", "?", "=", "-"),
+  addPaths = FALSE
 )
 }
 \arguments{
@@ -25,6 +26,8 @@ read_exb_file(
 \item{addIPNumber}{logical, if there should be an nummeration of intonation phrases}
 
 \item{IPEndSign}{character, spezifies characters that indicate the end of a intonation unit}
+
+\item{addPaths}{adding path of file and referenced audio}
 }
 \value{
 data.frame
