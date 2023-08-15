@@ -11,7 +11,8 @@ read_exb_dir(
   addMetaData = FALSE,
   addIPNumber = TRUE,
   IPEndSign = c("|", ".", ";", ",", ",", "?", "=", "-"),
-  verbose = TRUE
+  verbose = TRUE,
+  addPaths = FALSE
 )
 }
 \arguments{
@@ -26,6 +27,8 @@ read_exb_dir(
 \item{addIPNumber}{logical, if there should be an nummeration of intonation phrases}
 
 \item{IPEndSign}{character, spezifies characters that indicate the end of a intonation unit}
+
+\item{addPaths}{adding path of file and referenced audio}
 }
 \value{
 data.frame

@@ -5,6 +5,7 @@
 #' @param addDescription logical, if description tiers should be read NOT YET POSSIBLE
 #' @param addMetaData logical, if information from speaker table should be read
 #' @param addIPNumber logical, if there should be an nummeration of intonation phrases
+#' @param addPaths adding path of file and referenced audio
 #' @param IPEndSign character, spezifies characters that indicate the end of a intonation unit
 #' @importFrom rlang :=
 #'
