@@ -23,7 +23,7 @@ read_exb_dir <- function(pathDir,
   list_exb <- list()
   IsList <- rep(FALSE,length(files))
   exb <- read_exb_file(files[1],readAnn,addDescription, addMetaData=FALSE, addIPNumber, IPEndSign, addPaths)
-  if(is.list(exb)){
+  if(!is.data.frame(exb)){
     IsList[1] <- TRUE
     exb[[2]] <-  exb[[2]] %>% dplyr::mutate(File=basename(files[1]) %>% stringr::str_remove("\\.exb"))
   }
@@ -33,7 +33,7 @@ read_exb_dir <- function(pathDir,
   }
   for (k in 2:length(files)) {
     help <- read_exb_file(path=,files[k],readAnn,addDescription, addMetaData=FALSE, addIPNumber, IPEndSign, addPaths)
-    if(is.list(help)){
+    if(!is.data.frame(help)){
     help[[2]] <-  help[[2]] %>% dplyr::mutate(File=basename(files[k]) %>% stringr::str_remove("\\.exb"))
     list_exb <- append(list_exb,list(help))
     IsList[k] <- TRUE
