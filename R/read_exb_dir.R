@@ -27,9 +27,9 @@ read_exb_dir <- function(pathDir,
     IsList[1] <- TRUE
     exb[[2]] <-  exb[[2]] %>% dplyr::mutate(File=basename(files[1]) %>% stringr::str_remove("\\.exb"))
   }
-  list_exb <- append(list_exb,list(exb))
+  list_exb[[1]] <- exb
   if (verbose==TRUE){
-    print(paste(Sys.time()," 1/ ",length(files),"...",basename(files[1]),"...done"))
+    cat(paste(Sys.time()," 1/ ",length(files),"...",basename(files[1]),"...done"))
   }
   for (k in 2:length(files)) {
     help <- read_exb_file(path=,files[k],readAnn,addDescription, addMetaData=FALSE, addIPNumber, IPEndSign, addPaths)
@@ -38,22 +38,22 @@ read_exb_dir <- function(pathDir,
     list_exb <- append(list_exb,list(help))
     IsList[k] <- TRUE
     }else{
-      list_exb <- append(list_exb,help)
+      list_exb[[k]] <- help
     }
     #exb <- dplyr::bind_rows(exb,help)
 
     if (verbose==TRUE){
-      print(paste(Sys.time()," ", k,"/ ",length(files),"...",basename(files[k]),"...done"))
+      cat(paste(Sys.time()," ", k,"/ ",length(files),"...",basename(files[k]),"...done"))
     }
   }
   if(any(IsList)){
-    print("Adding MetaData not possible as there are problems with assigning annotations.")
-    print("Returns list with annotations and transcriptions per file, where annotations could not be allignend. Else alligned data.frame.")
+    cat("Adding MetaData not possible as there are problems with assigning annotations.")
+    cat("Returns list with annotations and transcriptions per file, where annotations could not be allignend. Else alligned data.frame.")
     return(list_exb)
   }else{
     exb <- data.frame()
     for (n in 1:length(list_exb)) {
-      exb <- dplyr::bind_rows(exb,list_exb[[1]])
+      exb <- dplyr::bind_rows(exb,list_exb[[n]])
     }
   }
   if(addMetaData==TRUE & !any(IsList)){
