@@ -15,7 +15,8 @@ write_back_to_exb(
   transcription_text = "Text",
   annotation_colums,
   overwrite_annotations = TRUE,
-  assignSpeakersAnnotation = FALSE
+  assignSpeakersAnnotation = FALSE,
+  recreate_timeline = FALSE
 )
 }
 \arguments{

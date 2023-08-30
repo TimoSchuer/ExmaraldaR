@@ -16,7 +16,8 @@ write_back_dir(
   transcription_text = "Text",
   annotation_colums = NA,
   overwrite_annotations = TRUE,
-  assignSpeakersAnnotation = FALSE
+  assignSpeakersAnnotation = FALSE,
+  recreate_timeline = FALSE
 )
 }
 \arguments{

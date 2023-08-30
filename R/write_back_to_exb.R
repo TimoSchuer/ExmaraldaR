@@ -23,7 +23,9 @@ write_back_to_exb <-
            transcription_text= "Text",
            annotation_colums,
            overwrite_annotations=TRUE,
-           assignSpeakersAnnotation=FALSE) {
+           assignSpeakersAnnotation=FALSE,
+           recreate_timeline=FALSE
+           ) {
     file <- xml2::read_xml(PathExb) #Read transcription
     if (is.data.frame(exb)) {
       exb <- exb
@@ -39,6 +41,34 @@ write_back_to_exb <-
     }
     ##create new timeline
     #check if all tiers are in dataframe
+    if(recreate_timeline==TRUE|xml2::xml_find_all(file,"//common-timeline") %>%
+       xml2::xml_children() %>% length()==0){
+      timeline <- c(exb$Start_time,exb$End_time) %>%
+        round(6) %>%
+        unique() %>%
+        as.double() %>%
+        data.frame(time=.)%>%
+        arrange(time) %>%
+        distinct() %>%
+        dplyr::mutate(id=paste("T",seq(1:nrow(timeline_new)), sep = ""))
+      exb <- exb %>%
+        dplyr::left_join(timeline, by= c("Start_time"="time")) %>%
+        rename(Start_new=id)
+      exb <- exb %>%
+        dplyr::left_join(timeline, by= c("End_time"="time")) %>%
+        rename(End_new=id)
+
+      common_timeline <- timeline %>%
+        dplyr::mutate(tli=if_else(is.na(type),
+                                  paste0('<tli id="',id,'" time="',time,'"/>',sep=""),
+                                  paste0('<tli id="',id,'" time="',time,'" type="intp"/>', sep = ""))) %>%
+        pull(tli) %>%
+        as.character() %>%
+        paste0(collapse = "") %>%
+        paste0("<common-timeline>",.,"</common-timeline>", collapse = "") %>%
+        xml2::read_xml()
+      file %>% xml2::xml_find_all("//common-timeline") %>% xml2::xml_replace(common_timeline)
+    }else{
     timeline_old <- data.frame(row.names = seq(from=1,to=xml2::xml_find_all(file,"//common-timeline") %>%
                                                  xml2::xml_children() %>%
                                                  xml2::xml_attr("id") %>%
@@ -69,17 +99,17 @@ write_back_to_exb <-
 
     if(nrow(timeline_new!=0)){
       exb <- exb %>%
-        dplyr::left_join(bind_rows(timeline_old,timeline_new), by= c("Start_time"="time")) %>%
+        dplyr::left_join(dplyr::bind_rows(timeline_old,timeline_new), by= c("Start_time"="time")) %>%
         rename(Start_new=id)
       exb <- exb %>%
-        dplyr::left_join(bind_rows(timeline_old,timeline_new), by= c("End_time"="time")) %>%
+        dplyr::left_join(dplyr::bind_rows(timeline_old,timeline_new), by= c("End_time"="time")) %>%
         rename(End_new=id)
 
       common_timeline <- timeline %>%
-        dplyr::mutate(tli=if_else(is.na(type),
+        dplyr::mutate(tli=dplyr::if_else(is.na(type),
                            paste0('<tli id="',id,'" time="',time,'"/>',sep=""),
                            paste0('<tli id="',id,'" time="',time,'" type="intp"/>', sep = ""))) %>%
-        pull(tli) %>%
+        dplyr::pull(tli) %>%
         as.character() %>%
         paste0(collapse = "") %>%
         paste0("<common-timeline>",.,"</common-timeline>", collapse = "") %>%
@@ -87,13 +117,13 @@ write_back_to_exb <-
       file %>% xml2::xml_find_all("//common-timeline") %>% xml2::xml_replace(common_timeline)
     }else{
       exb <- exb %>%
-        dplyr::left_join(bind_rows(timeline_old,timeline_new), by= c("Start_time"="time")) %>%
+        dplyr::left_join(dplyr::bind_rows(timeline_old,timeline_new), by= c("Start_time"="time")) %>%
         rename(Start_new=id)
       exb <- exb %>%
-        dplyr::left_join(bind_rows(timeline_old,timeline_new), by= c("End_time"="time")) %>%
+        dplyr::left_join(dplyr::bind_rows(timeline_old,timeline_new), by= c("End_time"="time")) %>%
         rename(End_new=id)
     }
-
+}
     for (t in unique(exb$TierID)) {
       TranscriptionTier <- exb %>% filter(TierID==t)
       if(length(xml2::xml_find_all(file,paste0("//tier[@id=","'",t,"']")))!=0){
@@ -106,7 +136,7 @@ write_back_to_exb <-
 
         tier <- TranscriptionTier %>%
           dplyr::mutate(Event=paste0('<event start="',Start_new,'" end="',End_new,'">',.data[[transcription_text]],'</event>' )) %>%
-          pull(Event) %>% paste0(collapse = "") %>%
+          dplyr::pull(Event) %>% paste0(collapse = "") %>%
           as.character() %>%
           paste0(paste0('<tier ',TierAttrs,'>', collapse = " "),
                  .,"</tier>", collapse = " ")%>%
