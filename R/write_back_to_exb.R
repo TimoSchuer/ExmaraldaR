@@ -50,7 +50,8 @@ write_back_to_exb <-
         data.frame(time=.)%>%
         arrange(time) %>%
         distinct() %>%
-        dplyr::mutate(id=paste("T",seq(1:nrow(.)), sep = ""))
+        dplyr::mutate(id=paste("T",seq(1:nrow(.)), sep = "")) %>%
+        dplyr::mutate(type=NA)
       exb <- exb %>%
         dplyr::left_join(timeline, by= c("Start_time"="time")) %>%
         rename(Start_new=id)
