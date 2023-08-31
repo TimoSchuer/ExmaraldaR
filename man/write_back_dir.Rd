@@ -17,7 +17,8 @@ write_back_dir(
   annotation_colums = NA,
   overwrite_annotations = TRUE,
   assignSpeakersAnnotation = FALSE,
-  recreate_timeline = FALSE
+  recreate_timeline = FALSE,
+  hideAnnotationTiers = FALSE
 )
 }
 \arguments{

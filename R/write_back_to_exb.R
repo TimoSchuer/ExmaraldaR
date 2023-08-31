@@ -24,7 +24,8 @@ write_back_to_exb <-
            annotation_colums,
            overwrite_annotations=TRUE,
            assignSpeakersAnnotation=FALSE,
-           recreate_timeline=FALSE
+           recreate_timeline=FALSE,
+           hideAnnotationTiers=FALSE
            ) {
     file <- xml2::read_xml(PathExb) #Read transcription
     if (is.data.frame(exb)) {
@@ -175,6 +176,26 @@ write_back_to_exb <-
               tierNumbers <- xml2::xml_find_all(file,"//tier") %>% xml2::xml_attr("id") %>% stringr::str_extract("\\d+") %>% as.numeric() %>% max(na.rm = TRUE) +1
               tierId <-  paste0("TIE",tierNumbers, collapse = "")
                AnnTier <- annCat %>% filter(Name==sp)
+               if(hideAnnotationTiers==TRUE){
+                 tier <- paste(
+                   paste0('<tier id="',tierId,'" ',
+                          'type="a" ',
+                          'category="',paste(ann,"_",stringr::str_extract(sp,"\\[.*\\]") %>% stringr::str_remove_all("\\[|\\]")),'" ',
+                          'display-name="',sp %>% stringr::str_remove("\\[.*\\]") %>%
+                            paste0("[",paste(ann,"_",stringr::str_extract(sp,"\\[.*\\]")%>% stringr::str_remove_all("\\[|\\]"),sep=""),"]",sep=""),
+                          '" speaker="',unique(AnnTier$Speaker),'"',">"),
+                   "<ud-tier-information><ud-information attribute-name=\"exmaralda:hidden\">true</ud-information></ud-tier-information>",
+                   AnnTier %>%
+                     mutate(Event=paste0('<event start="',Start_new,'" end="',End_new,'">',.data[[ann]] %>% str_remove_all("[&<>]"),'</event>' )) %>%
+                     pull(Event) %>%
+                     paste0(collapse = ""),
+                   "</tier>", collapse = "") %>%
+                   as.character() %>%
+                   xml2::read_xml()
+                 xml2::xml_child(file, 2) %>%
+                   xml2::xml_add_child(tier)
+                 remove(tier)
+               }else{
                tier <- paste(
              paste0('<tier id="',tierId,'" ',
                    'type="a" ',
@@ -192,6 +213,7 @@ write_back_to_exb <-
                xml2::xml_child(file, 2) %>%
                   xml2::xml_add_child(tier)
                remove(tier)
+            }
                     }
           }
         }

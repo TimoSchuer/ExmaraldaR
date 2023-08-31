@@ -26,7 +26,8 @@ write_back_dir <- function(exb,
                            annotation_colums=NA,
                            overwrite_annotations=TRUE,
                            assignSpeakersAnnotation=FALSE,
-                           recreate_timeline=FALSE){
+                           recreate_timeline=FALSE,
+                           hideAnnotationTiers=FALSE){
 
 # Check if exb is object or csv file, save in annotations -----------------
   if(is.data.frame(exb)){
@@ -47,7 +48,8 @@ write_back_dir <- function(exb,
                       transcription_text = transcription_text,
                       assignSpeakersAnnotation = assignSpeakersAnnotation,
                       overwrite_annotations = overwrite_annotations,
-                      recreate_timeline=recreate_timeline)
+                      recreate_timeline=recreate_timeline,
+                      hideAnnotationTiers=hideAnnotationTiers)
     if(verbose==TRUE){
       perc <- perc + round(nrow(ann)/nrow(annotations)*100,2)
       print(paste0(Sys.time()," ", k,"/", length(files)," ", files[k],"...done...",perc,"%", sep=""))
