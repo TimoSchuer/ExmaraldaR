@@ -10,8 +10,10 @@
 #' @param verbose logical, if TRUE, status will be shown
 #' @param transcription_text specify column with transcription text
 #' @param annotation_colums specify names of annotaion columns
+#' @param assignSpeakersAnnotation make a tier for every category/speaker
+#' @param recreate_timeline use values from exb to recreate timeline and remove old timeline
+#' @param hideAnnotationTiers annotation tiers will be hidden in exmaralda
 #' @param overwrite_annotations if true old annotaitons will be deleted, AT THE MOMENT ONLY WORKS IF TRUE
-#' @param assignSpeakerAnnotation if TRUE one annotation tier per category per speaker will be added, AT THME MOMENT ONLY WORKS IF FALSE
 #'
 #' @return NULL
 #' @export
@@ -27,7 +29,7 @@ write_back_dir <- function(exb,
                            overwrite_annotations=TRUE,
                            assignSpeakersAnnotation=FALSE,
                            recreate_timeline=FALSE,
-                           hideAnnotationTiers=FALSE){
+                           hideAnnotationTiers=TRUE){
 
 # Check if exb is object or csv file, save in annotations -----------------
   if(is.data.frame(exb)){

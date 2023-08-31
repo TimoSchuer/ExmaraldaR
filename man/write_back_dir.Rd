@@ -18,7 +18,7 @@ write_back_dir(
   overwrite_annotations = TRUE,
   assignSpeakersAnnotation = FALSE,
   recreate_timeline = FALSE,
-  hideAnnotationTiers = FALSE
+  hideAnnotationTiers = TRUE
 )
 }
 \arguments{
@@ -40,7 +40,11 @@ write_back_dir(
 
 \item{overwrite_annotations}{if true old annotaitons will be deleted, AT THE MOMENT ONLY WORKS IF TRUE}
 
-\item{assignSpeakerAnnotation}{if TRUE one annotation tier per category per speaker will be added, AT THME MOMENT ONLY WORKS IF FALSE}
+\item{assignSpeakersAnnotation}{make a tier for every category/speaker}
+
+\item{recreate_timeline}{use values from exb to recreate timeline and remove old timeline}
+
+\item{hideAnnotationTiers}{annotation tiers will be hidden in exmaralda}
 }
 \description{
 write_back_dir
