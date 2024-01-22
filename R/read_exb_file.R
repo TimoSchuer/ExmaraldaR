@@ -72,10 +72,10 @@ read_exb_file <- function(path,
       if(events %>% dplyr::group_by(Speaker,TierCategory) %>%
          dplyr::count() %>%
          dplyr::ungroup() %>%
-         # dplyr::group_by(Speaker) %>%
-         # dplyr::count()%>%
+          dplyr::group_by(Speaker) %>%
+          dplyr::count()%>%
          dplyr::filter(n>1) %>%
-         length()>1){#check if multiple transcription tiers per speaker, that make allignment of annotations difficult;
+         nrow()>1){#check if multiple transcription tiers per speaker, that make allignment of annotations difficult;
         #if yes: return dataframes for transcription and annotations so that user can manually allign them
         print("There are multiple transcription tiers per Speaker, which might cause problems when alligning annotations. Return list with Dataframe for annotation and events to manually allign them.")
         if(addMetaData==TRUE){
